@@ -1,0 +1,210 @@
+openapi: 3.0.3
+info:
+  title: SolarFlow API
+  version: 1.0.0
+  description: API para la gestión de trabajos de instalación para profesionales de energía solar.
+
+servers:
+  - url: http://localhost:3000/api
+    description: Development server
+  - url: https://solarflow.vercel.app/api
+    description: Production server
+
+paths:
+  /auth/register:
+    post:
+      summary: Registrar un nuevo usuario
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 8
+      responses:
+        '201':
+          description: Usuario creado exitosamente. Devuelve una sesión.
+        '400':
+          description: Error de validación o el email ya existe.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/login:
+    post:
+      summary: Iniciar sesión
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login exitoso. Devuelve una sesión.
+        '401':
+          description: Credenciales inválidas.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /clientes:
+    get:
+      summary: Obtener la lista de clientes del usuario
+      tags: [Clientes]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de clientes.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cliente'
+        '401':
+          description: No autorizado.
+    post:
+      summary: Crear un nuevo cliente
+      tags: [Clientes]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteInput'
+      responses:
+        '201':
+          description: Cliente creado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+        '400':
+          description: Error de validación.
+
+  /clientes/{clienteId}:
+    parameters:
+      - name: clienteId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Obtener un cliente por su ID
+      tags: [Clientes]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Datos del cliente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+        '404':
+          description: Cliente no encontrado.
+    put:
+      summary: Actualizar un cliente
+      tags: [Clientes]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteInput'
+      responses:
+        '200':
+          description: Cliente actualizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+        '404':
+          description: Cliente no encontrado.
+    delete:
+      summary: Eliminar un cliente
+      tags: [Clientes]
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Cliente eliminado exitosamente.
+        '404':
+          description: Cliente no encontrado.
+
+# Se replicaría una estructura similar para /empresas, /trabajos, /catalogo-items, etc.
+
+components:
+  schemas:
+    Cliente:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        nombre:
+          type: string
+        direccion:
+          type: string
+        telefono:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    ClienteInput:
+      type: object
+      required: [nombre]
+      properties:
+        nombre:
+          type: string
+          example: "Juan Pérez"
+        direccion:
+          type: string
+          example: "Calle Falsa 123, Ciudad"
+        telefono:
+          type: string
+          example: "+34600123456"
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+            code:
+              type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
