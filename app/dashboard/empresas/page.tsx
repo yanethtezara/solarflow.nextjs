@@ -1,8 +1,10 @@
+import { Suspense } from 'react';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { Database } from '@/types/supabase';
 import EmpresasList from './EmpresasList';
+import ToastFromUrl from '@/components/ToastFromUrl';
 
 export default async function EmpresasPage() {
   const cookieStore = await cookies();
@@ -47,6 +49,9 @@ export default async function EmpresasPage() {
       ) : (
         <EmpresasList empresas={empresas || []} />
       )}
+      <Suspense fallback={null}>
+        <ToastFromUrl />
+      </Suspense>
     </div>
   );
 }

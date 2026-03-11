@@ -56,7 +56,7 @@ export default function EditarEmpresaPage() {
       setError(err.message);
       return;
     }
-    router.push('/dashboard/empresas');
+    router.push('/dashboard/empresas?toast=empresa_actualizada');
     router.refresh();
   };
 
@@ -70,7 +70,7 @@ export default function EditarEmpresaPage() {
       setError(err.message);
       return;
     }
-    router.push('/dashboard/empresas');
+    router.push('/dashboard/empresas?toast=empresa_eliminada');
     router.refresh();
   };
 

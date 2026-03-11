@@ -56,7 +56,7 @@ export default function EditarClientePage() {
       setError(err.message);
       return;
     }
-    router.push('/dashboard/clientes');
+    router.push('/dashboard/clientes?toast=cliente_actualizado');
     router.refresh();
   };
 
@@ -70,7 +70,7 @@ export default function EditarClientePage() {
       setError(err.message);
       return;
     }
-    router.push('/dashboard/clientes');
+    router.push('/dashboard/clientes?toast=cliente_eliminado');
     router.refresh();
   };
 

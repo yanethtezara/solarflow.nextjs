@@ -38,7 +38,7 @@ export default function NuevoClientePage() {
       setError(err.message);
       return;
     }
-    router.push('/dashboard/clientes');
+    router.push('/dashboard/clientes?toast=cliente_creado');
     router.refresh();
   };
 

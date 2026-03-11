@@ -38,7 +38,7 @@ export default function NuevaEmpresaPage() {
       setError(err.message);
       return;
     }
-    router.push('/dashboard/empresas');
+    router.push('/dashboard/empresas?toast=empresa_creada');
     router.refresh();
   };
 

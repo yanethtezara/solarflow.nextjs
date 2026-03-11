@@ -1,0 +1,9 @@
+[[sources]]
+id = "solarflow_supabase"
+type = "postgresql"
+host = "db.fqaeyzndqyyfugwmkidh.supabase.co"
+port = 5432
+database = "postgres"
+user = "postgres"
+password = "U6bu0q7OkGNQccIA"
+sslmode = "require"
