@@ -4,15 +4,15 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createSupabaseBrowserClient } from '@/lib/supabase/client';
-import { User } from '@supabase/supabase-js';
+import { User, AuthError } from '@supabase/supabase-js';
 
 // Define the shape of the authentication context
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: any | null }>;
-  signUp: (email: string, password: string) => Promise<{ error: any | null }>;
-  signOut: () => Promise<{ error: any | null }>;
+  signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>;
+  signUp: (email: string, password: string) => Promise<{ error: AuthError | null }>;
+  signOut: () => Promise<{ error: AuthError | null }>;
 }
 
 // Create the context with a default undefined value
@@ -26,7 +26,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const supabase = createSupabaseBrowserClient();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session) {
         setUser(session.user);
         // Optionally, fetch profile data from your public.profiles table
@@ -67,8 +69,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signUp = async (email: string, password: string) => {
     setLoading(true);
-    const { error } = await supabase.auth.signUp({ 
-      email, 
+    const { error } = await supabase.auth.signUp({
+      email,
       password,
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback`, // Important for email confirmation

@@ -11,6 +11,11 @@ const MESSAGES: Record<string, string> = {
   empresa_creada: 'Empresa creada correctamente.',
   empresa_actualizada: 'Empresa actualizada correctamente.',
   empresa_eliminada: 'Empresa eliminada correctamente.',
+  item_creado: 'Ítem del catálogo creado correctamente.',
+  item_actualizado: 'Ítem del catálogo actualizado correctamente.',
+  item_eliminado: 'Ítem del catálogo eliminado correctamente.',
+  servicio_creado: 'Servicio creado correctamente.',
+  material_creado: 'Material creado correctamente.',
 };
 
 export default function ToastFromUrl() {
@@ -37,12 +42,5 @@ export default function ToastFromUrl() {
 
   if (!message) return null;
 
-  return (
-    <Toast
-      message={message}
-      visible={visible}
-      onHide={clearToast}
-      duration={3000}
-    />
-  );
+  return <Toast message={message} visible={visible} onHide={clearToast} duration={3000} />;
 }

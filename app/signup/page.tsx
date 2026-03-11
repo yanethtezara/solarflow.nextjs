@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/contexts/auth-context';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import SunLogo from '@/components/SunLogo';
 
@@ -12,7 +11,6 @@ export default function SignUpPage() {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const { signUp } = useAuth();
-  const router = useRouter();
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +40,7 @@ export default function SignUpPage() {
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               required
               className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200"
             />
@@ -52,7 +50,7 @@ export default function SignUpPage() {
             <input
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
               required
               className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200"
             />
