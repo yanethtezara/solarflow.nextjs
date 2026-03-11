@@ -49,45 +49,74 @@ export default function JobItemsList({ trabajoId, items }: JobItemsListProps) {
 
   return (
     <>
-      <div className="card overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-4 text-left table-header">Ítem</th>
-              <th className="px-6 py-4 text-left table-header">Tipo</th>
-              <th className="px-6 py-4 text-right table-header">Cantidad</th>
-              <th className="px-6 py-4 text-right table-header">Precio unit.</th>
-              <th className="px-6 py-4 text-right table-header">Subtotal</th>
-              <th className="px-6 py-4 text-right table-header">Acciones</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {rows.map(r => (
-              <tr key={r.item_id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 font-medium text-slate-900">{r.item?.nombre ?? '—'}</td>
-                <td className="px-6 py-4 text-slate-600">
-                  {r.item?.tipo === 'mano_de_obra' ? 'Mano de obra' : 'Material'}
-                </td>
-                <td className="px-6 py-4 text-right text-slate-600">{r.cantidad}</td>
-                <td className="px-6 py-4 text-right text-slate-600">
-                  {formatPrecio(r.item ? Number(r.item.precio) : 0)}
-                </td>
-                <td className="px-6 py-4 text-right font-medium">{formatPrecio(r.subtotal)}</td>
-                <td className="px-6 py-4 text-right">
-                  <button
-                    type="button"
-                    onClick={() => setDeleteTarget(r)}
-                    className="text-red-600 hover:underline text-sm font-medium"
-                  >
-                    Eliminar
-                  </button>
-                </td>
+      <div className="card overflow-hidden table-desktop">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[600px]">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-4 text-left table-header">Ítem</th>
+                <th className="px-6 py-4 text-left table-header">Tipo</th>
+                <th className="px-6 py-4 text-right table-header">Cantidad</th>
+                <th className="px-6 py-4 text-right table-header">Precio unit.</th>
+                <th className="px-6 py-4 text-right table-header">Subtotal</th>
+                <th className="px-6 py-4 text-right table-header">Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {rows.map(r => (
+                <tr key={r.item_id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 font-medium text-slate-900">{r.item?.nombre ?? '—'}</td>
+                  <td className="px-6 py-4 text-slate-600">
+                    {r.item?.tipo === 'mano_de_obra' ? 'Mano de obra' : 'Material'}
+                  </td>
+                  <td className="px-6 py-4 text-right text-slate-600">{r.cantidad}</td>
+                  <td className="px-6 py-4 text-right text-slate-600">
+                    {formatPrecio(r.item ? Number(r.item.precio) : 0)}
+                  </td>
+                  <td className="px-6 py-4 text-right font-medium">{formatPrecio(r.subtotal)}</td>
+                  <td className="px-6 py-4 text-right">
+                    <button
+                      type="button"
+                      onClick={() => setDeleteTarget(r)}
+                      className="text-red-600 hover:underline text-sm font-medium"
+                    >
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {rows.length > 0 && (
           <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end">
+            <p className="text-lg font-bold text-slate-900">Total: {formatPrecio(total)}</p>
+          </div>
+        )}
+      </div>
+
+      <div className="cards-mobile space-y-3">
+        {rows.map(r => (
+          <div key={r.item_id} className="card p-4">
+            <p className="font-medium text-slate-900">{r.item?.nombre ?? '—'}</p>
+            <p className="text-sm text-slate-600">
+              {r.item?.tipo === 'mano_de_obra' ? 'Mano de obra' : 'Material'}
+            </p>
+            <p className="text-sm mt-1">
+              {r.cantidad} × {formatPrecio(r.item ? Number(r.item.precio) : 0)} ={' '}
+              <strong>{formatPrecio(r.subtotal)}</strong>
+            </p>
+            <button
+              type="button"
+              onClick={() => setDeleteTarget(r)}
+              className="mt-2 px-4 py-2 rounded-lg text-red-600 border border-red-200 text-sm font-medium min-h-[44px]"
+            >
+              Eliminar
+            </button>
+          </div>
+        ))}
+        {rows.length > 0 && (
+          <div className="card p-4 mt-2">
             <p className="text-lg font-bold text-slate-900">Total: {formatPrecio(total)}</p>
           </div>
         )}

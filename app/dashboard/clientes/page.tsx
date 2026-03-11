@@ -33,12 +33,14 @@ export default async function ClientesPage() {
     .order('nombre');
 
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-black tracking-tight text-slate-900 uppercase">Clientes</h1>
+    <div className="p-4 sm:p-6 md:p-8">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+        <h1 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 uppercase">
+          Clientes
+        </h1>
         <Link
           href="/dashboard/clientes/nuevo"
-          className="btn-primary"
+          className="btn-primary w-full sm:w-auto text-center min-h-[44px] flex items-center justify-center"
         >
           + Nuevo cliente
         </Link>

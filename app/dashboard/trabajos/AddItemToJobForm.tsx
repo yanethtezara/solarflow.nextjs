@@ -77,13 +77,16 @@ export default function AddItemToJobForm({ trabajoId, existingItemIds }: AddItem
   }
 
   return (
-    <form onSubmit={handleSubmit} className="card p-4 flex flex-wrap items-end gap-4">
+    <form
+      onSubmit={handleSubmit}
+      className="card p-4 flex flex-col sm:flex-row flex-wrap sm:items-end gap-4"
+    >
       <div className="flex-1 min-w-[200px]">
         <label className="block text-xs font-medium text-gray-600 mb-1">Ítem</label>
         <select
           value={itemId}
           onChange={e => setItemId(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500"
+          className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
         >
           {availableItems.map(i => (
             <option key={i.id} value={i.id}>
@@ -100,10 +103,14 @@ export default function AddItemToJobForm({ trabajoId, existingItemIds }: AddItem
           min={1}
           value={cantidad}
           onChange={e => setCantidad(Math.max(1, parseInt(e.target.value, 10) || 1))}
-          className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500"
+          className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
         />
       </div>
-      <button type="submit" disabled={loading} className="btn-primary disabled:opacity-50">
+      <button
+        type="submit"
+        disabled={loading}
+        className="btn-primary disabled:opacity-50 min-h-[44px]"
+      >
         {loading ? 'Agregando...' : 'Agregar'}
       </button>
       {error && <p className="text-red-600 text-sm w-full">{error}</p>}

@@ -89,14 +89,14 @@ export default async function TrabajoDetailPage({ params }: { params: Promise<{ 
   };
 
   return (
-    <div className="p-8 max-w-3xl">
+    <div className="p-4 sm:p-6 md:p-8 max-w-3xl mx-auto">
       <div className="mb-6">
         <Link href="/dashboard/trabajos" className="text-amber-600 hover:underline text-sm">
           ← Volver a trabajos
         </Link>
       </div>
 
-      <div className="flex justify-between items-start mb-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-black tracking-tight text-slate-900 uppercase">
             {cliente?.nombre ?? 'Trabajo'}
@@ -105,7 +105,7 @@ export default async function TrabajoDetailPage({ params }: { params: Promise<{ 
             {formatFecha(trabajo.fecha)} · {formatHora(trabajo.hora)}
           </p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4">
           <JobStatusSelector trabajoId={id} currentEstado={trabajo.estado} />
           <Link href={`/dashboard/trabajos/${id}/editar`} className="btn-primary text-sm">
             Editar

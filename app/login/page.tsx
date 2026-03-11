@@ -26,7 +26,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-900/95 backdrop-blur-sm">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl border border-gray-200 shadow-sm animate-fade-in">
+      <div className="w-full max-w-md p-6 sm:p-8 mx-4 space-y-6 bg-white rounded-xl border border-gray-200 shadow-sm animate-fade-in">
         <div className="flex justify-center">
           <SunLogo size={56} className="text-amber-600" />
         </div>
@@ -40,9 +40,9 @@ export default function LoginPage() {
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200 min-h-[44px]"
             />
           </div>
           <div>
@@ -50,12 +50,12 @@ export default function LoginPage() {
             <input
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200 min-h-[44px]"
             />
           </div>
-          <button type="submit" className="btn-primary w-full">
+          <button type="submit" className="btn-primary w-full min-h-[44px]">
             Entrar
           </button>
         </form>

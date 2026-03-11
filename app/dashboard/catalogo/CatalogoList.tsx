@@ -62,11 +62,11 @@ export default function CatalogoList({ items }: { items: CatalogoItem[] }) {
 
   return (
     <>
-      <div className="flex gap-2 mb-4">
+      <div className="flex flex-wrap gap-2 mb-4">
         <button
           type="button"
           onClick={() => setFilter('todos')}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+          className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-colors min-h-[44px] ${
             filter === 'todos'
               ? 'bg-amber-600 text-white'
               : 'bg-white border border-gray-200 text-slate-600 hover:bg-gray-50'
@@ -77,7 +77,7 @@ export default function CatalogoList({ items }: { items: CatalogoItem[] }) {
         <button
           type="button"
           onClick={() => setFilter('mano_de_obra')}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+          className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-colors min-h-[44px] ${
             filter === 'mano_de_obra'
               ? 'bg-amber-600 text-white'
               : 'bg-white border border-gray-200 text-slate-600 hover:bg-gray-50'
@@ -88,7 +88,7 @@ export default function CatalogoList({ items }: { items: CatalogoItem[] }) {
         <button
           type="button"
           onClick={() => setFilter('material')}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+          className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-colors min-h-[44px] ${
             filter === 'material'
               ? 'bg-amber-600 text-white'
               : 'bg-white border border-gray-200 text-slate-600 hover:bg-gray-50'
@@ -98,7 +98,7 @@ export default function CatalogoList({ items }: { items: CatalogoItem[] }) {
         </button>
       </div>
 
-      <div className="card">
+      <div className="card table-desktop">
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
@@ -148,6 +148,42 @@ export default function CatalogoList({ items }: { items: CatalogoItem[] }) {
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div className="cards-mobile space-y-3">
+        {filtered.map(item => (
+          <div key={item.id} className="card p-4">
+            <Link
+              href={`/dashboard/catalogo/${item.id}`}
+              className="block font-medium text-slate-900 hover:text-amber-600 text-lg"
+            >
+              {item.nombre}
+            </Link>
+            <p className="text-sm text-slate-600 mt-1">{tipoLabel(item.tipo)}</p>
+            <p className="font-medium text-slate-900 mt-1">€{Number(item.precio).toFixed(2)}</p>
+            <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-gray-100">
+              <Link
+                href={`/dashboard/catalogo/${item.id}`}
+                className="px-4 py-2 rounded-lg bg-amber-600 text-white text-sm font-medium min-h-[44px] flex items-center"
+              >
+                Ver
+              </Link>
+              <Link
+                href={`/dashboard/catalogo/${item.id}/editar`}
+                className="px-4 py-2 rounded-lg border border-gray-200 text-slate-700 text-sm font-medium min-h-[44px] flex items-center"
+              >
+                Editar
+              </Link>
+              <button
+                type="button"
+                onClick={() => setDeleteTarget(item)}
+                className="px-4 py-2 rounded-lg text-red-600 border border-red-200 text-sm font-medium min-h-[44px] flex items-center"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
 
       <ConfirmDialog

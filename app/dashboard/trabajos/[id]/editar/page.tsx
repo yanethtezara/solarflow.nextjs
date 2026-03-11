@@ -42,7 +42,7 @@ export default function EditarTrabajoPage() {
 
   if (loading) {
     return (
-      <div className="p-8 max-w-xl">
+      <div className="p-4 sm:p-6 md:p-8 max-w-xl mx-auto">
         <p className="text-slate-600">Cargando...</p>
       </div>
     );
@@ -63,13 +63,13 @@ export default function EditarTrabajoPage() {
   }
 
   return (
-    <div className="p-8 max-w-xl">
+    <div className="p-4 sm:p-6 md:p-8 max-w-xl mx-auto">
       <div className="mb-6">
         <Link href={`/dashboard/trabajos/${id}`} className="text-amber-600 hover:underline text-sm">
           ← Volver al trabajo
         </Link>
       </div>
-      <h1 className="text-2xl font-black tracking-tight text-slate-900 uppercase mb-6">
+      <h1 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 uppercase mb-6">
         Editar trabajo
       </h1>
       {initialData && <JobCreationForm initialData={initialData} trabajoId={id} />}

@@ -82,14 +82,25 @@ export default function TrabajosList({ trabajos }: TrabajosListProps) {
     );
   }
 
+  const estadoBadge = (estado: string) =>
+    `inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+      estado === 'completado'
+        ? 'bg-green-100 text-green-800'
+        : estado === 'cancelado'
+          ? 'bg-red-100 text-red-800'
+          : estado === 'en_progreso'
+            ? 'bg-amber-100 text-amber-800'
+            : 'bg-slate-100 text-slate-800'
+    }`;
+
   return (
     <>
-      <div className="mb-4 flex items-center gap-4">
+      <div className="mb-4 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
         <label className="text-sm font-medium text-gray-700">Filtrar por estado:</label>
         <select
           value={estadoFilter}
           onChange={e => setEstadoFilter(e.target.value)}
-          className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+          className="w-full sm:w-auto px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 min-h-[44px]"
         >
           {ESTADOS.map(e => (
             <option key={e.value || 'all'} value={e.value}>
@@ -98,7 +109,7 @@ export default function TrabajosList({ trabajos }: TrabajosListProps) {
           ))}
         </select>
       </div>
-      <div className="card">
+      <div className="card table-desktop">
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
@@ -123,17 +134,7 @@ export default function TrabajosList({ trabajos }: TrabajosListProps) {
                 <td className="px-6 py-4 text-slate-600">{formatFecha(t.fecha)}</td>
                 <td className="px-6 py-4 text-slate-600">{formatHora(t.hora)}</td>
                 <td className="px-6 py-4">
-                  <span
-                    className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                      t.estado === 'completado'
-                        ? 'bg-green-100 text-green-800'
-                        : t.estado === 'cancelado'
-                          ? 'bg-red-100 text-red-800'
-                          : t.estado === 'en_progreso'
-                            ? 'bg-amber-100 text-amber-800'
-                            : 'bg-slate-100 text-slate-800'
-                    }`}
-                  >
+                  <span className={estadoBadge(t.estado)}>
                     {ESTADO_LABELS[t.estado] ?? t.estado}
                   </span>
                 </td>
@@ -162,6 +163,46 @@ export default function TrabajosList({ trabajos }: TrabajosListProps) {
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div className="cards-mobile space-y-3">
+        {filtered.map(t => (
+          <div key={t.id} className="card p-4">
+            <Link
+              href={`/dashboard/trabajos/${t.id}`}
+              className="block font-medium text-slate-900 hover:text-amber-600 text-lg"
+            >
+              {clienteNombre(t)}
+            </Link>
+            <p className="text-sm text-slate-600 mt-1">
+              {formatFecha(t.fecha)} · {formatHora(t.hora)}
+            </p>
+            <span className={`inline-block mt-2 ${estadoBadge(t.estado)}`}>
+              {ESTADO_LABELS[t.estado] ?? t.estado}
+            </span>
+            <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-gray-100">
+              <Link
+                href={`/dashboard/trabajos/${t.id}`}
+                className="px-4 py-2 rounded-lg bg-amber-600 text-white text-sm font-medium min-h-[44px] flex items-center"
+              >
+                Ver
+              </Link>
+              <Link
+                href={`/dashboard/trabajos/${t.id}/editar`}
+                className="px-4 py-2 rounded-lg border border-gray-200 text-slate-700 text-sm font-medium min-h-[44px] flex items-center"
+              >
+                Editar
+              </Link>
+              <button
+                type="button"
+                onClick={() => setDeleteTarget(t)}
+                className="px-4 py-2 rounded-lg text-red-600 border border-red-200 text-sm font-medium min-h-[44px] flex items-center"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
 
       <ConfirmDialog

@@ -33,4 +33,21 @@ body {
   .table-header {
     @apply text-slate-500 font-bold uppercase tracking-tight text-xs;
   }
+  /* Touch-friendly minimum tap target */
+  .tap-target {
+    @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+  }
+}
+
+/* Hide table on mobile, show cards - use .table-desktop and .cards-mobile */
+@media (max-width: 767px) {
+  .table-desktop {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .cards-mobile {
+    display: none !important;
+  }
 }

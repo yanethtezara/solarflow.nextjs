@@ -97,14 +97,14 @@ export default function JobCreationForm({ initialData, trabajoId }: JobCreationF
   };
 
   return (
-    <form onSubmit={handleSubmit} className="card p-6 space-y-4">
+    <form onSubmit={handleSubmit} className="card p-4 sm:p-6 space-y-4">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Cliente *</label>
         <select
           value={clienteId}
           onChange={e => setClienteId(e.target.value)}
           required
-          className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200"
+          className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200 min-h-[44px]"
         >
           <option value="">Seleccionar cliente</option>
           {clientes.map(c => (
@@ -119,7 +119,7 @@ export default function JobCreationForm({ initialData, trabajoId }: JobCreationF
         <select
           value={empresaId}
           onChange={e => setEmpresaId(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200"
+          className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200 min-h-[44px]"
         >
           <option value="">Sin empresa</option>
           {empresas.map(e => (
@@ -129,7 +129,7 @@ export default function JobCreationForm({ initialData, trabajoId }: JobCreationF
           ))}
         </select>
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Fecha *</label>
           <input
@@ -137,7 +137,7 @@ export default function JobCreationForm({ initialData, trabajoId }: JobCreationF
             value={fecha}
             onChange={e => setFecha(e.target.value)}
             required
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200"
+            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200 min-h-[44px]"
           />
         </div>
         <div>
@@ -147,7 +147,7 @@ export default function JobCreationForm({ initialData, trabajoId }: JobCreationF
             value={hora}
             onChange={e => setHora(e.target.value)}
             required
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200"
+            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200 min-h-[44px]"
           />
         </div>
       </div>
@@ -157,16 +157,20 @@ export default function JobCreationForm({ initialData, trabajoId }: JobCreationF
           type="text"
           value={ubicacion}
           onChange={e => setUbicacion(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200"
+          className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200 min-h-[44px]"
           placeholder="Ej: Calle Solar 123"
         />
       </div>
       {error && <p className="text-red-600 text-sm">{error}</p>}
-      <div className="flex gap-4 pt-2">
-        <button type="submit" disabled={loading} className="btn-primary disabled:opacity-50">
+      <div className="flex flex-col sm:flex-row gap-3 pt-2">
+        <button
+          type="submit"
+          disabled={loading}
+          className="btn-primary disabled:opacity-50 min-h-[44px]"
+        >
           {loading ? 'Guardando...' : isEdit ? 'Guardar cambios' : 'Guardar trabajo'}
         </button>
-        <button type="button" onClick={() => router.back()} className="btn-secondary">
+        <button type="button" onClick={() => router.back()} className="btn-secondary min-h-[44px]">
           Cancelar
         </button>
       </div>

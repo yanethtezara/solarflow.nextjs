@@ -46,7 +46,7 @@ export default function EmpresasList({ empresas }: { empresas: Empresa[] }) {
 
   return (
     <>
-      <div className="card">
+      <div className="card table-desktop">
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
@@ -57,7 +57,7 @@ export default function EmpresasList({ empresas }: { empresas: Empresa[] }) {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {empresas.map((e) => (
+            {empresas.map(e => (
               <tr key={e.id} className="hover:bg-gray-50 transition-colors duration-200">
                 <td className="px-6 py-4">
                   <Link
@@ -94,6 +94,44 @@ export default function EmpresasList({ empresas }: { empresas: Empresa[] }) {
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div className="cards-mobile space-y-3">
+        {empresas.map(e => (
+          <div key={e.id} className="card p-4">
+            <Link
+              href={`/dashboard/empresas/${e.id}`}
+              className="block font-medium text-slate-900 hover:text-amber-600 text-lg"
+            >
+              {e.nombre}
+            </Link>
+            {e.contacto_responsable && (
+              <p className="text-sm text-slate-600 mt-1">{e.contacto_responsable}</p>
+            )}
+            {e.telefono_contacto && <p className="text-sm text-slate-600">{e.telefono_contacto}</p>}
+            <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-gray-100">
+              <Link
+                href={`/dashboard/empresas/${e.id}`}
+                className="px-4 py-2 rounded-lg bg-amber-600 text-white text-sm font-medium min-h-[44px] flex items-center"
+              >
+                Ver
+              </Link>
+              <Link
+                href={`/dashboard/empresas/${e.id}/editar`}
+                className="px-4 py-2 rounded-lg border border-gray-200 text-slate-700 text-sm font-medium min-h-[44px] flex items-center"
+              >
+                Editar
+              </Link>
+              <button
+                type="button"
+                onClick={() => setDeleteTarget(e)}
+                className="px-4 py-2 rounded-lg text-red-600 border border-red-200 text-sm font-medium min-h-[44px] flex items-center"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
 
       <ConfirmDialog
