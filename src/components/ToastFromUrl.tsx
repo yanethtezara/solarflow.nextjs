@@ -16,6 +16,9 @@ const MESSAGES: Record<string, string> = {
   item_eliminado: 'Ítem del catálogo eliminado correctamente.',
   servicio_creado: 'Servicio creado correctamente.',
   material_creado: 'Material creado correctamente.',
+  trabajo_creado: 'Trabajo creado correctamente.',
+  trabajo_actualizado: 'Trabajo actualizado correctamente.',
+  trabajo_eliminado: 'Trabajo eliminado correctamente.',
 };
 
 export default function ToastFromUrl() {

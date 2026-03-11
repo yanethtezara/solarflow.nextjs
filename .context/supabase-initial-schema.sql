@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS public.trabajos (
   empresa_id UUID REFERENCES public.empresas(id) ON DELETE SET NULL,
   fecha DATE NOT NULL,
   hora TIME NOT NULL DEFAULT '09:00',
+  ubicacion TEXT,
   estado TEXT NOT NULL DEFAULT 'agendado' CHECK (estado IN ('agendado', 'en_progreso', 'completado', 'cancelado')),
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
