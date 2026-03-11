@@ -38,8 +38,7 @@ async function testSignUp() {
     if (error.stack) {
       console.error('Stack Trace:', error.stack);
     }
-    console.log('
-Troubleshooting Tips:');
+    console.log('\nTroubleshooting Tips:');
     console.log('- Is your Supabase project running?');
     console.log('- Are NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY correct in your .env file?');
     console.log('- Is there a network issue preventing connection to the Supabase API?');
@@ -49,8 +48,7 @@ Troubleshooting Tips:');
     console.log('User created successfully:');
     console.log('  User ID:', data.user.id);
     console.log('  Email:', data.user.email);
-    console.log('
-Next Steps:');
+    console.log('\nNext Steps:');
     console.log('1. Check the "Authentication" section in your Supabase project dashboard.');
     console.log(`2. You should see a new user with the email: ${email}`);
     console.log('3. You may need to disable "Enable email confirmations" in Supabase > Authentication > Providers > Email if you want to log in immediately without verifying the email address.');
