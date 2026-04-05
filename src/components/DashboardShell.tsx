@@ -11,6 +11,7 @@ const navLinks = [
   { href: '/dashboard/clientes', label: 'Clientes' },
   { href: '/dashboard/empresas', label: 'Empresas' },
   { href: '/dashboard/trabajos', label: 'Trabajos' },
+  { href: '/dashboard/calendario', label: 'Calendario' },
   { href: '/dashboard/catalogo', label: 'Catálogo' },
 ];
 
