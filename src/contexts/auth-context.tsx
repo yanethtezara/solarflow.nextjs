@@ -13,6 +13,8 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>;
   signUp: (email: string, password: string) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<{ error: AuthError | null }>;
+  resetPassword: (email: string) => Promise<{ error: AuthError | null }>;
+  updatePassword: (newPassword: string) => Promise<{ error: AuthError | null }>;
 }
 
 // Create the context with a default undefined value
@@ -85,15 +87,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     setLoading(true);
+    // Limpieza total del almacenamiento local antes de salir
+    if (typeof window !== 'undefined') {
+      localStorage.clear();
+      sessionStorage.clear();
+    }
     const { error } = await supabase.auth.signOut();
     setLoading(false);
     if (!error) {
-      router.refresh(); // Refresh to re-evaluate server components and middleware
+      router.push('/login');
+      router.refresh();
     }
     return { error };
   };
 
-  const value = { user, loading, signIn, signUp, signOut };
+  const resetPassword = async (email: string) => {
+    setLoading(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth/callback?next=/auth/reset-password`,
+    });
+    setLoading(false);
+    return { error };
+  };
+
+  const updatePassword = async (newPassword: string) => {
+    setLoading(true);
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    setLoading(false);
+    return { error };
+  };
+
+  const value = { user, loading, signIn, signUp, signOut, resetPassword, updatePassword };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
