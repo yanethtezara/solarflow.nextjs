@@ -1,3 +1,7 @@
+# SolarFlow
+
+[![CI/CD Pipeline](https://github.com/yanethtezara/solarflow.nextjs/actions/workflows/ci.yml/badge.svg)](https://github.com/yanethtezara/solarflow.nextjs/actions)
+
 # BIG PICTURE - Arquitectura Completa del Repositorio
 
 ## Estructura Visual Completa
