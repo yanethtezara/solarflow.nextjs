@@ -27,6 +27,7 @@ export default function RegistrationForm() {
     formState: { errors, isSubmitting },
   } = useForm<SignupValues>({
     resolver: zodResolver(signupSchema),
+    mode: 'onChange',
   });
 
   const onSubmit = async (data: SignupValues) => {
