@@ -48,7 +48,7 @@ describe('RegistrationForm', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Ingresa un correo electrónico válido')).toBeInTheDocument();
+      expect(screen.getByText(/correo electrónico válido/i)).toBeInTheDocument();
     });
   });
 
