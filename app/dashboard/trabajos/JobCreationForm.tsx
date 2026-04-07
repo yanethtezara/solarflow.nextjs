@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -33,17 +33,19 @@ type JobCreationFormProps = {
 
 export default function JobCreationForm({ initialData, trabajoId }: JobCreationFormProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const fechaParam = searchParams.get('fecha');
+
   const [clientes, setClientes] = useState<Cliente[]>([]);
   const [empresas, setEmpresas] = useState<Empresa[]>([]);
 
   const [formData, setFormData] = useState({
     cliente_id: initialData?.cliente_id || '',
     empresa_id: initialData?.empresa_id || '',
-    fecha: initialData?.fecha || '',
+    fecha: initialData?.fecha || fechaParam || '',
     hora: initialData?.hora ? initialData.hora.slice(0, 5) : '09:00',
     ubicacion: initialData?.ubicacion || '',
   });
-
   const [validationErrors, setValidationErrors] = useState<
     Partial<Record<keyof JobFormData, string>>
   >({});

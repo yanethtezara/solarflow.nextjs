@@ -30,6 +30,8 @@ export async function GET(request: NextRequest) {
 
   const { searchParams } = new URL(request.url);
   const estado = searchParams.get('estado'); // agendado | en_progreso | completado | cancelado | null (all)
+  const startDate = searchParams.get('startDate'); // YYYY-MM-DD
+  const endDate = searchParams.get('endDate'); // YYYY-MM-DD
 
   let query = supabase
     .from('trabajos')
@@ -46,6 +48,14 @@ export async function GET(request: NextRequest) {
 
   if (estado && ['agendado', 'en_progreso', 'completado', 'cancelado'].includes(estado)) {
     query = query.eq('estado', estado);
+  }
+
+  if (startDate) {
+    query = query.gte('fecha', startDate);
+  }
+
+  if (endDate) {
+    query = query.lte('fecha', endDate);
   }
 
   const { data, error } = await query;
