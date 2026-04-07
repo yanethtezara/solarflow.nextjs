@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 
 type CatalogoItem = {
   id: string;
@@ -31,7 +32,7 @@ export default function AddItemToJobForm({ trabajoId, existingItemIds }: AddItem
         const avail = data.filter(i => !existingItemIds.includes(i.id));
         if (avail.length && !itemId) setItemId(avail[0].id);
       });
-  }, []);
+  }, [existingItemIds]);
 
   const availableItems = items.filter(i => !existingItemIds.includes(i.id));
 
@@ -63,7 +64,10 @@ export default function AddItemToJobForm({ trabajoId, existingItemIds }: AddItem
 
   if (availableItems.length === 0) {
     return (
-      <div className="card p-4 bg-amber-50 border border-amber-200">
+      <div
+        className="card p-4 bg-amber-50 border border-amber-200"
+        data-testid="no_available_items"
+      >
         <p className="text-amber-800 text-sm">
           No hay ítems disponibles en el catálogo o ya agregaste todos. Crea materiales o servicios
           en{' '}
@@ -80,6 +84,7 @@ export default function AddItemToJobForm({ trabajoId, existingItemIds }: AddItem
     <form
       onSubmit={handleSubmit}
       className="card p-4 flex flex-col sm:flex-row flex-wrap sm:items-end gap-4"
+      data-testid="addItemToJobForm"
     >
       <div className="flex-1 min-w-[200px]">
         <label className="block text-xs font-medium text-gray-600 mb-1">Ítem</label>
@@ -87,6 +92,7 @@ export default function AddItemToJobForm({ trabajoId, existingItemIds }: AddItem
           value={itemId}
           onChange={e => setItemId(e.target.value)}
           className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+          data-testid="item_select"
         >
           {availableItems.map(i => (
             <option key={i.id} value={i.id}>
@@ -104,16 +110,22 @@ export default function AddItemToJobForm({ trabajoId, existingItemIds }: AddItem
           value={cantidad}
           onChange={e => setCantidad(Math.max(1, parseInt(e.target.value, 10) || 1))}
           className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+          data-testid="item_quantity_input"
         />
       </div>
-      <button
+      <Button
         type="submit"
         disabled={loading}
-        className="btn-primary disabled:opacity-50 min-h-[44px]"
+        className="min-h-[44px] flex-1 sm:flex-none"
+        data-testid="add_item_button"
       >
-        {loading ? 'Agregando...' : 'Agregar'}
-      </button>
-      {error && <p className="text-red-600 text-sm w-full">{error}</p>}
+        {loading ? 'Agregando...' : 'Agregar ítem'}
+      </Button>
+      {error && (
+        <p className="text-red-600 text-sm w-full" data-testid="add_item_error">
+          {error}
+        </p>
+      )}
     </form>
   );
 }

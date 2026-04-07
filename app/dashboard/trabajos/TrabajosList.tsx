@@ -70,11 +70,12 @@ export default function TrabajosList({ trabajos }: TrabajosListProps) {
 
   if (trabajos.length === 0) {
     return (
-      <div className="card p-12 text-center">
+      <div className="card p-12 text-center" data-testid="empty_state">
         <p className="text-slate-500 mb-4">Aún no tienes trabajos registrados.</p>
         <Link
           href="/dashboard/trabajos/nuevo"
           className="text-amber-600 hover:underline font-medium"
+          data-testid="create_first_job_link"
         >
           Crear tu primer trabajo →
         </Link>
@@ -94,13 +95,14 @@ export default function TrabajosList({ trabajos }: TrabajosListProps) {
     }`;
 
   return (
-    <>
+    <div data-testid="trabajosList">
       <div className="mb-4 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
         <label className="text-sm font-medium text-gray-700">Filtrar por estado:</label>
         <select
           value={estadoFilter}
           onChange={e => setEstadoFilter(e.target.value)}
           className="w-full sm:w-auto px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 min-h-[44px]"
+          data-testid="estado_filter_select"
         >
           {ESTADOS.map(e => (
             <option key={e.value || 'all'} value={e.value}>
@@ -109,6 +111,8 @@ export default function TrabajosList({ trabajos }: TrabajosListProps) {
           ))}
         </select>
       </div>
+
+      {/* Desktop table */}
       <div className="card table-desktop">
         <table className="w-full">
           <thead className="bg-gray-50">
@@ -120,21 +124,30 @@ export default function TrabajosList({ trabajos }: TrabajosListProps) {
               <th className="px-6 py-4 text-right table-header">Acciones</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y divide-gray-200" data-testid="job_table_body">
             {filtered.map(t => (
-              <tr key={t.id} className="hover:bg-gray-50 transition-colors duration-200">
+              <tr
+                key={t.id}
+                className="hover:bg-gray-50 transition-colors duration-200"
+                data-testid="job_row"
+              >
                 <td className="px-6 py-4">
                   <Link
                     href={`/dashboard/trabajos/${t.id}`}
                     className="font-medium text-slate-900 hover:text-amber-600 hover:underline"
+                    data-testid="job_client_link"
                   >
                     {clienteNombre(t)}
                   </Link>
                 </td>
-                <td className="px-6 py-4 text-slate-600">{formatFecha(t.fecha)}</td>
-                <td className="px-6 py-4 text-slate-600">{formatHora(t.hora)}</td>
+                <td className="px-6 py-4 text-slate-600" data-testid="job_date">
+                  {formatFecha(t.fecha)}
+                </td>
+                <td className="px-6 py-4 text-slate-600" data-testid="job_time">
+                  {formatHora(t.hora)}
+                </td>
                 <td className="px-6 py-4">
-                  <span className={estadoBadge(t.estado)}>
+                  <span className={estadoBadge(t.estado)} data-testid="job_status_badge">
                     {ESTADO_LABELS[t.estado] ?? t.estado}
                   </span>
                 </td>
@@ -142,12 +155,14 @@ export default function TrabajosList({ trabajos }: TrabajosListProps) {
                   <Link
                     href={`/dashboard/trabajos/${t.id}`}
                     className="text-amber-600 hover:underline text-sm font-medium"
+                    data-testid="view_job_link"
                   >
                     Ver
                   </Link>
                   <Link
                     href={`/dashboard/trabajos/${t.id}/editar`}
                     className="text-amber-600 hover:underline text-sm font-medium"
+                    data-testid="edit_job_link"
                   >
                     Editar
                   </Link>
@@ -155,6 +170,7 @@ export default function TrabajosList({ trabajos }: TrabajosListProps) {
                     type="button"
                     onClick={() => setDeleteTarget(t)}
                     className="text-red-600 hover:underline text-sm font-medium"
+                    data-testid="delete_job_button"
                   >
                     Eliminar
                   </button>
@@ -165,31 +181,38 @@ export default function TrabajosList({ trabajos }: TrabajosListProps) {
         </table>
       </div>
 
-      <div className="cards-mobile space-y-3">
+      {/* Mobile cards */}
+      <div className="cards-mobile space-y-3" data-testid="job_cards_mobile">
         {filtered.map(t => (
-          <div key={t.id} className="card p-4">
+          <div key={t.id} className="card p-4" data-testid="job_card">
             <Link
               href={`/dashboard/trabajos/${t.id}`}
               className="block font-medium text-slate-900 hover:text-amber-600 text-lg"
+              data-testid="job_client_link_mobile"
             >
               {clienteNombre(t)}
             </Link>
-            <p className="text-sm text-slate-600 mt-1">
+            <p className="text-sm text-slate-600 mt-1" data-testid="job_datetime_mobile">
               {formatFecha(t.fecha)} · {formatHora(t.hora)}
             </p>
-            <span className={`inline-block mt-2 ${estadoBadge(t.estado)}`}>
+            <span
+              className={`inline-block mt-2 ${estadoBadge(t.estado)}`}
+              data-testid="job_status_badge_mobile"
+            >
               {ESTADO_LABELS[t.estado] ?? t.estado}
             </span>
             <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-gray-100">
               <Link
                 href={`/dashboard/trabajos/${t.id}`}
                 className="px-4 py-2 rounded-lg bg-amber-600 text-white text-sm font-medium min-h-[44px] flex items-center"
+                data-testid="view_job_link_mobile"
               >
                 Ver
               </Link>
               <Link
                 href={`/dashboard/trabajos/${t.id}/editar`}
                 className="px-4 py-2 rounded-lg border border-gray-200 text-slate-700 text-sm font-medium min-h-[44px] flex items-center"
+                data-testid="edit_job_link_mobile"
               >
                 Editar
               </Link>
@@ -197,6 +220,7 @@ export default function TrabajosList({ trabajos }: TrabajosListProps) {
                 type="button"
                 onClick={() => setDeleteTarget(t)}
                 className="px-4 py-2 rounded-lg text-red-600 border border-red-200 text-sm font-medium min-h-[44px] flex items-center"
+                data-testid="delete_job_button_mobile"
               >
                 Eliminar
               </button>
@@ -214,6 +238,6 @@ export default function TrabajosList({ trabajos }: TrabajosListProps) {
         onConfirm={handleDeleteConfirm}
         onCancel={() => setDeleteTarget(null)}
       />
-    </>
+    </div>
   );
 }

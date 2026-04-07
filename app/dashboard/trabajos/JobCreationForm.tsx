@@ -2,8 +2,22 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
-type Cliente = { id: string; nombre: string };
+// Schema de Zod según implementation-plan.md
+const jobSchema = z.object({
+  cliente_id: z.string().uuid('Selecciona un cliente'),
+  empresa_id: z.string().uuid().optional().nullable(),
+  fecha: z.string().min(1, 'La fecha es obligatoria'),
+  hora: z.string().min(1, 'La hora es obligatoria'),
+  ubicacion: z.string().min(1, 'La ubicación es obligatoria'),
+});
+
+type JobFormData = z.infer<typeof jobSchema>;
+
+type Cliente = { id: string; nombre: string; direccion: string | null };
 type Empresa = { id: string; nombre: string };
 
 type JobCreationFormProps = {
@@ -21,11 +35,18 @@ export default function JobCreationForm({ initialData, trabajoId }: JobCreationF
   const router = useRouter();
   const [clientes, setClientes] = useState<Cliente[]>([]);
   const [empresas, setEmpresas] = useState<Empresa[]>([]);
-  const [clienteId, setClienteId] = useState(initialData?.cliente_id || '');
-  const [empresaId, setEmpresaId] = useState(initialData?.empresa_id || '');
-  const [fecha, setFecha] = useState(initialData?.fecha || '');
-  const [hora, setHora] = useState(initialData?.hora || '09:00');
-  const [ubicacion, setUbicacion] = useState(initialData?.ubicacion || '');
+
+  const [formData, setFormData] = useState({
+    cliente_id: initialData?.cliente_id || '',
+    empresa_id: initialData?.empresa_id || '',
+    fecha: initialData?.fecha || '',
+    hora: initialData?.hora ? initialData.hora.slice(0, 5) : '09:00',
+    ubicacion: initialData?.ubicacion || '',
+  });
+
+  const [validationErrors, setValidationErrors] = useState<
+    Partial<Record<keyof JobFormData, string>>
+  >({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -49,62 +70,96 @@ export default function JobCreationForm({ initialData, trabajoId }: JobCreationF
     load();
   }, []);
 
-  useEffect(() => {
-    if (initialData) {
-      setClienteId(initialData.cliente_id);
-      setEmpresaId(initialData.empresa_id || '');
-      setFecha(initialData.fecha);
-      setHora(initialData.hora.slice(0, 5));
-      setUbicacion(initialData.ubicacion || '');
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+
+    // Lógica de sugerencia de ubicación
+    if (name === 'cliente_id' && value && !isEdit) {
+      const selectedClient = clientes.find(c => c.id === value);
+      if (selectedClient?.direccion) {
+        setFormData(prev => ({ ...prev, ubicacion: selectedClient.direccion || '' }));
+      }
     }
-  }, [initialData]);
+
+    if (validationErrors[name as keyof JobFormData]) {
+      setValidationErrors(prev => ({ ...prev, [name]: undefined }));
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setValidationErrors({});
     setError(null);
+
+    const result = jobSchema.safeParse({
+      ...formData,
+      empresa_id: formData.empresa_id || null,
+    });
+
+    if (!result.success) {
+      const errors: Partial<Record<keyof JobFormData, string>> = {};
+      result.error.issues.forEach(err => {
+        if (err.path[0]) {
+          errors[err.path[0] as keyof JobFormData] = err.message;
+        }
+      });
+      setValidationErrors(errors);
+      return;
+    }
+
     setLoading(true);
 
     const url = isEdit ? `/api/trabajos/${trabajoId}` : '/api/trabajos';
     const method = isEdit ? 'PUT' : 'POST';
     const body = {
-      cliente_id: clienteId,
-      empresa_id: empresaId || null,
-      fecha,
-      hora: hora.length === 5 ? hora : `${hora}:00`,
-      ubicacion: ubicacion.trim() || null,
+      ...result.data,
+      hora: result.data.hora.length === 5 ? result.data.hora : `${result.data.hora}:00`,
     };
 
-    const res = await fetch(url, {
-      method,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
 
-    const data = await res.json().catch(() => ({}));
+      const data = await res.json().catch(() => ({}));
 
-    setLoading(false);
-    if (!res.ok) {
-      setError(data?.error?.message || 'Error al guardar');
-      return;
+      if (!res.ok) {
+        throw new Error(data?.error?.message || 'Error al guardar el trabajo');
+      }
+
+      const toast = isEdit ? 'trabajo_actualizado' : 'trabajo_creado';
+      router.push(
+        isEdit
+          ? `/dashboard/trabajos/${trabajoId}?toast=${toast}`
+          : `/dashboard/trabajos?toast=${toast}`
+      );
+      router.refresh();
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-
-    if (isEdit) {
-      router.push(`/dashboard/trabajos/${trabajoId}?toast=trabajo_actualizado`);
-    } else {
-      router.push('/dashboard/trabajos?toast=trabajo_creado');
-    }
-    router.refresh();
   };
 
   return (
-    <form onSubmit={handleSubmit} className="card p-4 sm:p-6 space-y-4">
+    <form
+      onSubmit={handleSubmit}
+      className="card p-4 sm:p-6 space-y-4"
+      data-testid="jobCreationForm"
+    >
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Cliente *</label>
         <select
-          value={clienteId}
-          onChange={e => setClienteId(e.target.value)}
-          required
-          className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200 min-h-[44px]"
+          name="cliente_id"
+          value={formData.cliente_id}
+          onChange={handleChange}
+          className={`w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200 min-h-[44px] ${
+            validationErrors.cliente_id ? 'border-red-500' : ''
+          }`}
+          data-testid="cliente_select"
         >
           <option value="">Seleccionar cliente</option>
           {clientes.map(c => (
@@ -113,13 +168,21 @@ export default function JobCreationForm({ initialData, trabajoId }: JobCreationF
             </option>
           ))}
         </select>
+        {validationErrors.cliente_id && (
+          <p className="text-red-600 text-xs mt-1" data-testid="cliente_error">
+            {validationErrors.cliente_id}
+          </p>
+        )}
       </div>
+
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Empresa (opcional)</label>
         <select
-          value={empresaId}
-          onChange={e => setEmpresaId(e.target.value)}
+          name="empresa_id"
+          value={formData.empresa_id}
+          onChange={handleChange}
           className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200 min-h-[44px]"
+          data-testid="empresa_select"
         >
           <option value="">Sin empresa</option>
           {empresas.map(e => (
@@ -129,50 +192,84 @@ export default function JobCreationForm({ initialData, trabajoId }: JobCreationF
           ))}
         </select>
       </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Fecha *</label>
-          <input
+          <Input
+            name="fecha"
             type="date"
-            value={fecha}
-            onChange={e => setFecha(e.target.value)}
-            required
-            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200 min-h-[44px]"
+            value={formData.fecha}
+            onChange={handleChange}
+            className={validationErrors.fecha ? 'border-red-500' : ''}
+            data-testid="fecha_input"
           />
+          {validationErrors.fecha && (
+            <p className="text-red-600 text-xs mt-1" data-testid="fecha_error">
+              {validationErrors.fecha}
+            </p>
+          )}
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Hora *</label>
-          <input
+          <Input
+            name="hora"
             type="time"
-            value={hora}
-            onChange={e => setHora(e.target.value)}
-            required
-            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200 min-h-[44px]"
+            value={formData.hora}
+            onChange={handleChange}
+            className={validationErrors.hora ? 'border-red-500' : ''}
+            data-testid="hora_input"
           />
+          {validationErrors.hora && (
+            <p className="text-red-600 text-xs mt-1" data-testid="hora_error">
+              {validationErrors.hora}
+            </p>
+          )}
         </div>
       </div>
+
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Ubicación</label>
-        <input
+        <label className="block text-sm font-medium text-gray-700 mb-1">Ubicación *</label>
+        <Input
+          name="ubicacion"
           type="text"
-          value={ubicacion}
-          onChange={e => setUbicacion(e.target.value)}
-          className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200 min-h-[44px]"
-          placeholder="Ej: Calle Solar 123"
+          value={formData.ubicacion}
+          onChange={handleChange}
+          placeholder="Dirección exacta de la obra..."
+          className={validationErrors.ubicacion ? 'border-red-500' : ''}
+          data-testid="ubicacion_input"
         />
+        {validationErrors.ubicacion && (
+          <p className="text-red-600 text-xs mt-1" data-testid="ubicacion_error">
+            {validationErrors.ubicacion}
+          </p>
+        )}
       </div>
-      {error && <p className="text-red-600 text-sm">{error}</p>}
+
+      {error && (
+        <p className="text-red-600 text-sm" data-testid="form_error">
+          {error}
+        </p>
+      )}
+
       <div className="flex flex-col sm:flex-row gap-3 pt-2">
-        <button
+        <Button
           type="submit"
           disabled={loading}
-          className="btn-primary disabled:opacity-50 min-h-[44px]"
+          className="btn-primary flex-1 sm:flex-none"
+          data-testid="submit_button"
         >
-          {loading ? 'Guardando...' : isEdit ? 'Guardar cambios' : 'Guardar trabajo'}
-        </button>
-        <button type="button" onClick={() => router.back()} className="btn-secondary min-h-[44px]">
+          {loading ? 'Guardando...' : isEdit ? 'Guardar cambios' : 'Crear trabajo'}
+        </Button>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => router.back()}
+          className="flex-1 sm:flex-none"
+          data-testid="cancel_button"
+        >
           Cancelar
-        </button>
+        </Button>
       </div>
     </form>
   );

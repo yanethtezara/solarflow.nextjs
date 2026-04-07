@@ -41,9 +41,10 @@ export default function JobStatusSelector({ trabajoId, currentEstado }: JobStatu
       onChange={e => handleChange(e.target.value)}
       disabled={loading}
       className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm font-medium disabled:opacity-50"
+      data-testid="job_status_selector"
     >
       {ESTADOS.map(e => (
-        <option key={e.value} value={e.value}>
+        <option key={e.value} value={e.value} data-testid={`status_option_${e.value}`}>
           {e.label}
         </option>
       ))}
