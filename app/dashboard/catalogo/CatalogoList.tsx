@@ -39,12 +39,13 @@ export default function CatalogoList({ items }: { items: CatalogoItem[] }) {
 
   if (items.length === 0) {
     return (
-      <div className="card p-12 text-center">
+      <div className="card p-12 text-center" data-testid="empty_state">
         <p className="text-slate-500 mb-4">Aún no tienes ítems en el catálogo.</p>
         <div className="flex gap-4 justify-center flex-wrap">
           <Link
             href="/dashboard/catalogo/nuevo?tipo=mano_de_obra"
             className="text-amber-600 hover:underline font-medium"
+            data-testid="add_labor_link"
           >
             + Nuevo servicio
           </Link>
@@ -52,6 +53,7 @@ export default function CatalogoList({ items }: { items: CatalogoItem[] }) {
           <Link
             href="/dashboard/catalogo/nuevo?tipo=material"
             className="text-amber-600 hover:underline font-medium"
+            data-testid="add_material_link"
           >
             + Nuevo material
           </Link>
@@ -61,11 +63,12 @@ export default function CatalogoList({ items }: { items: CatalogoItem[] }) {
   }
 
   return (
-    <>
-      <div className="flex flex-wrap gap-2 mb-4">
+    <div data-testid="catalogoList">
+      <div className="flex flex-wrap gap-2 mb-4" data-testid="filter_buttons">
         <button
           type="button"
           onClick={() => setFilter('todos')}
+          data-testid="filter_all"
           className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-colors min-h-[44px] ${
             filter === 'todos'
               ? 'bg-amber-600 text-white'
@@ -77,6 +80,7 @@ export default function CatalogoList({ items }: { items: CatalogoItem[] }) {
         <button
           type="button"
           onClick={() => setFilter('mano_de_obra')}
+          data-testid="filter_labor"
           className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-colors min-h-[44px] ${
             filter === 'mano_de_obra'
               ? 'bg-amber-600 text-white'
@@ -88,6 +92,7 @@ export default function CatalogoList({ items }: { items: CatalogoItem[] }) {
         <button
           type="button"
           onClick={() => setFilter('material')}
+          data-testid="filter_material"
           className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-colors min-h-[44px] ${
             filter === 'material'
               ? 'bg-amber-600 text-white'
@@ -108,31 +113,43 @@ export default function CatalogoList({ items }: { items: CatalogoItem[] }) {
               <th className="px-6 py-4 text-right table-header">Acciones</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y divide-gray-200" data-testid="catalogo_table_body">
             {filtered.map(item => (
-              <tr key={item.id} className="hover:bg-gray-50 transition-colors duration-200">
+              <tr
+                key={item.id}
+                className="hover:bg-gray-50 transition-colors duration-200"
+                data-testid="catalogo_row"
+              >
                 <td className="px-6 py-4">
                   <Link
                     href={`/dashboard/catalogo/${item.id}`}
                     className="font-medium text-slate-900 hover:text-amber-600 hover:underline"
+                    data-testid="item_name_link"
                   >
                     {item.nombre}
                   </Link>
                 </td>
-                <td className="px-6 py-4 text-slate-600">{tipoLabel(item.tipo)}</td>
-                <td className="px-6 py-4 text-right font-medium text-slate-900">
+                <td className="px-6 py-4 text-slate-600" data-testid="item_type">
+                  {tipoLabel(item.tipo)}
+                </td>
+                <td
+                  className="px-6 py-4 text-right font-medium text-slate-900"
+                  data-testid="item_price"
+                >
                   €{Number(item.precio).toFixed(2)}
                 </td>
                 <td className="px-6 py-4 text-right space-x-3">
                   <Link
                     href={`/dashboard/catalogo/${item.id}`}
                     className="text-amber-600 hover:underline text-sm font-medium"
+                    data-testid="view_item_link"
                   >
                     Ver
                   </Link>
                   <Link
                     href={`/dashboard/catalogo/${item.id}/editar`}
                     className="text-amber-600 hover:underline text-sm font-medium"
+                    data-testid="edit_item_link"
                   >
                     Editar
                   </Link>
@@ -140,6 +157,7 @@ export default function CatalogoList({ items }: { items: CatalogoItem[] }) {
                     type="button"
                     onClick={() => setDeleteTarget(item)}
                     className="text-red-600 hover:underline text-sm font-medium"
+                    data-testid="delete_item_button"
                   >
                     Eliminar
                   </button>
@@ -150,27 +168,34 @@ export default function CatalogoList({ items }: { items: CatalogoItem[] }) {
         </table>
       </div>
 
-      <div className="cards-mobile space-y-3">
+      <div className="cards-mobile space-y-3" data-testid="catalogo_cards_mobile">
         {filtered.map(item => (
-          <div key={item.id} className="card p-4">
+          <div key={item.id} className="card p-4" data-testid="catalogo_card">
             <Link
               href={`/dashboard/catalogo/${item.id}`}
               className="block font-medium text-slate-900 hover:text-amber-600 text-lg"
+              data-testid="item_name_link_mobile"
             >
               {item.nombre}
             </Link>
-            <p className="text-sm text-slate-600 mt-1">{tipoLabel(item.tipo)}</p>
-            <p className="font-medium text-slate-900 mt-1">€{Number(item.precio).toFixed(2)}</p>
+            <p className="text-sm text-slate-600 mt-1" data-testid="item_type_mobile">
+              {tipoLabel(item.tipo)}
+            </p>
+            <p className="font-medium text-slate-900 mt-1" data-testid="item_price_mobile">
+              €{Number(item.precio).toFixed(2)}
+            </p>
             <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-gray-100">
               <Link
                 href={`/dashboard/catalogo/${item.id}`}
                 className="px-4 py-2 rounded-lg bg-amber-600 text-white text-sm font-medium min-h-[44px] flex items-center"
+                data-testid="view_item_link_mobile"
               >
                 Ver
               </Link>
               <Link
                 href={`/dashboard/catalogo/${item.id}/editar`}
                 className="px-4 py-2 rounded-lg border border-gray-200 text-slate-700 text-sm font-medium min-h-[44px] flex items-center"
+                data-testid="edit_item_link_mobile"
               >
                 Editar
               </Link>
@@ -178,6 +203,7 @@ export default function CatalogoList({ items }: { items: CatalogoItem[] }) {
                 type="button"
                 onClick={() => setDeleteTarget(item)}
                 className="px-4 py-2 rounded-lg text-red-600 border border-red-200 text-sm font-medium min-h-[44px] flex items-center"
+                data-testid="delete_item_button_mobile"
               >
                 Eliminar
               </button>
@@ -195,6 +221,6 @@ export default function CatalogoList({ items }: { items: CatalogoItem[] }) {
         onConfirm={handleDeleteConfirm}
         onCancel={() => setDeleteTarget(null)}
       />
-    </>
+    </div>
   );
 }
