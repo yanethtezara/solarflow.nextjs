@@ -82,6 +82,7 @@ export type Database = {
         Row: {
           contacto_responsable: string | null;
           created_at: string | null;
+          direccion: string | null;
           id: string;
           nombre: string;
           telefono_contacto: string | null;
@@ -90,6 +91,7 @@ export type Database = {
         Insert: {
           contacto_responsable?: string | null;
           created_at?: string | null;
+          direccion?: string | null;
           id?: string;
           nombre: string;
           telefono_contacto?: string | null;
@@ -98,6 +100,7 @@ export type Database = {
         Update: {
           contacto_responsable?: string | null;
           created_at?: string | null;
+          direccion?: string | null;
           id?: string;
           nombre?: string;
           telefono_contacto?: string | null;
@@ -140,6 +143,7 @@ export type Database = {
           fecha: string;
           hora: string;
           id: string;
+          ubicacion: string | null;
           user_id: string;
         };
         Insert: {
@@ -150,6 +154,7 @@ export type Database = {
           fecha: string;
           hora?: string;
           id?: string;
+          ubicacion?: string | null;
           user_id: string;
         };
         Update: {
@@ -160,6 +165,7 @@ export type Database = {
           fecha?: string;
           hora?: string;
           id?: string;
+          ubicacion?: string | null;
           user_id?: string;
         };
         Relationships: [

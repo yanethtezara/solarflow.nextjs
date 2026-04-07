@@ -4,16 +4,22 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { createSupabaseBrowserClient } from '@/lib/supabase/client';
+import { ClientForm } from '@/components/features/clientes/ClientForm';
+import ConfirmDialog from '@/components/ConfirmDialog';
 
 export default function EditarClientePage() {
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
-  const [nombre, setNombre] = useState('');
-  const [direccion, setDireccion] = useState('');
-  const [telefono, setTelefono] = useState('');
+
+  const [initialData, setInitialData] = useState<{
+    nombre: string;
+    direccion: string;
+    telefono: string;
+  } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -23,21 +29,27 @@ export default function EditarClientePage() {
         .select('*')
         .eq('id', id)
         .single();
+
       if (err) {
         setError(err.message);
         return;
       }
       if (data) {
-        setNombre(data.nombre);
-        setDireccion(data.direccion || '');
-        setTelefono(data.telefono || '');
+        setInitialData({
+          nombre: data.nombre,
+          direccion: data.direccion || '',
+          telefono: data.telefono || '',
+        });
       }
     };
     load();
   }, [id]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (formData: {
+    nombre: string;
+    direccion?: string | null;
+    telefono: string;
+  }) => {
     setError(null);
     setLoading(true);
 
@@ -45,9 +57,9 @@ export default function EditarClientePage() {
     const { error: err } = await supabase
       .from('clientes')
       .update({
-        nombre: nombre.trim(),
-        direccion: direccion.trim() || null,
-        telefono: telefono.trim() || null,
+        nombre: formData.nombre.trim(),
+        direccion: formData.direccion?.trim() || null,
+        telefono: formData.telefono.trim() || null,
       })
       .eq('id', id);
 
@@ -60,11 +72,12 @@ export default function EditarClientePage() {
     router.refresh();
   };
 
-  const handleDelete = async () => {
-    if (!confirm('¿Eliminar este cliente?')) return;
+  const handleDeleteConfirm = async () => {
+    setShowDeleteConfirm(false);
     setLoading(true);
     const supabase = createSupabaseBrowserClient();
     const { error: err } = await supabase.from('clientes').delete().eq('id', id);
+
     setLoading(false);
     if (err) {
       setError(err.message);
@@ -74,64 +87,57 @@ export default function EditarClientePage() {
     router.refresh();
   };
 
+  if (!initialData && !error) {
+    return (
+      <div className="p-8 text-center" data-testid="loading_state">
+        Cargando cliente...
+      </div>
+    );
+  }
+
   return (
-    <div className="p-4 sm:p-6 md:p-8 max-w-xl mx-auto">
+    <div className="p-4 sm:p-6 md:p-8 max-w-xl mx-auto" data-testid="editarClientePage">
       <div className="mb-6">
-        <Link href="/dashboard/clientes" className="text-amber-600 hover:underline text-sm">
+        <Link
+          href="/dashboard/clientes"
+          className="text-amber-600 hover:underline text-sm"
+          data-testid="back_to_clientes_link"
+        >
           ← Volver a clientes
         </Link>
       </div>
-      <h1 className="text-2xl font-black tracking-tight text-slate-900 uppercase mb-6">
+      <h1
+        className="text-2xl font-black tracking-tight text-slate-900 uppercase mb-6"
+        data-testid="page_title"
+      >
         Editar cliente
       </h1>
 
-      <form onSubmit={handleSubmit} className="card p-6 space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
-          <input
-            type="text"
-            value={nombre}
-            onChange={e => setNombre(e.target.value)}
-            required
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200"
-          />
+      {initialData && (
+        <ClientForm
+          initialData={initialData}
+          onSubmit={handleSubmit}
+          onDelete={() => setShowDeleteConfirm(true)}
+          loading={loading}
+          error={error}
+        />
+      )}
+
+      {error && !initialData && (
+        <div className="card p-6 border-red-200 bg-red-50 text-red-700" data-testid="load_error">
+          {error}
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Dirección</label>
-          <input
-            type="text"
-            value={direccion}
-            onChange={e => setDireccion(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
-          <input
-            type="tel"
-            value={telefono}
-            onChange={e => setTelefono(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200"
-          />
-        </div>
-        {error && <p className="text-red-600 text-sm">{error}</p>}
-        <div className="flex flex-col sm:flex-row gap-3 pt-2">
-          <button type="submit" disabled={loading} className="btn-primary disabled:opacity-50">
-            {loading ? 'Guardando...' : 'Guardar'}
-          </button>
-          <button
-            type="button"
-            onClick={handleDelete}
-            disabled={loading}
-            className="px-6 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 transition-colors duration-200 focus:ring-2 focus:ring-amber-500"
-          >
-            Eliminar
-          </button>
-          <Link href="/dashboard/clientes" className="btn-secondary">
-            Cancelar
-          </Link>
-        </div>
-      </form>
+      )}
+
+      <ConfirmDialog
+        open={showDeleteConfirm}
+        title="Eliminar cliente"
+        message={`¿Estás seguro de que quieres eliminar a "${initialData?.nombre}"? Esta acción no se puede deshacer.`}
+        confirmLabel="Eliminar"
+        variant="danger"
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setShowDeleteConfirm(false)}
+      />
     </div>
   );
 }
