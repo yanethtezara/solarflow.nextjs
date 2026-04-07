@@ -107,7 +107,20 @@ export default async function TrabajoDetailPage({ params }: { params: Promise<{ 
         </div>
         <div className="flex flex-wrap items-center gap-2 sm:gap-4">
           <JobStatusSelector trabajoId={id} currentEstado={trabajo.estado} />
-          <Link href={`/dashboard/trabajos/${id}/editar`} className="btn-primary text-sm">
+          {trabajo.estado === 'completado' && (
+            <Link
+              href={`/dashboard/trabajos/${id}/factura`}
+              className="bg-amber-100 text-amber-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-amber-200 transition-colors"
+              data-testid="generate_invoice_button"
+            >
+              Generar Factura
+            </Link>
+          )}
+          <Link
+            href={`/dashboard/trabajos/${id}/editar`}
+            className="btn-primary text-sm"
+            data-testid="edit_job_button"
+          >
             Editar
           </Link>
         </div>
