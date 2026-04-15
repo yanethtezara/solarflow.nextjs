@@ -1,0 +1,123 @@
+Descripcion;Costo;Cantidad;Total
+"Conduit 2"" sch 80";20;;0
+"Conduit 1-1/4"" sch 80";18;;0
+"Conduit 1-1/2"" sch 80";16;;0
+"Conduit 1"" sch 80";11;;0
+"Conduit 1"" sch 40";8;;0
+Conduit 3/4 80SCH;12;;0
+Conduit 3/4 40SCH;8;;0
+Conduit 1/2;6;;0
+emt 3/4x10ft;13;;0
+"Blue Flex 2""";4,8;;0
+Blue Flex 3/4 in;60;;0
+Blue Flex 1in;75;;0
+Coupling emt 1 1/4 ;7;;0
+Coupling emt 1 ;6;;0
+Coupling emt 3/4 ;4;;0
+"Coupling PVC 2""";2;;0
+"Coupling PVC 1-1/2""";2;;0
+"Coupling PVC 1-1/4""";1,9;;0
+"Coupling PVC 1""";1,5;;0
+"Coupling PVC 3/4""";1;;0
+"Coupling PVC 1/2""";1;;0
+"Locknut 3/4""";0,8;;0
+"Locknut 1""";1;;0
+"Locknut 1-1/4""";1,25;;0
+"Locknut 1-1/2""";1,5;;0
+"Locknuts 2""";1,75;;0
+Locknuts Sealer 2 ;4;;0
+"Sealing Ring 2""";5;;0
+"Bushing 1""";1,5;;0
+"Bushing 1-1/4""";1,75;;0
+"Bushing 1-1/2""";2;;0
+"Bushing 2""";2,25;;0
+"Grounding Bushing 2""";13;;0
+"Grounding Bushing 3/4""";5;;0
+"Male Adapter 1/2""";1;;0
+Male Adapter 3/4;1,25;;0
+"Male Adapter 1""";1,5;;0
+"Male Adapter 1-1/4""";2;;0
+"Male Adapter 2""";2,5;;0
+"Male Adapter 1-1/2""";2;;0
+"Famele Adapter 1-1/2""";2;;0
+"Famele Adapter 1-1/4""";2,5;;0
+"Male Adapter EMT 3/4""";1,5;;0
+"Box Adapter 2""";2,5;;0
+"Box Adapter 1-1/2""";2,5;;0
+"Box Adapter 1-1/4""";2,5;;0
+Box Adapter 1 in;2;;0
+Box Adapter 3/4 in;1,5;;0
+Liquidtight 1 1/4 male ada;12;;0
+PVC Expansion Coupling;30;;0
+90º 1 1/2 in sch 40;7;;0
+90º 1 1/4 in SCH 80;11;;0
+90º 1 1/4 in sch 40;4,2;;0
+90º 2 in SCH 40;15;;0
+90º 1 in SCH 80;6;;0
+90º 1 in;3;;0
+90º 3/4 in;2,5;;0
+90º 3/4 in sch 80;5;;0
+90º 1/2 in sch 40;1,5;;0
+90º 1/2 in sch 80;5;;0
+LB 2 in  PVC ;16;;0
+"LB 1-1/2"" in PVC";11;;0
+"LB 1-1/4"" PVC";9;;0
+"LB 1"" PVC";7;;0
+"LB 3/4"" PVC";6;;0
+"LB 1/2"" PVC";5;;0
+LB EMT 3/4;9;;0
+T EMT 3/4;9;;0
+"Strap 2""";2;;0
+Strap 3/4;0,8;;0
+"Strap 1""";1;;0
+"Strap 1-1/4""";1,2;;0
+Strap 1/2;0,5;;0
+Hanger;1,5;;0
+Reductores ;1;;0
+Conector Jbox;2,7;;0
+Niple 1 1/2 rigid;6;;0
+Niple 1 1/4 rigid;4;;0
+Niple 1 in rigid;3;;0
+Niple 3/4 in rigid;2;;0
+Rigid Conduit Coupling 1 1/4;7;;0
+Rigid Conduit Coupling 1;7;;0
+Rigid Conduit Coupling 3/4;7;;0
+"Rigid Offsert conduit 2""";17;;0
+Polaris Tap 3/0;32;;0
+Line Tap;15;;0
+Eaton Ground Bar;9;;0
+Mayers Hub 1-1/4 in;15;;0
+Mayers Hub  1 in;9,5;;0
+Mayers Hub 3/4 in;8,5;;0
+Hub eaton 1 1/4 in;18;;0
+Hub eaton 1in;18;;0
+Hub eaton 2 in;17;;0
+Tap;28;;0
+Neutral Lug;10;;0
+Wire #10;0,34;;0
+Wire #8;1,2;;0
+Wire #6 Black;1,7;;0
+Wire #6 Red;1,7;;0
+Wire #6 White;1,7;;0
+Wire #6 Green;1,7;;0
+Flasing;10;;0
+Wire #3/0;6,4;;0
+Wire #2/0;7;;0
+Wire #3;3,2;;0
+Wire #4;3;;0
+Comunication Wire ;0,75;;0
+Gutter;3;;0
+Grounding Bridge;25;;0
+Strut cone nut;5;;0
+"Pipe clamp 2""";7;;0
+"Pipe clamp 1 1/2""";6;;0
+"Pipe clamp 1 1/4""";4,2;;0
+Pipe clamp 3/4;3,5;;0
+Ground Rod ;17;;0
+Ground Rod Clamp;5;;0
+Ground Rod Clamp with Lay in;7,5;;0
+Bracker;18;;0
+Liquidtight 1 1/4 male ada;6;;0
+Cooper Grounding Wire;73;;0
+Varios;60;1;60
+Total;;;$60,00 

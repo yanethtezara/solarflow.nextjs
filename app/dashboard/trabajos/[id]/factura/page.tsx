@@ -1,243 +1,257 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
+import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { Database } from '@/types/supabase';
 import SunLogo from '@/components/SunLogo';
 
-type InvoiceData = {
-  trabajo: any;
-  items: any[];
-  perfil: any;
-  metadata: {
-    generated_at: string;
-    invoice_number: string;
-  };
-};
-
-export default function FacturaPage() {
-  const params = useParams();
-  const router = useRouter();
-  const id = params.id as string;
-  const [data, setData] = useState<InvoiceData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const res = await fetch(`/api/facturas/${id}`);
-        if (!res.ok) throw new Error('No se pudo obtener los datos de la factura');
-        const json = await res.json();
-        setData(json);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
-  }, [id]);
-
-  const handlePrint = () => {
-    window.print();
-  };
-
-  if (loading)
-    return (
-      <div className="p-12 text-center" data-testid="loading_state">
-        Cargando factura...
-      </div>
-    );
-  if (error || !data)
-    return (
-      <div className="p-12 text-center" data-testid="error_state">
-        <p className="text-red-600 mb-4">{error || 'Error desconocido'}</p>
-        <Link href={`/dashboard/trabajos/${id}`} className="text-amber-600 underline">
-          Volver al trabajo
-        </Link>
-      </div>
-    );
-
-  const total = data.items.reduce(
-    (acc, i) => acc + i.cantidad * (i.catalogo_items?.precio || 0),
-    0
+export default async function FacturaPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const cookieStore = await cookies();
+  const supabase = createServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        },
+      },
+    }
   );
-  const { trabajo, perfil, metadata } = data;
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  const { data: trabajo, error } = await supabase
+    .from('trabajos')
+    .select(
+      `
+      *,
+      clientes(nombre, direccion, telefono),
+      empresas(nombre, contacto_responsable, telefono_contacto)
+    `
+    )
+    .eq('id', id)
+    .single();
+
+  if (error || !trabajo) notFound();
+
+  const { data: items } = await supabase
+    .from('trabajos_items')
+    .select(
+      `
+      cantidad,
+      catalogo_items(nombre, precio)
+    `
+    )
+    .eq('trabajo_id', id);
+
+  const subtotal = (items || []).reduce((acc, item) => {
+    const precio = (item.catalogo_items as any)?.precio || 0;
+    return acc + precio * item.cantidad;
+  }, 0);
+
+  const total = subtotal;
+
+  const cliente = trabajo.clientes as any;
+  const empresa = trabajo.empresas as any;
 
   return (
     <div
-      className="min-h-screen bg-slate-50 p-4 sm:p-8 print:bg-white print:p-0"
+      className="min-h-screen bg-gray-50 p-4 sm:p-8 print:bg-white print:p-0"
       data-testid="invoicePage"
     >
-      {/* Navbar de controles (oculto en impresión) */}
-      <div className="max-w-4xl mx-auto mb-6 flex justify-between items-center print:hidden">
-        <Link
-          href={`/dashboard/trabajos/${id}`}
-          className="text-slate-600 hover:text-slate-900 flex items-center gap-2 text-sm font-medium"
-          data-testid="back_link"
-        >
-          ← Volver al trabajo
-        </Link>
-        <Button onClick={handlePrint} className="gap-2" data-testid="print_button">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+      <div className="max-w-4xl mx-auto space-y-6">
+        {/* Actions - hidden on print */}
+        <div className="flex justify-between items-center print:hidden">
+          <Link
+            href={`/dashboard/trabajos/${id}`}
+            className="text-amber-600 hover:underline text-sm font-medium"
+            data-testid="back_link"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-            />
-          </svg>
-          Descargar PDF
-        </Button>
-      </div>
+            ← Volver al trabajo
+          </Link>
+          <button
+            id="print-btn"
+            className="btn-primary text-sm px-6 flex items-center gap-2"
+            data-testid="print_button"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+              />
+            </svg>
+            Imprimir o Guardar PDF
+          </button>
+        </div>
 
-      {/* Papel de Factura */}
-      <div
-        className="max-w-4xl mx-auto bg-white shadow-xl rounded-none sm:rounded-xl overflow-hidden print:shadow-none print:rounded-none"
-        data-testid="invoice_paper"
-      >
-        <div className="p-8 sm:p-12">
-          {/* Cabecera: Logo y Título */}
-          <div className="flex flex-col sm:flex-row justify-between gap-8 mb-12">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <SunLogo className="h-10 w-10 text-amber-600" />
-                <span className="text-2xl font-black tracking-tighter text-slate-900">
-                  SOLARFLOW
-                </span>
-              </div>
-              <div className="text-sm text-slate-500 space-y-1">
-                <p className="font-bold text-slate-900">
-                  {perfil.email.split('@')[0].toUpperCase()} SOLUTIONS
+        {/* Invoice Container */}
+        <div
+          className="bg-white border border-gray-200 shadow-sm p-8 sm:p-12 print:border-none print:shadow-none min-h-[1056px] flex flex-col"
+          data-testid="invoice_paper"
+        >
+          {/* Header */}
+          <div className="flex justify-between items-start border-b border-gray-100 pb-8 mb-8">
+            <div className="flex items-center gap-3">
+              <SunLogo size={48} className="text-amber-600" />
+              <div>
+                <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">
+                  SolarFlow
+                </h2>
+                <p className="text-xs text-slate-500 uppercase font-bold tracking-widest">
+                  Factura de Servicio
                 </p>
-                <p>NIF: B-87654321 (Provisional)</p>
-                <p>{perfil.email}</p>
               </div>
             </div>
             <div className="text-right">
-              <h1 className="text-4xl font-black text-slate-900 mb-2">FACTURA</h1>
-              <p className="text-amber-600 font-bold tracking-widest">{metadata.invoice_number}</p>
-              <div className="mt-4 text-sm text-slate-500">
-                <p>Fecha: {new Date(metadata.generated_at).toLocaleDateString('es-ES')}</p>
-                <p>Trabajo ID: #{trabajo.id.slice(0, 5)}</p>
-              </div>
+              <p className="text-sm font-bold text-slate-900 uppercase tracking-tight mb-1">
+                Factura #
+              </p>
+              <p className="text-xl font-medium text-slate-600 truncate">
+                {id.slice(0, 8).toUpperCase()}
+              </p>
+              <p className="text-sm text-slate-500 mt-2">
+                {new Date(trabajo.fecha).toLocaleDateString('es-ES', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })}
+              </p>
             </div>
           </div>
 
-          <hr className="border-slate-100 mb-12" />
-
-          {/* Emisor vs Receptor */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 mb-12">
+          {/* Info Blocks */}
+          <div className="grid grid-cols-2 gap-12 mb-12">
             <div>
-              <p className="text-xs font-black uppercase text-slate-400 tracking-widest mb-3">
-                Emitido por
-              </p>
-              <div className="text-sm text-slate-700 space-y-1">
-                <p className="font-bold">{perfil.email.split('@')[0]}</p>
-                <p>Instalador Autorizado</p>
-                <p>España</p>
-              </div>
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">De</p>
+              <p className="text-lg font-bold text-slate-900">{empresa?.nombre ?? 'Mi Empresa'}</p>
+              {empresa?.contacto_responsable && (
+                <p className="text-sm text-slate-600 mt-1">{empresa.contacto_responsable}</p>
+              )}
+              {empresa?.telefono_contacto && (
+                <p className="text-sm text-slate-600">{empresa.telefono_contacto}</p>
+              )}
+              <p className="text-sm text-slate-600 mt-2">{user.email}</p>
             </div>
-            <div className="sm:text-right">
-              <p className="text-xs font-black uppercase text-slate-400 tracking-widest mb-3">
-                Facturar a
-              </p>
-              <div className="text-sm text-slate-700 space-y-1">
-                <p className="font-bold">{trabajo.clientes?.nombre || '—'}</p>
-                <p>{trabajo.clientes?.direccion || 'Sin dirección registrada'}</p>
-                <p>{trabajo.clientes?.telefono || 'Sin teléfono'}</p>
-                {trabajo.empresas && (
-                  <p className="mt-2 pt-2 border-t border-slate-50 italic text-slate-500">
-                    Vía: {trabajo.empresas.nombre}
-                  </p>
-                )}
-              </div>
+            <div className="text-right">
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Para</p>
+              <p className="text-lg font-bold text-slate-900">{cliente?.nombre}</p>
+              {cliente?.direccion && (
+                <p className="text-sm text-slate-600 mt-1">{cliente.direccion}</p>
+              )}
+              {cliente?.telefono && <p className="text-sm text-slate-600">{cliente.telefono}</p>}
             </div>
           </div>
 
-          {/* Tabla de Conceptos */}
-          <div className="mb-12">
+          {/* Items Table */}
+          <div className="flex-1">
             <table className="w-full text-left">
-              <thead>
-                <tr className="border-b-2 border-slate-900">
-                  <th className="py-4 text-xs font-black uppercase text-slate-900 tracking-widest">
-                    Concepto
+              <thead className="border-b-2 border-slate-900">
+                <tr>
+                  <th className="py-3 text-xs font-black uppercase tracking-widest text-slate-900">
+                    Descripción
                   </th>
-                  <th className="py-4 text-center text-xs font-black uppercase text-slate-900 tracking-widest">
+                  <th className="py-3 text-xs font-black uppercase tracking-widest text-slate-900 text-center">
                     Cant.
                   </th>
-                  <th className="py-4 text-right text-xs font-black uppercase text-slate-900 tracking-widest">
+                  <th className="py-3 text-xs font-black uppercase tracking-widest text-slate-900 text-right">
                     Precio
                   </th>
-                  <th className="py-4 text-right text-xs font-black uppercase text-slate-900 tracking-widest">
-                    Total
+                  <th className="py-3 text-xs font-black uppercase tracking-widest text-slate-900 text-right">
+                    Subtotal
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
-                {data.items.map((item, idx) => (
-                  <tr key={idx} className="group">
-                    <td className="py-6">
-                      <p className="font-bold text-slate-900">
-                        {item.catalogo_items?.nombre || 'Ítem de catálogo'}
-                      </p>
-                      <p className="text-xs text-slate-500 uppercase tracking-tighter">
-                        {item.catalogo_items?.tipo === 'mano_de_obra'
-                          ? 'Servicio / Mano de Obra'
-                          : 'Material / Componente'}
-                      </p>
-                    </td>
-                    <td className="py-6 text-center text-slate-700">{item.cantidad}</td>
-                    <td className="py-6 text-right text-slate-700">
-                      €{Number(item.catalogo_items?.precio || 0).toFixed(2)}
-                    </td>
-                    <td className="py-6 text-right font-bold text-slate-900">
-                      €{(item.cantidad * (item.catalogo_items?.precio || 0)).toFixed(2)}
-                    </td>
-                  </tr>
-                ))}
+              <tbody className="divide-y divide-gray-100">
+                {(items || []).map((item, idx) => {
+                  const catalogo = item.catalogo_items as any;
+                  const precio = catalogo?.precio || 0;
+                  return (
+                    <tr key={idx}>
+                      <td className="py-4 text-sm font-medium text-slate-900">
+                        {catalogo?.nombre}
+                      </td>
+                      <td className="py-4 text-sm text-slate-600 text-center">{item.cantidad}</td>
+                      <td className="py-4 text-sm text-slate-600 text-right">
+                        {precio.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' })}
+                      </td>
+                      <td className="py-4 text-sm font-bold text-slate-900 text-right">
+                        {(precio * item.cantidad).toLocaleString('es-ES', {
+                          style: 'currency',
+                          currency: 'EUR',
+                        })}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
 
-          {/* Totales */}
-          <div className="flex justify-end">
+          {/* Totals */}
+          <div className="border-t-2 border-slate-900 pt-8 mt-12 flex justify-end">
             <div className="w-full sm:w-64 space-y-3">
-              <div className="flex justify-between text-sm text-slate-500">
-                <span>Subtotal (Base Imponible)</span>
-                <span>€{total.toFixed(2)}</span>
+              <div className="flex justify-between text-sm">
+                <span className="text-slate-500 uppercase font-bold">Subtotal</span>
+                <span className="text-slate-900 font-medium">
+                  {subtotal.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' })}
+                </span>
               </div>
-              <div className="flex justify-between text-sm text-slate-500">
-                <span>IVA (Incluido)</span>
-                <span>€0.00</span>
-              </div>
-              <div className="flex justify-between items-center pt-3 border-t-2 border-slate-900">
-                <span className="font-black text-slate-900 uppercase tracking-wider">Total</span>
-                <span className="text-2xl font-black text-amber-600">€{total.toFixed(2)}</span>
+              <div className="flex justify-between text-xl font-black pt-3 border-t border-gray-100">
+                <span className="text-slate-900 uppercase">Total</span>
+                <span className="text-amber-600">
+                  {total.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' })}
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Footer Pie de Página */}
-          <div className="mt-20 pt-8 border-t border-slate-100 text-center">
-            <p className="text-xs text-slate-400 font-medium">
-              Gracias por confiar en SolarFlow para su transición energética.
+          {/* Footer */}
+          <div className="mt-20 text-center">
+            <p className="text-xs text-slate-400 uppercase font-bold tracking-widest mb-1">
+              Gracias por su confianza
             </p>
-            <p className="text-[10px] text-slate-300 mt-2">
-              Este documento es una previsualización generada automáticamente por SolarFlow Next.js
-              MVP.
+            <p className="text-[10px] text-slate-300">
+              Esta es una factura generada automáticamente por SolarFlow.
             </p>
           </div>
         </div>
       </div>
+
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            document.getElementById('print-btn')?.addEventListener('click', () => {
+              window.print();
+            });
+          `,
+        }}
+      />
+
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+        @media print {
+          body {
+            background: white !important;
+          }
+          .print-hidden {
+            display: none !important;
+          }
+          main {
+            padding: 0 !important;
+            margin: 0 !important;
+          }
+        }
+      `,
+        }}
+      />
     </div>
   );
 }

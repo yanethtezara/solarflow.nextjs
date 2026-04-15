@@ -1,73 +1,57 @@
 'use client';
 
-import { useState } from 'react';
-import { useAuth } from '@/contexts/auth-context';
 import Link from 'next/link';
 import SunLogo from '@/components/SunLogo';
+import RegistrationForm from '@/components/auth/RegistrationForm';
 
 export default function SignUpPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
-  const { signUp } = useAuth();
-
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setMessage(null);
-    const { error } = await signUp(email, password);
-    if (error) {
-      setError(error.message);
-    } else {
-      setMessage('Revisa tu email para confirmar el registro.');
-    }
-  };
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-900/95 backdrop-blur-sm">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl border border-gray-200 shadow-sm animate-fade-in">
-        <div className="flex justify-center">
-          <SunLogo size={56} className="text-amber-600" />
+    <main className="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-12">
+      {/* Background decoration - subtle sun-like glow */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-[10%] -right-[10%] w-[40%] h-[40%] bg-amber-100/50 rounded-full blur-3xl" />
+        <div className="absolute -bottom-[10%] -left-[10%] w-[30%] h-[30%] bg-slate-200/50 rounded-full blur-3xl" />
+      </div>
+
+      <div className="w-full max-w-[400px] relative z-10">
+        <div className="card p-8 space-y-8 animate-fade-in shadow-xl bg-white/80 backdrop-blur-sm">
+          {/* Brand Header */}
+          <div className="flex flex-col items-center space-y-4">
+            <Link href="/" className="transition-transform duration-300 hover:scale-105">
+              <SunLogo size={64} className="text-amber-600" />
+            </Link>
+            <div className="text-center">
+              <h1 className="text-2xl font-black tracking-tight text-slate-900 uppercase">
+                Únete a SolarFlow
+              </h1>
+              <p className="text-slate-500 text-sm mt-1">
+                Tu oficina de bolsillo para instalaciones solares.
+              </p>
+            </div>
+          </div>
+
+          {/* Form Component */}
+          <RegistrationForm />
+
+          {/* Footer Link */}
+          <div className="pt-4 border-t border-slate-100 text-center">
+            <p className="text-sm text-slate-600">
+              ¿Ya tienes cuenta?{' '}
+              <Link
+                href="/login"
+                className="font-bold text-amber-600 hover:text-amber-700 transition-colors duration-200 underline-offset-4 hover:underline"
+              >
+                Inicia sesión aquí
+              </Link>
+            </p>
+          </div>
         </div>
-        <h1 className="text-2xl font-black tracking-tight text-slate-900 uppercase text-center">
-          Crear cuenta
-        </h1>
-        <p className="text-slate-500 text-sm text-center">SolarFlow</p>
-        <form onSubmit={handleSignUp} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Contraseña</label>
-            <input
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200"
-            />
-          </div>
-          <button type="submit" className="btn-primary w-full">
-            Registrarse
-          </button>
-        </form>
-        {error && <p className="text-sm text-red-600 text-center">{error}</p>}
-        {message && <p className="text-sm text-amber-600 text-center">{message}</p>}
-        <p className="text-sm text-center text-slate-600">
-          ¿Ya tienes cuenta?{' '}
-          <Link href="/login" className="font-medium text-amber-600 hover:underline">
-            Iniciar sesión
-          </Link>
+
+        {/* Legal / Trust footer */}
+        <p className="mt-8 text-center text-xs text-slate-400">
+          Al crear una cuenta, aceptas nuestros términos de servicio y política de privacidad.
         </p>
       </div>
-    </div>
+    </main>
   );
 }
