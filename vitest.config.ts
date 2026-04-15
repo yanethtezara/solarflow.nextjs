@@ -11,11 +11,13 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     alias: {
       '@': path.resolve(__dirname, './src'),
+      '@csstools/css-calc': path.resolve(__dirname, './src/test/empty-mock.ts'),
+      '@asamuzakjp/css-color': path.resolve(__dirname, './src/test/empty-mock.ts'),
     },
     css: false,
     server: {
       deps: {
-        inline: [/node_modules/],
+        inline: ['@asamuzakjp/css-color', '@csstools/css-calc'],
       },
     },
     coverage: {
