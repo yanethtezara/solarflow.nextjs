@@ -20,8 +20,10 @@ const ESTADO_COLORS: Record<string, string> = {
 };
 
 const DAYS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+const HOURS = Array.from({ length: 13 }, (_, i) => i + 8); // 8:00 to 20:00
 
 export function CalendarView() {
+  const [viewMode, setViewMode] = useState<'monthly' | 'weekly'>('monthly');
   const [currentDate, setCurrentDate] = useState(new Date());
   const [jobs, setJobs] = useState<Trabajo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,33 +32,38 @@ export function CalendarView() {
   const month = currentDate.getMonth();
   const year = currentDate.getFullYear();
 
+  // Monthly logic
   const daysInMonth = useMemo(() => {
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
-
     const days = [];
-    // Adjust for Monday start (0=Sun, 1=Mon... -> 0=Mon, 6=Sun)
     let startDay = firstDay.getDay() - 1;
     if (startDay === -1) startDay = 6;
-
-    // Days from prev month
-    for (let i = 0; i < startDay; i++) {
-      days.push(null);
-    }
-
-    // Days of current month
-    for (let i = 1; i <= lastDay.getDate(); i++) {
-      days.push(new Date(year, month, i));
-    }
-
+    for (let i = 0; i < startDay; i++) days.push(null);
+    for (let i = 1; i <= lastDay.getDate(); i++) days.push(new Date(year, month, i));
     return days;
   }, [month, year]);
+
+  // Weekly logic
+  const daysInWeek = useMemo(() => {
+    const startOfWeek = new Date(currentDate);
+    const day = startOfWeek.getDay();
+    const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1); // Adjust for Monday
+    startOfWeek.setDate(diff);
+
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(startOfWeek);
+      d.setDate(startOfWeek.getDate() + i);
+      return d;
+    });
+  }, [currentDate]);
 
   useEffect(() => {
     const fetchJobs = async () => {
       setLoading(true);
-      const start = new Date(year, month, 1).toISOString().split('T')[0];
-      const end = new Date(year, month + 1, 0).toISOString().split('T')[0];
+      // Fetch a wider range to be safe
+      const start = new Date(year, month - 1, 1).toISOString().split('T')[0];
+      const end = new Date(year, month + 2, 0).toISOString().split('T')[0];
 
       try {
         const res = await fetch(`/api/trabajos?startDate=${start}&endDate=${end}`);
@@ -82,29 +89,55 @@ export function CalendarView() {
     return map;
   }, [jobs]);
 
-  const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
-  const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
+  const next = () => {
+    const newDate = new Date(currentDate);
+    if (viewMode === 'monthly') newDate.setMonth(currentDate.getMonth() + 1);
+    else newDate.setDate(currentDate.getDate() + 7);
+    setCurrentDate(newDate);
+  };
 
-  const monthName = new Intl.DateTimeFormat('es-ES', { month: 'long' }).format(currentDate);
+  const prev = () => {
+    const newDate = new Date(currentDate);
+    if (viewMode === 'monthly') newDate.setMonth(currentDate.getMonth() - 1);
+    else newDate.setDate(currentDate.getDate() - 7);
+    setCurrentDate(newDate);
+  };
+
+  const titleLabel =
+    viewMode === 'monthly'
+      ? new Intl.DateTimeFormat('es-ES', { month: 'long', year: 'numeric' }).format(currentDate)
+      : `Semana del ${daysInWeek[0].toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}`;
 
   const selectedDayJobs = selectedDate ? jobsByDate[selectedDate] || [] : [];
 
   return (
     <div className="space-y-6" data-testid="calendarView">
-      <div className="flex items-center justify-between bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-        <h2
-          className="text-lg font-bold text-slate-900 capitalize"
-          data-testid="calendar_month_year"
-        >
-          {monthName} {year}
-        </h2>
+      {/* Header & Controls */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between bg-white p-4 rounded-xl shadow-sm border border-gray-100 gap-4">
+        <div className="flex flex-col gap-1">
+          <h2 className="text-lg font-bold text-slate-900 capitalize" data-testid="calendar_title">
+            {titleLabel}
+          </h2>
+          <div className="flex gap-1 mt-1 bg-gray-100 p-1 rounded-lg w-fit">
+            <button
+              onClick={() => setViewMode('monthly')}
+              className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${viewMode === 'monthly' ? 'bg-white text-amber-600 shadow-sm' : 'text-slate-500'}`}
+              data-testid="monthly_view_button"
+            >
+              MENSUAL
+            </button>
+            <button
+              onClick={() => setViewMode('weekly')}
+              className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${viewMode === 'weekly' ? 'bg-white text-amber-600 shadow-sm' : 'text-slate-500'}`}
+              data-testid="weekly_view_button"
+            >
+              SEMANAL
+            </button>
+          </div>
+        </div>
+
         <div className="flex gap-2">
-          <Button
-            variant="secondary"
-            onClick={prevMonth}
-            className="px-3"
-            data-testid="prev_month_button"
-          >
+          <Button variant="secondary" onClick={prev} className="px-3" data-testid="prev_button">
             ←
           </Button>
           <Button
@@ -114,79 +147,122 @@ export function CalendarView() {
           >
             Hoy
           </Button>
-          <Button
-            variant="secondary"
-            onClick={nextMonth}
-            className="px-3"
-            data-testid="next_month_button"
-          >
+          <Button variant="secondary" onClick={next} className="px-3" data-testid="next_button">
             →
           </Button>
         </div>
       </div>
 
+      {/* View Content */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="grid grid-cols-7 bg-gray-50 border-b border-gray-100">
-          {DAYS.map(day => (
-            <div
-              key={day}
-              className="py-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider"
-            >
-              {day}
-            </div>
-          ))}
-        </div>
-        <div className="grid grid-cols-7 auto-rows-fr">
-          {daysInMonth.map((date, idx) => {
-            if (!date)
-              return (
+        {viewMode === 'monthly' ? (
+          <>
+            <div className="grid grid-cols-7 bg-gray-50 border-b border-gray-100">
+              {DAYS.map(day => (
                 <div
-                  key={`empty-${idx}`}
-                  className="bg-gray-50/50 min-h-[100px] border-r border-b border-gray-50"
-                />
-              );
-
-            const dateStr = date.toISOString().split('T')[0];
-            const isToday = new Date().toISOString().split('T')[0] === dateStr;
-            const isSelected = selectedDate === dateStr;
-            const dayJobs = jobsByDate[dateStr] || [];
-
-            return (
-              <div
-                key={dateStr}
-                onClick={() => setSelectedDate(dateStr)}
-                className={`min-h-[100px] p-2 border-r border-b border-gray-100 cursor-pointer transition-colors hover:bg-amber-50/30 ${
-                  isSelected ? 'bg-amber-50' : ''
-                }`}
-                data-testid={`calendar_day_${dateStr}`}
-              >
-                <div className="flex justify-between items-start">
-                  <span
-                    className={`text-sm font-medium ${isToday ? 'bg-amber-600 text-white w-6 h-6 flex items-center justify-center rounded-full' : 'text-slate-700'}`}
-                  >
-                    {date.getDate()}
-                  </span>
+                  key={day}
+                  className="py-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider"
+                >
+                  {day}
                 </div>
-                <div className="mt-2 space-y-1">
-                  {dayJobs.slice(0, 3).map(job => (
+              ))}
+            </div>
+            <div className="grid grid-cols-7 auto-rows-fr">
+              {daysInMonth.map((date, idx) => {
+                if (!date)
+                  return (
                     <div
-                      key={job.id}
-                      className={`h-1.5 w-full rounded-full ${ESTADO_COLORS[job.estado] || 'bg-gray-200'}`}
-                      title={`${job.hora} - ${job.clientes?.nombre}`}
+                      key={`empty-${idx}`}
+                      className="bg-gray-50/50 min-h-[100px] border-r border-b border-gray-50"
                     />
-                  ))}
-                  {dayJobs.length > 3 && (
-                    <p className="text-[10px] text-slate-400 font-bold text-center">
-                      +{dayJobs.length - 3} más
+                  );
+                const dateStr = date.toISOString().split('T')[0];
+                const isToday = new Date().toISOString().split('T')[0] === dateStr;
+                const isSelected = selectedDate === dateStr;
+                const dayJobs = jobsByDate[dateStr] || [];
+
+                return (
+                  <div
+                    key={dateStr}
+                    onClick={() => setSelectedDate(dateStr)}
+                    className={`min-h-[100px] p-2 border-r border-b border-gray-100 cursor-pointer transition-colors hover:bg-amber-50/30 ${isSelected ? 'bg-amber-50' : ''}`}
+                    data-testid={`calendar_day_${dateStr}`}
+                  >
+                    <span
+                      className={`text-sm font-medium ${isToday ? 'bg-amber-600 text-white w-6 h-6 flex items-center justify-center rounded-full' : 'text-slate-700'}`}
+                    >
+                      {date.getDate()}
+                    </span>
+                    <div className="mt-2 space-y-1">
+                      {dayJobs.slice(0, 3).map(job => (
+                        <div
+                          key={job.id}
+                          className={`h-1.5 w-full rounded-full ${ESTADO_COLORS[job.estado] || 'bg-gray-200'}`}
+                          title={`${job.hora} - ${job.clientes?.nombre}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        ) : (
+          /* Weekly View */
+          <div className="overflow-x-auto" data-testid="weeklyGrid">
+            <div className="min-w-[800px]">
+              <div className="grid grid-cols-[80px_repeat(7,1fr)] bg-gray-50 border-b border-gray-100">
+                <div className="py-3 border-r border-gray-100" />
+                {daysInWeek.map((date, i) => (
+                  <div key={i} className="py-3 text-center border-r border-gray-100">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase">{DAYS[i]}</p>
+                    <p
+                      className={`text-sm font-bold ${new Date().toISOString().split('T')[0] === date.toISOString().split('T')[0] ? 'text-amber-600' : 'text-slate-700'}`}
+                    >
+                      {date.getDate()}
                     </p>
-                  )}
-                </div>
+                  </div>
+                ))}
               </div>
-            );
-          })}
-        </div>
+              <div className="grid grid-cols-[80px_repeat(7,1fr)]">
+                {HOURS.map(hour => (
+                  <div key={hour} className="contents">
+                    <div className="py-4 text-center text-[10px] font-bold text-slate-400 border-r border-b border-gray-50">
+                      {hour.toString().padStart(2, '0')}:00
+                    </div>
+                    {daysInWeek.map((date, dayIdx) => {
+                      const dateStr = date.toISOString().split('T')[0];
+                      const hourStr = `${hour.toString().padStart(2, '0')}:`;
+                      const hourJobs = (jobsByDate[dateStr] || []).filter(j =>
+                        j.hora.startsWith(hourStr)
+                      );
+
+                      return (
+                        <div
+                          key={`${dayIdx}-${hour}`}
+                          className="relative border-r border-b border-gray-50 p-1 min-h-[60px] hover:bg-gray-50/50"
+                        >
+                          {hourJobs.map(job => (
+                            <Link
+                              key={job.id}
+                              href={`/dashboard/trabajos/${job.id}`}
+                              className={`block p-1 mb-1 rounded text-[9px] font-bold text-white shadow-sm ${ESTADO_COLORS[job.estado]}`}
+                            >
+                              {job.clientes?.nombre}
+                            </Link>
+                          ))}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
+      {/* Day Details (Reuse existing logic) */}
       {selectedDate && (
         <div
           className="card p-6 bg-white animate-in fade-in slide-in-from-bottom-2"
@@ -209,7 +285,6 @@ export function CalendarView() {
               + Nuevo Trabajo
             </Link>
           </div>
-
           {selectedDayJobs.length === 0 ? (
             <p className="text-sm text-slate-500 italic">No hay trabajos para este día.</p>
           ) : (
@@ -219,7 +294,6 @@ export function CalendarView() {
                   key={job.id}
                   href={`/dashboard/trabajos/${job.id}`}
                   className="flex items-center gap-3 p-3 rounded-lg border border-gray-100 hover:border-amber-200 hover:bg-amber-50/50 transition-all group"
-                  data-testid="calendar_job_item"
                 >
                   <span className={`w-3 h-3 rounded-full shrink-0 ${ESTADO_COLORS[job.estado]}`} />
                   <div className="flex-1 min-w-0">
