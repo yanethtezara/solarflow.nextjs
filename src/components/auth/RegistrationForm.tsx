@@ -9,7 +9,10 @@ import { useRouter } from 'next/navigation';
 import Toast from '@/components/Toast';
 
 const signupSchema = z.object({
-  email: z.string().email('Ingresa un correo electrónico válido'),
+  email: z
+    .string()
+    .email('Ingresa un correo electrónico válido')
+    .max(254, 'El email es demasiado largo'),
   password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
 });
 
@@ -35,7 +38,13 @@ export default function RegistrationForm() {
     const { error: signUpError } = await signUp(data.email, data.password);
 
     if (signUpError) {
-      setError(signUpError.message);
+      if (signUpError.message.includes('rate limit') || signUpError.status === 429) {
+        setError(
+          'Has realizado demasiados intentos. Por favor, espera unos minutos antes de intentar de nuevo por seguridad.'
+        );
+      } else {
+        setError(signUpError.message);
+      }
     } else {
       setShowToast(true);
       // El autologin de Supabase redirigirá automáticamente vía AuthContext/Middleware
