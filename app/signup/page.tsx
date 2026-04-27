@@ -6,15 +6,15 @@ import RegistrationForm from '@/components/auth/RegistrationForm';
 
 export default function SignUpPage() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-12">
+    <main className="min-h-screen flex items-center justify-center bg-slate-900 px-4 py-12">
       {/* Background decoration - subtle sun-like glow */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-[10%] -right-[10%] w-[40%] h-[40%] bg-amber-100/50 rounded-full blur-3xl" />
-        <div className="absolute -bottom-[10%] -left-[10%] w-[30%] h-[30%] bg-slate-200/50 rounded-full blur-3xl" />
+        <div className="absolute -top-[10%] -right-[10%] w-[40%] h-[40%] bg-amber-500/5 rounded-full blur-3xl" />
+        <div className="absolute -bottom-[10%] -left-[10%] w-[30%] h-[30%] bg-blue-500/5 rounded-full blur-3xl" />
       </div>
 
       <div className="w-full max-w-[400px] relative z-10">
-        <div className="card p-8 space-y-8 animate-fade-in shadow-xl bg-white/80 backdrop-blur-sm">
+        <div className="card p-8 space-y-8 animate-fade-in shadow-2xl bg-white">
           {/* Brand Header */}
           <div className="flex flex-col items-center space-y-4">
             <Link href="/" className="transition-transform duration-300 hover:scale-105">
