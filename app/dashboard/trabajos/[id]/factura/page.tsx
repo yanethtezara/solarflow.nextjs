@@ -104,11 +104,19 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
         {pages.map((pageItems, pageIdx) => (
           <div
             key={pageIdx}
-            className="bg-white border border-gray-200 shadow-sm p-8 sm:p-12 print:border-none print:shadow-none min-h-[1056px] flex flex-col page-break"
+            className="relative bg-white border border-gray-200 shadow-sm p-8 sm:p-12 print:border-none print:shadow-none min-h-[1056px] flex flex-col page-break overflow-hidden"
             data-testid={`invoice_page_${pageIdx + 1}`}
           >
+            {/* Watermark */}
+            <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center opacity-[0.04] rotate-[-35deg] scale-150 select-none print:opacity-[0.05]">
+              <SunLogo size={400} className="text-amber-600 mb-4" />
+              <h1 className="text-8xl font-black uppercase tracking-tighter text-slate-900">
+                SolarFlow
+              </h1>
+            </div>
+
             {/* Header - Repeated on every page */}
-            <div className="flex justify-between items-start border-b border-gray-100 pb-8 mb-8">
+            <div className="relative z-10 flex justify-between items-start border-b border-gray-100 pb-8 mb-8">
               <div className="flex items-center gap-3">
                 <SunLogo size={48} className="text-amber-600" />
                 <div>
@@ -137,9 +145,9 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
               </div>
             </div>
 
-            {/* Info Blocks - Only on first page to save space? User wants consistency, let's keep basic info */}
+            {/* Info Blocks - Only on first page */}
             {pageIdx === 0 && (
-              <div className="grid grid-cols-2 gap-12 mb-12">
+              <div className="relative z-10 grid grid-cols-2 gap-12 mb-12">
                 <div>
                   <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
                     De
@@ -171,7 +179,7 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
             )}
 
             {/* Items Table */}
-            <div className="flex-1">
+            <div className="relative z-10 flex-1">
               <table className="w-full text-left">
                 <thead className="border-b-2 border-slate-900">
                   <tr>
@@ -189,15 +197,13 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-gray-100 font-medium">
                   {pageItems.map((item, idx) => {
                     const catalogo = item.catalogo_items as any;
                     const precio = catalogo?.precio || 0;
                     return (
                       <tr key={idx}>
-                        <td className="py-4 text-sm font-medium text-slate-900">
-                          {catalogo?.nombre}
-                        </td>
+                        <td className="py-4 text-sm text-slate-900">{catalogo?.nombre}</td>
                         <td className="py-4 text-sm text-slate-600 text-center">{item.cantidad}</td>
                         <td className="py-4 text-sm text-slate-600 text-right">
                           {precio.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
@@ -216,13 +222,13 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
             </div>
 
             {/* Totals & Footer - Only on LAST page */}
-            {pageIdx === totalPages - 1 ? (
-              <>
+            {pageIdx === totalPages - 1 && (
+              <div className="relative z-10">
                 <div className="border-t-2 border-slate-900 pt-8 mt-12 flex justify-end">
                   <div className="w-full sm:w-64 space-y-3">
                     <div className="flex justify-between text-sm">
                       <span className="text-slate-500 uppercase font-bold">Subtotal</span>
-                      <span className="text-slate-900 font-medium">
+                      <span className="text-slate-900 font-bold">
                         {subtotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
                       </span>
                     </div>
@@ -243,15 +249,17 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
                     Esta es una factura generada automáticamente por SolarFlow.
                   </p>
                 </div>
-              </>
-            ) : (
-              <div className="mt-8 text-right italic text-slate-400 text-xs">
+              </div>
+            )}
+
+            {pageIdx !== totalPages - 1 && (
+              <div className="relative z-10 mt-8 text-right italic text-slate-400 text-xs">
                 Continúa en la siguiente página...
               </div>
             )}
 
             {/* Page Counter */}
-            <div className="mt-auto pt-8 flex justify-center border-t border-gray-50">
+            <div className="relative z-10 mt-auto pt-8 flex justify-center border-t border-gray-50">
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 Página {pageIdx + 1} de {totalPages}
               </p>
@@ -290,6 +298,11 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
             box-shadow: none !important;
             padding: 0 !important;
             margin: 0 !important;
+          }
+          /* Asegurar que la marca de agua se imprima correctamente */
+          .relative {
+             -webkit-print-color-adjust: exact;
+             print-color-adjust: exact;
           }
         }
       `,
