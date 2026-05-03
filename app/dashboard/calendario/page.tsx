@@ -46,7 +46,7 @@ export default async function CalendarioPage() {
   return (
     <div className="p-4 sm:p-6 md:p-8">
       <h1 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 uppercase mb-6">
-        Calendario de Trabajos
+        Calendario de Instalaciones
       </h1>
       <CalendarView initialTrabajos={formattedTrabajos} />
     </div>
