@@ -1,99 +1,102 @@
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
-import { notFound } from 'next/navigation';
+'use client';
+
+import { useState, useEffect } from 'react';
+import { createSupabaseBrowserClient } from '@/lib/supabase/client';
+import { notFound, useParams } from 'next/navigation';
 import Link from 'next/link';
-import { Database } from '@/types/supabase';
 import SunLogo from '@/components/SunLogo';
 
-export default async function FacturaPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const cookieStore = await cookies();
-  const supabase = createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-      },
+export default function FacturaPage() {
+  const params = useParams();
+  const id = params.id as string;
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<any>(null);
+  const supabase = createSupabaseBrowserClient();
+
+  useEffect(() => {
+    async function loadData() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: trabajo } = await supabase
+        .from('trabajos')
+        .select(
+          `
+          *,
+          clientes(nombre, direccion, telefono),
+          empresas(nombre, contacto_responsable, telefono_contacto)
+        `
+        )
+        .eq('id', id)
+        .single();
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('nombre_completo, telefono')
+        .eq('id', user.id)
+        .single();
+
+      const { data: items } = await supabase
+        .from('trabajos_items')
+        .select(
+          `
+          cantidad,
+          catalogo_items(nombre, precio)
+        `
+        )
+        .eq('trabajo_id', id);
+
+      if (trabajo) {
+        setData({ trabajo, profile, items: items || [], userEmail: user.email });
+      }
+      setLoading(false);
     }
-  );
+    loadData();
+  }, [id, supabase]);
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return null;
+  const handlePrint = () => {
+    window.print();
+  };
 
-  const { data: trabajo, error } = await supabase
-    .from('trabajos')
-    .select(
-      `
-      *,
-      clientes(nombre, direccion, telefono),
-      empresas(nombre, contacto_responsable, telefono_contacto)
-    `
-    )
-    .eq('id', id)
-    .single();
+  if (loading)
+    return (
+      <div className="p-8 text-center text-slate-500 uppercase font-black animate-pulse">
+        Cargando Factura...
+      </div>
+    );
+  if (!data) return notFound();
 
-  if (error || !trabajo) notFound();
-
-  // Obtener datos del perfil del usuario (emisor)
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('nombre_completo, telefono')
-    .eq('id', user.id)
-    .single();
-
-  const { data: itemsData } = await supabase
-    .from('trabajos_items')
-    .select(
-      `
-      cantidad,
-      catalogo_items(nombre, precio)
-    `
-    )
-    .eq('trabajo_id', id);
-
-  const items = itemsData || [];
-  const subtotal = items.reduce((acc, item) => {
-    const precio = (item.catalogo_items as any)?.precio || 0;
+  const { trabajo, profile, items, userEmail } = data;
+  const subtotal = items.reduce((acc: number, item: any) => {
+    const precio = item.catalogo_items?.precio || 0;
     return acc + precio * item.cantidad;
   }, 0);
-
   const total = subtotal;
-  const cliente = trabajo.clientes as any;
-  const empresa = trabajo.empresas as any;
+  const cliente = trabajo.clientes;
+  const empresa = trabajo.empresas;
 
-  // Lógica de Paginación (15 ítems por página)
   const itemsPerPage = 15;
   const totalPages = Math.ceil(items.length / itemsPerPage) || 1;
   const pages = [];
-
   for (let i = 0; i < totalPages; i++) {
     pages.push(items.slice(i * itemsPerPage, (i + 1) * itemsPerPage));
   }
 
   return (
-    <div
-      className="min-h-screen bg-gray-50 p-4 sm:p-8 print:bg-white print:p-0"
-      data-testid="invoicePage"
-    >
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-8 print:bg-white print:p-0">
       <div className="max-w-4xl mx-auto space-y-6">
-        {/* Actions - hidden on print */}
         <div className="flex justify-between items-center print:hidden">
           <Link
             href={`/dashboard/trabajos/${id}`}
             className="text-amber-600 hover:underline text-sm font-medium"
-            data-testid="back_link"
           >
             ← Volver a la instalación
           </Link>
           <button
-            id="print-btn"
+            onClick={handlePrint}
             className="btn-primary text-sm px-6 flex items-center gap-2"
-            data-testid="print_button"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -107,12 +110,10 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
           </button>
         </div>
 
-        {/* Invoice Pages Loop */}
         {pages.map((pageItems, pageIdx) => (
           <div
             key={pageIdx}
-            className="relative bg-white border border-gray-200 shadow-sm p-8 sm:p-12 print:border-none print:shadow-none min-h-[1056px] flex flex-col page-break overflow-hidden"
-            data-testid={`invoice_page_${pageIdx + 1}`}
+            className="relative bg-white border border-gray-200 shadow-sm p-8 sm:p-12 print:border-none print:shadow-none min-h-[1056px] flex flex-col page-break overflow-hidden mb-8"
           >
             {/* Watermark */}
             <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center opacity-[0.04] rotate-[-35deg] scale-150 select-none print:opacity-[0.05]">
@@ -122,7 +123,6 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
               </h1>
             </div>
 
-            {/* Header - Repeated on every page */}
             <div className="relative z-10 flex justify-between items-start border-b border-gray-100 pb-8 mb-8">
               <div className="flex items-center gap-3">
                 <SunLogo size={48} className="text-amber-600" />
@@ -152,7 +152,6 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
               </div>
             </div>
 
-            {/* Info Blocks - Only on first page */}
             {pageIdx === 0 && (
               <div className="relative z-10 grid grid-cols-2 gap-12 mb-12">
                 <div>
@@ -160,15 +159,10 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
                     De
                   </p>
                   <p className="text-lg font-bold text-slate-900">
-                    {profile?.nombre_completo ?? empresa?.nombre ?? 'Mi Empresa'}
+                    {profile?.nombre_completo ?? 'Emisor'}
                   </p>
-                  {empresa?.nombre && profile?.nombre_completo && (
-                    <p className="text-sm text-slate-600">{empresa.nombre}</p>
-                  )}
-                  <p className="text-sm text-slate-600 mt-1">
-                    {profile?.telefono ?? empresa?.telefono_contacto}
-                  </p>
-                  <p className="text-sm text-slate-600">{user.email}</p>
+                  <p className="text-sm text-slate-600 mt-1">{profile?.telefono}</p>
+                  <p className="text-sm text-slate-600">{userEmail}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
@@ -185,7 +179,6 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
               </div>
             )}
 
-            {/* Items Table */}
             <div className="relative z-10 flex-1">
               <table className="w-full text-left">
                 <thead className="border-b-2 border-slate-900">
@@ -205,8 +198,8 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 font-medium">
-                  {pageItems.map((item, idx) => {
-                    const catalogo = item.catalogo_items as any;
+                  {pageItems.map((item: any, idx: number) => {
+                    const catalogo = item.catalogo_items;
                     const precio = catalogo?.precio || 0;
                     return (
                       <tr key={idx}>
@@ -228,7 +221,6 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
               </table>
             </div>
 
-            {/* Totals & Footer - Only on LAST page */}
             {pageIdx === totalPages - 1 && (
               <div className="relative z-10">
                 <div className="border-t-2 border-slate-900 pt-8 mt-12 flex justify-end">
@@ -247,7 +239,6 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
                     </div>
                   </div>
                 </div>
-
                 <div className="mt-20 text-center">
                   <p className="text-xs text-slate-400 uppercase font-bold tracking-widest mb-1">
                     Gracias por su confianza
@@ -265,7 +256,6 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
               </div>
             )}
 
-            {/* Page Counter */}
             <div className="relative z-10 mt-auto pt-8 flex justify-center border-t border-gray-50">
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 Página {pageIdx + 1} de {totalPages}
@@ -275,41 +265,43 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
         ))}
       </div>
 
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            document.getElementById('print-btn')?.addEventListener('click', () => {
-              window.print();
-            });
-          `,
-        }}
-      />
-
       <style
         dangerouslySetInnerHTML={{
           __html: `
         @media print {
-          body {
+          /* Ocultar TODO el layout del dashboard */
+          aside, nav, header, footer, .print-hidden { 
+            display: none !important; 
+          }
+          
+          /* Forzar que el contenido de la factura ocupe todo el ancho */
+          body, main { 
             background: white !important;
-          }
-          .print-hidden {
-            display: none !important;
-          }
-          main {
-            padding: 0 !important;
             margin: 0 !important;
-          }
-          .page-break {
-            page-break-after: always;
-            border: none !important;
-            box-shadow: none !important;
             padding: 0 !important;
-            margin: 0 !important;
+            width: 100% !important;
           }
-          /* Asegurar que la marca de agua se imprima correctamente */
-          .relative {
-             -webkit-print-color-adjust: exact;
-             print-color-adjust: exact;
+
+          .max-w-4xl {
+            max-width: none !important;
+            width: 100% !important;
+          }
+
+          .min-h-screen {
+            min-height: 0 !important;
+          }
+
+          .page-break { 
+            page-break-after: always; 
+            border: none !important; 
+            box-shadow: none !important; 
+            padding: 0 !important; 
+            margin: 0 !important; 
+          }
+          
+          .relative { 
+            -webkit-print-color-adjust: exact; 
+            print-color-adjust: exact; 
           }
         }
       `,
