@@ -129,7 +129,7 @@ export default function JobCreationForm({ initialData, trabajoId }: JobCreationF
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        throw new Error(data?.error?.message || 'Error al guardar el trabajo');
+        throw new Error(data?.error?.message || 'Error al guardar la instalación');
       }
 
       const toast = isEdit ? 'trabajo_actualizado' : 'trabajo_creado';
