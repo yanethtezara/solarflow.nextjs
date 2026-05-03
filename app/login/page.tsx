@@ -48,9 +48,9 @@ export default function LoginPage() {
         {/* Support link */}
         <p className="mt-8 text-center text-xs text-slate-400">
           ¿Necesitas ayuda técnica?{' '}
-          <a href="#" className="underline hover:text-slate-200 transition-colors">
+          <Link href="/support" className="underline hover:text-slate-200 transition-colors">
             Contacta con soporte
-          </a>
+          </Link>
         </p>
       </div>
     </main>
