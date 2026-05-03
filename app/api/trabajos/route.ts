@@ -82,6 +82,8 @@ export async function POST(request: Request) {
   const empresaId = body.empresa_id?.trim() || null;
   const fecha = body.fecha?.trim();
   const hora = body.hora?.trim();
+  const fechaFin = body.fecha_fin?.trim() || fecha;
+  const horaFin = body.hora_fin?.trim() || null;
   const ubicacion = body.ubicacion?.trim() || null;
 
   if (!clienteId) {
@@ -133,6 +135,8 @@ export async function POST(request: Request) {
       empresa_id: empresaId,
       fecha,
       hora,
+      fecha_fin: fechaFin,
+      hora_fin: horaFin,
       ubicacion,
       estado: 'agendado',
     })

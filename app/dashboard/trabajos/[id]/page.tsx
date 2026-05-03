@@ -88,6 +88,11 @@ export default async function TrabajoDetailPage({ params }: { params: Promise<{ 
     return `${parts[0]}:${parts[1] || '00'}`;
   };
 
+  const isSameDay = !trabajo.fecha_fin || trabajo.fecha === trabajo.fecha_fin;
+  const rangeText = isSameDay
+    ? `${formatFecha(trabajo.fecha)} · ${formatHora(trabajo.hora)} - ${formatHora(trabajo.hora_fin || '11:00')}`
+    : `${formatFecha(trabajo.fecha)} ${formatHora(trabajo.hora)} hasta ${formatFecha(trabajo.fecha_fin || trabajo.fecha)} ${formatHora(trabajo.hora_fin || '11:00')}`;
+
   return (
     <div className="p-4 sm:p-6 md:p-8 max-w-3xl mx-auto">
       <div className="mb-6">
@@ -101,9 +106,7 @@ export default async function TrabajoDetailPage({ params }: { params: Promise<{ 
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 uppercase">
             {cliente?.nombre ?? 'Instalación'}
           </h1>
-          <p className="text-slate-600 mt-1">
-            {formatFecha(trabajo.fecha)} · {formatHora(trabajo.hora)}
-          </p>
+          <p className="text-slate-600 mt-1">{rangeText}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2 sm:gap-4">
           <JobStatusSelector trabajoId={id} currentEstado={trabajo.estado} />

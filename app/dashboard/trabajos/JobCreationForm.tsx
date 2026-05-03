@@ -7,13 +7,27 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 // Schema de Zod según implementation-plan.md
-const jobSchema = z.object({
-  cliente_id: z.string().uuid('Selecciona un cliente'),
-  empresa_id: z.string().uuid().optional().nullable(),
-  fecha: z.string().min(1, 'La fecha es obligatoria'),
-  hora: z.string().min(1, 'La hora es obligatoria'),
-  ubicacion: z.string().min(1, 'La ubicación es obligatoria'),
-});
+const jobSchema = z
+  .object({
+    cliente_id: z.string().uuid('Selecciona un cliente'),
+    empresa_id: z.string().uuid().optional().nullable(),
+    fecha: z.string().min(1, 'La fecha es obligatoria'),
+    hora: z.string().min(1, 'La hora es obligatoria'),
+    fecha_fin: z.string().min(1, 'La fecha de fin es obligatoria'),
+    hora_fin: z.string().min(1, 'La hora de fin es obligatoria'),
+    ubicacion: z.string().min(1, 'La ubicación es obligatoria'),
+  })
+  .refine(
+    data => {
+      const start = new Date(`${data.fecha}T${data.hora}`);
+      const end = new Date(`${data.fecha_fin}T${data.hora_fin}`);
+      return end > start;
+    },
+    {
+      message: 'La fecha y hora de fin deben ser posteriores al inicio',
+      path: ['fecha_fin'],
+    }
+  );
 
 type JobFormData = z.infer<typeof jobSchema>;
 
@@ -26,6 +40,8 @@ type JobCreationFormProps = {
     empresa_id: string | null;
     fecha: string;
     hora: string;
+    fecha_fin: string | null;
+    hora_fin: string | null;
     ubicacion: string | null;
   };
   trabajoId?: string;
@@ -44,6 +60,8 @@ export default function JobCreationForm({ initialData, trabajoId }: JobCreationF
     empresa_id: initialData?.empresa_id || '',
     fecha: initialData?.fecha || fechaParam || '',
     hora: initialData?.hora ? initialData.hora.slice(0, 5) : '09:00',
+    fecha_fin: initialData?.fecha_fin || initialData?.fecha || fechaParam || '',
+    hora_fin: initialData?.hora_fin ? initialData.hora_fin.slice(0, 5) : '11:00',
     ubicacion: initialData?.ubicacion || '',
   });
   const [validationErrors, setValidationErrors] = useState<
@@ -117,6 +135,8 @@ export default function JobCreationForm({ initialData, trabajoId }: JobCreationF
     const body = {
       ...result.data,
       hora: result.data.hora.length === 5 ? result.data.hora : `${result.data.hora}:00`,
+      hora_fin:
+        result.data.hora_fin.length === 5 ? result.data.hora_fin : `${result.data.hora_fin}:00`,
     };
 
     try {
@@ -197,7 +217,7 @@ export default function JobCreationForm({ initialData, trabajoId }: JobCreationF
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Fecha *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Fecha Inicio *</label>
           <Input
             name="fecha"
             type="date"
@@ -213,7 +233,7 @@ export default function JobCreationForm({ initialData, trabajoId }: JobCreationF
           )}
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Hora *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Hora Inicio *</label>
           <Input
             name="hora"
             type="time"
@@ -225,6 +245,41 @@ export default function JobCreationForm({ initialData, trabajoId }: JobCreationF
           {validationErrors.hora && (
             <p className="text-red-600 text-xs mt-1" data-testid="hora_error">
               {validationErrors.hora}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Fecha Fin *</label>
+          <Input
+            name="fecha_fin"
+            type="date"
+            value={formData.fecha_fin}
+            onChange={handleChange}
+            className={validationErrors.fecha_fin ? 'border-red-500' : ''}
+            data-testid="fecha_fin_input"
+          />
+          {validationErrors.fecha_fin && (
+            <p className="text-red-600 text-xs mt-1" data-testid="fecha_fin_error">
+              {validationErrors.fecha_fin}
+            </p>
+          )}
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Hora Fin *</label>
+          <Input
+            name="hora_fin"
+            type="time"
+            value={formData.hora_fin}
+            onChange={handleChange}
+            className={validationErrors.hora_fin ? 'border-red-500' : ''}
+            data-testid="hora_fin_input"
+          />
+          {validationErrors.hora_fin && (
+            <p className="text-red-600 text-xs mt-1" data-testid="hora_fin_error">
+              {validationErrors.hora_fin}
             </p>
           )}
         </div>

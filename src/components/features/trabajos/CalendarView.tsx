@@ -8,6 +8,8 @@ type Trabajo = {
   id: string;
   fecha: string;
   hora: string;
+  fecha_fin: string | null;
+  hora_fin: string | null;
   estado: string;
   clientes: { id: string; nombre: string } | null;
 };
@@ -83,8 +85,16 @@ export function CalendarView() {
   const jobsByDate = useMemo(() => {
     const map: Record<string, Trabajo[]> = {};
     jobs.forEach(job => {
-      if (!map[job.fecha]) map[job.fecha] = [];
-      map[job.fecha].push(job);
+      const start = new Date(job.fecha + 'T00:00:00');
+      const end = new Date((job.fecha_fin || job.fecha) + 'T00:00:00');
+
+      const current = new Date(start);
+      while (current <= end) {
+        const dateStr = current.toISOString().split('T')[0];
+        if (!map[dateStr]) map[dateStr] = [];
+        map[dateStr].push(job);
+        current.setDate(current.getDate() + 1);
+      }
     });
     return map;
   }, [jobs]);
@@ -232,10 +242,21 @@ export function CalendarView() {
                     </div>
                     {daysInWeek.map((date, dayIdx) => {
                       const dateStr = date.toISOString().split('T')[0];
-                      const hourStr = `${hour.toString().padStart(2, '0')}:`;
-                      const hourJobs = (jobsByDate[dateStr] || []).filter(j =>
-                        j.hora.startsWith(hourStr)
+                      const currentSlotStart = new Date(
+                        `${dateStr}T${hour.toString().padStart(2, '0')}:00:00`
                       );
+                      const currentSlotEnd = new Date(
+                        `${dateStr}T${hour.toString().padStart(2, '0')}:59:59`
+                      );
+
+                      const hourJobs = (jobsByDate[dateStr] || []).filter(j => {
+                        const jobStart = new Date(`${j.fecha}T${j.hora}`);
+                        const jobEnd = new Date(
+                          `${j.fecha_fin || j.fecha}T${j.hora_fin || j.hora}`
+                        );
+                        // Overlap logic
+                        return jobStart <= currentSlotEnd && jobEnd >= currentSlotStart;
+                      });
 
                       return (
                         <div
@@ -247,6 +268,7 @@ export function CalendarView() {
                               key={job.id}
                               href={`/dashboard/trabajos/${job.id}`}
                               className={`block p-1 mb-1 rounded text-[9px] font-bold text-white shadow-sm ${ESTADO_COLORS[job.estado]}`}
+                              title={`${job.hora.slice(0, 5)} - ${(job.hora_fin || '').slice(0, 5)}: ${job.clientes?.nombre}`}
                             >
                               {job.clientes?.nombre}
                             </Link>
@@ -301,7 +323,7 @@ export function CalendarView() {
                       {job.clientes?.nombre || 'Sin cliente'}
                     </p>
                     <p className="text-xs text-slate-500">
-                      {job.hora.slice(0, 5)} ·{' '}
+                      {job.hora.slice(0, 5)} - {(job.hora_fin || '').slice(0, 5)} ·{' '}
                       <span className="capitalize">{job.estado.replace('_', ' ')}</span>
                     </p>
                   </div>

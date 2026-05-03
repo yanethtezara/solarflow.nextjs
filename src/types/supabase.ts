@@ -147,7 +147,9 @@ export type Database = {
           empresa_id: string | null;
           estado: string;
           fecha: string;
+          fecha_fin: string | null;
           hora: string;
+          hora_fin: string | null;
           id: string;
           ubicacion: string | null;
           user_id: string;
@@ -158,7 +160,9 @@ export type Database = {
           empresa_id?: string | null;
           estado?: string;
           fecha: string;
+          fecha_fin?: string | null;
           hora?: string;
+          hora_fin?: string | null;
           id?: string;
           ubicacion?: string | null;
           user_id: string;
@@ -169,7 +173,9 @@ export type Database = {
           empresa_id?: string | null;
           estado?: string;
           fecha?: string;
+          fecha_fin?: string | null;
           hora?: string;
+          hora_fin?: string | null;
           id?: string;
           ubicacion?: string | null;
           user_id?: string;

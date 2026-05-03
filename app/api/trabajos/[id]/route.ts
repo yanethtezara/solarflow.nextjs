@@ -69,6 +69,8 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     body.empresa_id === null || body.empresa_id === '' ? null : body.empresa_id?.trim();
   const fecha = body.fecha?.trim();
   const hora = body.hora?.trim();
+  const fechaFin = body.fecha_fin?.trim() || fecha;
+  const horaFin = body.hora_fin?.trim() || null;
   const ubicacion = body.ubicacion?.trim() || null;
 
   if (!clienteId) {
@@ -119,6 +121,8 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       empresa_id: empresaId,
       fecha,
       hora,
+      fecha_fin: fechaFin,
+      hora_fin: horaFin,
       ubicacion,
     })
     .eq('id', id)
