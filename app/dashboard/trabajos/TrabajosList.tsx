@@ -37,9 +37,16 @@ type TrabajosListProps = {
 export default function TrabajosList({ trabajos }: TrabajosListProps) {
   const router = useRouter();
   const [estadoFilter, setEstadoFilter] = useState('');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [deleteTarget, setDeleteTarget] = useState<Trabajo | null>(null);
 
   const filtered = estadoFilter ? trabajos.filter(t => t.estado === estadoFilter) : trabajos;
+
+  const sortedAndFiltered = [...filtered].sort((a, b) => {
+    const dateA = new Date(`${a.fecha}T${a.hora}`).getTime();
+    const dateB = new Date(`${b.fecha}T${b.hora}`).getTime();
+    return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+  });
 
   const handleDeleteConfirm = async () => {
     if (!deleteTarget) return;
@@ -96,20 +103,48 @@ export default function TrabajosList({ trabajos }: TrabajosListProps) {
 
   return (
     <div data-testid="trabajosList">
-      <div className="mb-4 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-        <label className="text-sm font-medium text-gray-700">Filtrar por estado:</label>
-        <select
-          value={estadoFilter}
-          onChange={e => setEstadoFilter(e.target.value)}
-          className="w-full sm:w-auto px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 min-h-[44px]"
-          data-testid="estado_filter_select"
-        >
-          {ESTADOS.map(e => (
-            <option key={e.value || 'all'} value={e.value}>
-              {e.label}
-            </option>
-          ))}
-        </select>
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+          <label className="text-sm font-medium text-slate-700">Filtrar por estado:</label>
+          <select
+            value={estadoFilter}
+            onChange={e => setEstadoFilter(e.target.value)}
+            className="w-full sm:w-auto px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 min-h-[44px]"
+            data-testid="estado_filter_select"
+          >
+            {ESTADOS.map(e => (
+              <option key={e.value || 'all'} value={e.value}>
+                {e.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium text-slate-700">Orden:</label>
+          <button
+            onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors min-h-[44px]"
+            data-testid="sort_order_button"
+          >
+            <span className="text-sm font-medium text-slate-700">
+              {sortOrder === 'asc' ? '📅 Más antiguas primero' : '📅 Más recientes primero'}
+            </span>
+            <svg
+              className={`w-4 h-4 text-slate-500 transition-transform ${sortOrder === 'desc' ? 'rotate-180' : ''}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
 
       {/* Desktop table */}
@@ -125,7 +160,7 @@ export default function TrabajosList({ trabajos }: TrabajosListProps) {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200" data-testid="job_table_body">
-            {filtered.map(t => (
+            {sortedAndFiltered.map(t => (
               <tr
                 key={t.id}
                 className="hover:bg-gray-50 transition-colors duration-200"
@@ -183,7 +218,7 @@ export default function TrabajosList({ trabajos }: TrabajosListProps) {
 
       {/* Mobile cards */}
       <div className="cards-mobile space-y-3" data-testid="job_cards_mobile">
-        {filtered.map(t => (
+        {sortedAndFiltered.map(t => (
           <div key={t.id} className="card p-4" data-testid="job_card">
             <Link
               href={`/dashboard/trabajos/${t.id}`}
