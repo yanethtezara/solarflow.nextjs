@@ -29,12 +29,11 @@ export default function AddItemToJobForm({ trabajoId, existingItemIds }: AddItem
       .then(res => (res.ok ? res.json() : []))
       .then((data: CatalogoItem[]) => {
         setItems(data);
-        const avail = data.filter(i => !existingItemIds.includes(i.id));
-        if (avail.length && !itemId) setItemId(avail[0].id);
+        if (data.length && !itemId) setItemId(data[0].id);
       });
-  }, [existingItemIds]);
+  }, []); // Cargar una vez al inicio
 
-  const availableItems = items.filter(i => !existingItemIds.includes(i.id));
+  const availableItems = items; // Mostrar todos los ítems del catálogo
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -118,18 +118,36 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     );
   }
 
-  const { data, error } = await supabase
+  // Check if item already exists in job
+  const { data: existingEntry } = await supabase
     .from('trabajos_items')
-    .upsert(
-      { trabajo_id: trabajoId, item_id: itemId, cantidad },
-      { onConflict: 'trabajo_id,item_id', ignoreDuplicates: false }
-    )
-    .select()
+    .select('cantidad')
+    .eq('trabajo_id', trabajoId)
+    .eq('item_id', itemId)
     .single();
 
-  if (error) {
-    return NextResponse.json({ error: { message: error.message } }, { status: 500 });
+  let result;
+  if (existingEntry) {
+    // Update summing the quantity
+    result = await supabase
+      .from('trabajos_items')
+      .update({ cantidad: existingEntry.cantidad + cantidad })
+      .eq('trabajo_id', trabajoId)
+      .eq('item_id', itemId)
+      .select()
+      .single();
+  } else {
+    // Insert new entry
+    result = await supabase
+      .from('trabajos_items')
+      .insert({ trabajo_id: trabajoId, item_id: itemId, cantidad })
+      .select()
+      .single();
   }
 
-  return NextResponse.json(data, { status: 201 });
+  if (result.error) {
+    return NextResponse.json({ error: { message: result.error.message } }, { status: 500 });
+  }
+
+  return NextResponse.json(result.data, { status: 201 });
 }
