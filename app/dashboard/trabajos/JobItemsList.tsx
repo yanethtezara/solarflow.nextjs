@@ -23,8 +23,16 @@ type JobItemsListProps = {
 export default function JobItemsList({ trabajoId, items }: JobItemsListProps) {
   const router = useRouter();
   const [deleteTarget, setDeleteTarget] = useState<JobItem | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 15;
 
   const total = items.reduce((acc, i) => acc + i.cantidad * (i.catalogo_items?.precio || 0), 0);
+  const totalItemsCount = items.length;
+
+  // Pagination logic
+  const totalPages = Math.ceil(totalItemsCount / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedItems = items.slice(startIndex, startIndex + itemsPerPage);
 
   const handleDeleteConfirm = async () => {
     if (!deleteTarget) return;
@@ -49,7 +57,19 @@ export default function JobItemsList({ trabajoId, items }: JobItemsListProps) {
   }
 
   return (
-    <div data-testid="jobItemsList">
+    <div data-testid="jobItemsList" className="space-y-4">
+      <div className="flex justify-between items-center px-1">
+        <p className="text-sm text-slate-600 font-medium">
+          Total: <span className="text-amber-600 font-bold">{totalItemsCount}</span>{' '}
+          {totalItemsCount === 1 ? 'ítem' : 'ítems'} agregados
+        </p>
+        {totalPages > 1 && (
+          <p className="text-xs text-slate-500">
+            Página {currentPage} de {totalPages}
+          </p>
+        )}
+      </div>
+
       <div className="card overflow-x-auto">
         <table className="w-full text-sm min-w-[600px]">
           <thead className="bg-gray-50 border-b border-gray-200">
@@ -62,7 +82,7 @@ export default function JobItemsList({ trabajoId, items }: JobItemsListProps) {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100" data-testid="items_table_body">
-            {items.map(i => (
+            {paginatedItems.map(i => (
               <tr
                 key={i.item_id}
                 className="hover:bg-gray-50 transition-colors"
@@ -136,6 +156,28 @@ export default function JobItemsList({ trabajoId, items }: JobItemsListProps) {
           </tfoot>
         </table>
       </div>
+
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-4 pt-2">
+          <button
+            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+            disabled={currentPage === 1}
+            className="px-4 py-2 text-sm font-bold rounded-lg border border-gray-200 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+          >
+            ← Anterior
+          </button>
+          <span className="text-sm font-bold text-slate-700">
+            {currentPage} / {totalPages}
+          </span>
+          <button
+            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 text-sm font-bold rounded-lg border border-gray-200 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+          >
+            Siguiente →
+          </button>
+        </div>
+      )}
 
       <ConfirmDialog
         open={!!deleteTarget}
