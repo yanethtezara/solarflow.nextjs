@@ -72,7 +72,7 @@ export function CatalogoForm({
     await onSubmit(result.data);
   };
 
-  const labelPrecio = formData.tipo === 'mano_de_obra' ? 'Precio (€)' : 'Costo (€)';
+  const labelPrecio = formData.tipo === 'mano_de_obra' ? 'Precio ($)' : 'Costo ($)';
 
   return (
     <form onSubmit={handleSubmit} className="card p-6 space-y-4" data-testid="catalogoForm">

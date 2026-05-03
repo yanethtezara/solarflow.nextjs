@@ -179,12 +179,12 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
                       </td>
                       <td className="py-4 text-sm text-slate-600 text-center">{item.cantidad}</td>
                       <td className="py-4 text-sm text-slate-600 text-right">
-                        {precio.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' })}
+                        {precio.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
                       </td>
                       <td className="py-4 text-sm font-bold text-slate-900 text-right">
-                        {(precio * item.cantidad).toLocaleString('es-ES', {
+                        {(precio * item.cantidad).toLocaleString('en-US', {
                           style: 'currency',
-                          currency: 'EUR',
+                          currency: 'USD',
                         })}
                       </td>
                     </tr>
@@ -200,13 +200,13 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
               <div className="flex justify-between text-sm">
                 <span className="text-slate-500 uppercase font-bold">Subtotal</span>
                 <span className="text-slate-900 font-medium">
-                  {subtotal.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' })}
+                  {subtotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
                 </span>
               </div>
               <div className="flex justify-between text-xl font-black pt-3 border-t border-gray-100">
                 <span className="text-slate-900 uppercase">Total</span>
                 <span className="text-amber-600">
-                  {total.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' })}
+                  {total.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
                 </span>
               </div>
             </div>

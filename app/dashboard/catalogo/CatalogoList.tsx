@@ -136,7 +136,7 @@ export default function CatalogoList({ items }: { items: CatalogoItem[] }) {
                   className="px-6 py-4 text-right font-medium text-slate-900"
                   data-testid="item_price"
                 >
-                  €{Number(item.precio).toFixed(2)}
+                  ${Number(item.precio).toFixed(2)}
                 </td>
                 <td className="px-6 py-4 text-right space-x-3">
                   <Link

@@ -83,13 +83,13 @@ export default function JobItemsList({ trabajoId, items }: JobItemsListProps) {
                   {i.cantidad}
                 </td>
                 <td className="px-4 py-3 text-right text-slate-600" data-testid="item_price">
-                  €{Number(i.catalogo_items?.precio || 0).toFixed(2)}
+                  ${Number(i.catalogo_items?.precio || 0).toFixed(2)}
                 </td>
                 <td
                   className="px-4 py-3 text-right font-medium text-slate-900"
                   data-testid="item_subtotal"
                 >
-                  €{(i.cantidad * (i.catalogo_items?.precio || 0)).toFixed(2)}
+                  ${(i.cantidad * (i.catalogo_items?.precio || 0)).toFixed(2)}
                 </td>
                 <td className="px-4 py-3 text-right">
                   <button
@@ -129,7 +129,7 @@ export default function JobItemsList({ trabajoId, items }: JobItemsListProps) {
                 className="px-4 py-4 text-right font-black text-lg text-amber-700"
                 data-testid="job_total"
               >
-                €{total.toFixed(2)}
+                ${total.toFixed(2)}
               </td>
               <td></td>
             </tr>

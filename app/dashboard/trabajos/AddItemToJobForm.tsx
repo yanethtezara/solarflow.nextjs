@@ -96,7 +96,7 @@ export default function AddItemToJobForm({ trabajoId, existingItemIds }: AddItem
         >
           {availableItems.map(i => (
             <option key={i.id} value={i.id}>
-              {i.nombre} ({i.tipo === 'mano_de_obra' ? 'Mano de obra' : 'Material'}) — €
+              {i.nombre} ({i.tipo === 'mano_de_obra' ? 'Mano de obra' : 'Material'}) — $
               {Number(i.precio).toFixed(2)}
             </option>
           ))}

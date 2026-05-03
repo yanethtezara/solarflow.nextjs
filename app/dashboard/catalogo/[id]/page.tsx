@@ -61,7 +61,7 @@ export default async function CatalogoItemDetailPage({
         </div>
         <div>
           <p className="text-xs font-bold uppercase text-slate-500 tracking-tight mb-1">Precio</p>
-          <p className="text-slate-900 font-medium">€{Number(item.precio).toFixed(2)}</p>
+          <p className="text-slate-900 font-medium">${Number(item.precio).toFixed(2)}</p>
         </div>
       </div>
     </div>
