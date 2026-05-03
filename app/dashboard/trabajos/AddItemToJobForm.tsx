@@ -25,11 +25,11 @@ export default function AddItemToJobForm({ trabajoId, existingItemIds }: AddItem
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/api/catalogo-items')
-      .then(res => (res.ok ? res.json() : []))
-      .then((data: CatalogoItem[]) => {
-        setItems(data);
-        if (data.length && !itemId) setItemId(data[0].id);
+    fetch('/api/catalogo-items?limit=1000')
+      .then(res => (res.ok ? res.json() : { items: [] }))
+      .then((data: { items: CatalogoItem[] }) => {
+        setItems(data.items || []);
+        if (data.items?.length && !itemId) setItemId(data.items[0].id);
       });
   }, []); // Cargar una vez al inicio
 
