@@ -14,6 +14,8 @@ export default function EditarTrabajoPage() {
     empresa_id: string | null;
     fecha: string;
     hora: string;
+    fecha_fin: string | null;
+    hora_fin: string | null;
     ubicacion: string | null;
   } | null>(null);
   const [loading, setLoading] = useState(true);
@@ -33,6 +35,8 @@ export default function EditarTrabajoPage() {
         empresa_id: data.empresa_id,
         fecha: data.fecha,
         hora: (data.hora || '09:00').slice(0, 5),
+        fecha_fin: data.fecha_fin,
+        hora_fin: (data.hora_fin || '11:00').slice(0, 5),
         ubicacion: data.ubicacion,
       });
       setLoading(false);
