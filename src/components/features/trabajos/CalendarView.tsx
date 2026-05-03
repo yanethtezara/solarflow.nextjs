@@ -105,7 +105,7 @@ export function CalendarView() {
 
   const titleLabel =
     viewMode === 'monthly'
-      ? new Intl.DateTimeFormat('es-ES', { month: 'long', year: 'numeric' }).format(currentDate)
+      ? `${currentDate.toLocaleDateString('es-ES', { month: 'long' })} ${currentDate.getFullYear()}`
       : `Semana del ${daysInWeek[0].toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}`;
 
   const selectedDayJobs = selectedDate ? jobsByDate[selectedDate] || [] : [];
