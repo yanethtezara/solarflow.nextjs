@@ -286,7 +286,7 @@ export function CalendarView() {
             </Link>
           </div>
           {selectedDayJobs.length === 0 ? (
-            <p className="text-sm text-slate-500 italic">No hay trabajos para este día.</p>
+            <p className="text-sm text-slate-500 italic">No hay instalaciones para este día.</p>
           ) : (
             <div className="space-y-3">
               {selectedDayJobs.map(job => (

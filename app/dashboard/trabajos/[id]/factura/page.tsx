@@ -72,7 +72,7 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
             className="text-amber-600 hover:underline text-sm font-medium"
             data-testid="back_link"
           >
-            ← Volver al trabajo
+            ← Volver a la instalación
           </Link>
           <button
             id="print-btn"

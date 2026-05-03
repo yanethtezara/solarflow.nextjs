@@ -71,13 +71,13 @@ export default function TrabajosList({ trabajos }: TrabajosListProps) {
   if (trabajos.length === 0) {
     return (
       <div className="card p-12 text-center" data-testid="empty_state">
-        <p className="text-slate-500 mb-4">Aún no tienes trabajos registrados.</p>
+        <p className="text-slate-500 mb-4">Aún no tienes instalaciones registradas.</p>
         <Link
           href="/dashboard/trabajos/nuevo"
           className="text-amber-600 hover:underline font-medium"
           data-testid="create_first_job_link"
         >
-          Crear tu primer trabajo →
+          Crear tu primera instalación →
         </Link>
       </div>
     );
@@ -231,8 +231,8 @@ export default function TrabajosList({ trabajos }: TrabajosListProps) {
 
       <ConfirmDialog
         open={!!deleteTarget}
-        title="Eliminar trabajo"
-        message={`¿Estás seguro de que quieres eliminar el trabajo de "${deleteTarget ? clienteNombre(deleteTarget) : ''}"? Esta acción no se puede deshacer.`}
+        title="Eliminar instalación"
+        message={`¿Estás seguro de que quieres eliminar la instalación de "${deleteTarget ? clienteNombre(deleteTarget) : ''}"? Esta acción no se puede deshacer.`}
         confirmLabel="Eliminar"
         variant="danger"
         onConfirm={handleDeleteConfirm}
