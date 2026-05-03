@@ -39,7 +39,7 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
 
   if (error || !trabajo) notFound();
 
-  const { data: items } = await supabase
+  const { data: itemsData } = await supabase
     .from('trabajos_items')
     .select(
       `
@@ -49,15 +49,24 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
     )
     .eq('trabajo_id', id);
 
-  const subtotal = (items || []).reduce((acc, item) => {
+  const items = itemsData || [];
+  const subtotal = items.reduce((acc, item) => {
     const precio = (item.catalogo_items as any)?.precio || 0;
     return acc + precio * item.cantidad;
   }, 0);
 
   const total = subtotal;
-
   const cliente = trabajo.clientes as any;
   const empresa = trabajo.empresas as any;
+
+  // Lógica de Paginación (15 ítems por página)
+  const itemsPerPage = 15;
+  const totalPages = Math.ceil(items.length / itemsPerPage) || 1;
+  const pages = [];
+
+  for (let i = 0; i < totalPages; i++) {
+    pages.push(items.slice(i * itemsPerPage, (i + 1) * itemsPerPage));
+  }
 
   return (
     <div
@@ -91,137 +100,164 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
           </button>
         </div>
 
-        {/* Invoice Container */}
-        <div
-          className="bg-white border border-gray-200 shadow-sm p-8 sm:p-12 print:border-none print:shadow-none min-h-[1056px] flex flex-col"
-          data-testid="invoice_paper"
-        >
-          {/* Header */}
-          <div className="flex justify-between items-start border-b border-gray-100 pb-8 mb-8">
-            <div className="flex items-center gap-3">
-              <SunLogo size={48} className="text-amber-600" />
-              <div>
-                <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">
-                  SolarFlow
-                </h2>
-                <p className="text-xs text-slate-500 uppercase font-bold tracking-widest">
-                  Factura de Servicio
+        {/* Invoice Pages Loop */}
+        {pages.map((pageItems, pageIdx) => (
+          <div
+            key={pageIdx}
+            className="bg-white border border-gray-200 shadow-sm p-8 sm:p-12 print:border-none print:shadow-none min-h-[1056px] flex flex-col page-break"
+            data-testid={`invoice_page_${pageIdx + 1}`}
+          >
+            {/* Header - Repeated on every page */}
+            <div className="flex justify-between items-start border-b border-gray-100 pb-8 mb-8">
+              <div className="flex items-center gap-3">
+                <SunLogo size={48} className="text-amber-600" />
+                <div>
+                  <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">
+                    SolarFlow
+                  </h2>
+                  <p className="text-xs text-slate-500 uppercase font-bold tracking-widest">
+                    Factura de Servicio
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-bold text-slate-900 uppercase tracking-tight mb-1">
+                  Factura #
+                </p>
+                <p className="text-xl font-medium text-slate-600 truncate">
+                  {id.slice(0, 8).toUpperCase()}
+                </p>
+                <p className="text-sm text-slate-500 mt-2">
+                  {new Date(trabajo.fecha).toLocaleDateString('es-ES', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                  })}
                 </p>
               </div>
             </div>
-            <div className="text-right">
-              <p className="text-sm font-bold text-slate-900 uppercase tracking-tight mb-1">
-                Factura #
-              </p>
-              <p className="text-xl font-medium text-slate-600 truncate">
-                {id.slice(0, 8).toUpperCase()}
-              </p>
-              <p className="text-sm text-slate-500 mt-2">
-                {new Date(trabajo.fecha).toLocaleDateString('es-ES', {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })}
-              </p>
-            </div>
-          </div>
 
-          {/* Info Blocks */}
-          <div className="grid grid-cols-2 gap-12 mb-12">
-            <div>
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">De</p>
-              <p className="text-lg font-bold text-slate-900">{empresa?.nombre ?? 'Mi Empresa'}</p>
-              {empresa?.contacto_responsable && (
-                <p className="text-sm text-slate-600 mt-1">{empresa.contacto_responsable}</p>
-              )}
-              {empresa?.telefono_contacto && (
-                <p className="text-sm text-slate-600">{empresa.telefono_contacto}</p>
-              )}
-              <p className="text-sm text-slate-600 mt-2">{user.email}</p>
-            </div>
-            <div className="text-right">
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Para</p>
-              <p className="text-lg font-bold text-slate-900">{cliente?.nombre}</p>
-              {cliente?.direccion && (
-                <p className="text-sm text-slate-600 mt-1">{cliente.direccion}</p>
-              )}
-              {cliente?.telefono && <p className="text-sm text-slate-600">{cliente.telefono}</p>}
-            </div>
-          </div>
-
-          {/* Items Table */}
-          <div className="flex-1">
-            <table className="w-full text-left">
-              <thead className="border-b-2 border-slate-900">
-                <tr>
-                  <th className="py-3 text-xs font-black uppercase tracking-widest text-slate-900">
-                    Descripción
-                  </th>
-                  <th className="py-3 text-xs font-black uppercase tracking-widest text-slate-900 text-center">
-                    Cant.
-                  </th>
-                  <th className="py-3 text-xs font-black uppercase tracking-widest text-slate-900 text-right">
-                    Precio
-                  </th>
-                  <th className="py-3 text-xs font-black uppercase tracking-widest text-slate-900 text-right">
-                    Subtotal
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {(items || []).map((item, idx) => {
-                  const catalogo = item.catalogo_items as any;
-                  const precio = catalogo?.precio || 0;
-                  return (
-                    <tr key={idx}>
-                      <td className="py-4 text-sm font-medium text-slate-900">
-                        {catalogo?.nombre}
-                      </td>
-                      <td className="py-4 text-sm text-slate-600 text-center">{item.cantidad}</td>
-                      <td className="py-4 text-sm text-slate-600 text-right">
-                        {precio.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
-                      </td>
-                      <td className="py-4 text-sm font-bold text-slate-900 text-right">
-                        {(precio * item.cantidad).toLocaleString('en-US', {
-                          style: 'currency',
-                          currency: 'USD',
-                        })}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Totals */}
-          <div className="border-t-2 border-slate-900 pt-8 mt-12 flex justify-end">
-            <div className="w-full sm:w-64 space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-slate-500 uppercase font-bold">Subtotal</span>
-                <span className="text-slate-900 font-medium">
-                  {subtotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
-                </span>
+            {/* Info Blocks - Only on first page to save space? User wants consistency, let's keep basic info */}
+            {pageIdx === 0 && (
+              <div className="grid grid-cols-2 gap-12 mb-12">
+                <div>
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
+                    De
+                  </p>
+                  <p className="text-lg font-bold text-slate-900">
+                    {empresa?.nombre ?? 'Mi Empresa'}
+                  </p>
+                  {empresa?.contacto_responsable && (
+                    <p className="text-sm text-slate-600 mt-1">{empresa.contacto_responsable}</p>
+                  )}
+                  {empresa?.telefono_contacto && (
+                    <p className="text-sm text-slate-600">{empresa.telefono_contacto}</p>
+                  )}
+                  <p className="text-sm text-slate-600 mt-2">{user.email}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
+                    Para
+                  </p>
+                  <p className="text-lg font-bold text-slate-900">{cliente?.nombre}</p>
+                  {cliente?.direccion && (
+                    <p className="text-sm text-slate-600 mt-1">{cliente.direccion}</p>
+                  )}
+                  {cliente?.telefono && (
+                    <p className="text-sm text-slate-600">{cliente.telefono}</p>
+                  )}
+                </div>
               </div>
-              <div className="flex justify-between text-xl font-black pt-3 border-t border-gray-100">
-                <span className="text-slate-900 uppercase">Total</span>
-                <span className="text-amber-600">
-                  {total.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
-                </span>
+            )}
+
+            {/* Items Table */}
+            <div className="flex-1">
+              <table className="w-full text-left">
+                <thead className="border-b-2 border-slate-900">
+                  <tr>
+                    <th className="py-3 text-xs font-black uppercase tracking-widest text-slate-900">
+                      Descripción
+                    </th>
+                    <th className="py-3 text-xs font-black uppercase tracking-widest text-slate-900 text-center">
+                      Cant.
+                    </th>
+                    <th className="py-3 text-xs font-black uppercase tracking-widest text-slate-900 text-right">
+                      Precio
+                    </th>
+                    <th className="py-3 text-xs font-black uppercase tracking-widest text-slate-900 text-right">
+                      Subtotal
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {pageItems.map((item, idx) => {
+                    const catalogo = item.catalogo_items as any;
+                    const precio = catalogo?.precio || 0;
+                    return (
+                      <tr key={idx}>
+                        <td className="py-4 text-sm font-medium text-slate-900">
+                          {catalogo?.nombre}
+                        </td>
+                        <td className="py-4 text-sm text-slate-600 text-center">{item.cantidad}</td>
+                        <td className="py-4 text-sm text-slate-600 text-right">
+                          {precio.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+                        </td>
+                        <td className="py-4 text-sm font-bold text-slate-900 text-right">
+                          {(precio * item.cantidad).toLocaleString('en-US', {
+                            style: 'currency',
+                            currency: 'USD',
+                          })}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Totals & Footer - Only on LAST page */}
+            {pageIdx === totalPages - 1 ? (
+              <>
+                <div className="border-t-2 border-slate-900 pt-8 mt-12 flex justify-end">
+                  <div className="w-full sm:w-64 space-y-3">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-slate-500 uppercase font-bold">Subtotal</span>
+                      <span className="text-slate-900 font-medium">
+                        {subtotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-xl font-black pt-3 border-t border-gray-100">
+                      <span className="text-slate-900 uppercase">Total</span>
+                      <span className="text-amber-600">
+                        {total.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-20 text-center">
+                  <p className="text-xs text-slate-400 uppercase font-bold tracking-widest mb-1">
+                    Gracias por su confianza
+                  </p>
+                  <p className="text-[10px] text-slate-300">
+                    Esta es una factura generada automáticamente por SolarFlow.
+                  </p>
+                </div>
+              </>
+            ) : (
+              <div className="mt-8 text-right italic text-slate-400 text-xs">
+                Continúa en la siguiente página...
               </div>
+            )}
+
+            {/* Page Counter */}
+            <div className="mt-auto pt-8 flex justify-center border-t border-gray-50">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                Página {pageIdx + 1} de {totalPages}
+              </p>
             </div>
           </div>
-
-          {/* Footer */}
-          <div className="mt-20 text-center">
-            <p className="text-xs text-slate-400 uppercase font-bold tracking-widest mb-1">
-              Gracias por su confianza
-            </p>
-            <p className="text-[10px] text-slate-300">
-              Esta es una factura generada automáticamente por SolarFlow.
-            </p>
-          </div>
-        </div>
+        ))}
       </div>
 
       <script
@@ -245,6 +281,13 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
             display: none !important;
           }
           main {
+            padding: 0 !important;
+            margin: 0 !important;
+          }
+          .page-break {
+            page-break-after: always;
+            border: none !important;
+            box-shadow: none !important;
             padding: 0 !important;
             margin: 0 !important;
           }
