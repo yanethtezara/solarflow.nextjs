@@ -50,7 +50,7 @@ export default function TrabajosPage() {
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
         <div>
           <h1 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 uppercase">
-            Mis Trabajos
+            Mis Instalaciones
           </h1>
           <div className="flex gap-1 mt-2 bg-gray-100 p-1 rounded-lg w-fit">
             <button
@@ -83,7 +83,7 @@ export default function TrabajosPage() {
           className="btn-primary w-full sm:w-auto text-center min-h-[44px] flex items-center justify-center"
           data-testid="new_job_button"
         >
-          + Nuevo trabajo
+          + Nueva instalación
         </Link>
       </div>
 

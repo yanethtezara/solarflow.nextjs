@@ -33,7 +33,7 @@ export default function DashboardHomePage() {
           href="/dashboard/trabajos"
           className="block p-4 sm:p-6 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 min-h-[88px] sm:min-h-0 flex flex-col justify-center"
         >
-          <h2 className="text-lg font-bold text-amber-600 mb-2">Trabajos</h2>
+          <h2 className="text-lg font-bold text-amber-600 mb-2">Mis instalaciones</h2>
           <p className="text-slate-600 text-sm">
             Crea y gestiona tus trabajos de instalación con calendario.
           </p>

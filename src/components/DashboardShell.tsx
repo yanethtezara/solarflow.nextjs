@@ -10,7 +10,7 @@ const navLinks = [
   { href: '/dashboard', label: 'Inicio' },
   { href: '/dashboard/empresas', label: 'Empresas' },
   { href: '/dashboard/clientes', label: 'Clientes' },
-  { href: '/dashboard/trabajos', label: 'Trabajos' },
+  { href: '/dashboard/trabajos', label: 'Mis instalaciones' },
   { href: '/dashboard/calendario', label: 'Calendario' },
   { href: '/dashboard/catalogo', label: 'Catálogo' },
 ];
