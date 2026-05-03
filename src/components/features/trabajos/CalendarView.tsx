@@ -270,7 +270,7 @@ export function CalendarView() {
         >
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-bold text-slate-900">
-              Trabajos para el{' '}
+              Instalaciones para el{' '}
               {new Date(selectedDate + 'T00:00:00').toLocaleDateString('es-ES', {
                 day: 'numeric',
                 month: 'long',
@@ -282,7 +282,7 @@ export function CalendarView() {
               className="text-xs bg-amber-600 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-amber-700 transition-colors"
               data-testid="create_job_from_calendar_button"
             >
-              + Nuevo Trabajo
+              + Nueva Instalación
             </Link>
           </div>
           {selectedDayJobs.length === 0 ? (

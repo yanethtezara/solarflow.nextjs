@@ -56,7 +56,7 @@ export default function EditarTrabajoPage() {
           href="/dashboard/trabajos"
           className="text-amber-600 hover:underline mt-4 inline-block"
         >
-          Volver a trabajos
+          Volver a instalaciones
         </Link>
       </div>
     );
@@ -66,11 +66,11 @@ export default function EditarTrabajoPage() {
     <div className="p-4 sm:p-6 md:p-8 max-w-xl mx-auto">
       <div className="mb-6">
         <Link href={`/dashboard/trabajos/${id}`} className="text-amber-600 hover:underline text-sm">
-          ← Volver al trabajo
+          ← Volver a la instalación
         </Link>
       </div>
       <h1 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 uppercase mb-6">
-        Editar trabajo
+        Editar instalación
       </h1>
       {initialData && <JobCreationForm initialData={initialData} trabajoId={id} />}
     </div>

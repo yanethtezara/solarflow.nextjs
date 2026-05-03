@@ -261,7 +261,7 @@ export default function JobCreationForm({ initialData, trabajoId }: JobCreationF
           className="btn-primary flex-1 sm:flex-none"
           data-testid="submit_button"
         >
-          {loading ? 'Guardando...' : isEdit ? 'Guardar cambios' : 'Crear trabajo'}
+          {loading ? 'Guardando...' : isEdit ? 'Guardar cambios' : 'Crear instalación'}
         </Button>
         <Button
           type="button"
