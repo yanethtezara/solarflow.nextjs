@@ -94,12 +94,24 @@ export default function AddItemToJobForm({ trabajoId, existingItemIds }: AddItem
           className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
           data-testid="item_select"
         >
-          {availableItems.map(i => (
-            <option key={i.id} value={i.id}>
-              {i.nombre} ({i.tipo === 'mano_de_obra' ? 'Mano de obra' : 'Material'}) — $
-              {Number(i.precio).toFixed(2)}
-            </option>
-          ))}
+          <optgroup label="Mano de obra">
+            {availableItems
+              .filter(i => i.tipo === 'mano_de_obra')
+              .map(i => (
+                <option key={i.id} value={i.id}>
+                  {i.nombre} — ${Number(i.precio).toFixed(2)}
+                </option>
+              ))}
+          </optgroup>
+          <optgroup label="Materiales">
+            {availableItems
+              .filter(i => i.tipo === 'material')
+              .map(i => (
+                <option key={i.id} value={i.id}>
+                  {i.nombre} — ${Number(i.precio).toFixed(2)}
+                </option>
+              ))}
+          </optgroup>
         </select>
       </div>
       <div className="w-24">
