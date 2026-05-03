@@ -31,7 +31,13 @@ export default function ForgotPasswordForm() {
     const { error: resetError } = await resetPassword(data.email);
 
     if (resetError) {
-      setError(resetError.message);
+      if (resetError.message.includes('Email rate limit exceeded')) {
+        setError(
+          'Has solicitado demasiados correos. Por seguridad, espera unos minutos e inténtalo de nuevo.'
+        );
+      } else {
+        setError(resetError.message);
+      }
     } else {
       setIsSent(true);
     }
