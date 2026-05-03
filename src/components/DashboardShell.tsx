@@ -8,8 +8,8 @@ import SunLogo from './SunLogo';
 
 const navLinks = [
   { href: '/dashboard', label: 'Inicio' },
-  { href: '/dashboard/clientes', label: 'Clientes' },
   { href: '/dashboard/empresas', label: 'Empresas' },
+  { href: '/dashboard/clientes', label: 'Clientes' },
   { href: '/dashboard/trabajos', label: 'Trabajos' },
   { href: '/dashboard/calendario', label: 'Calendario' },
   { href: '/dashboard/catalogo', label: 'Catálogo' },
