@@ -50,15 +50,15 @@ export default function JobItemsList({ trabajoId, items }: JobItemsListProps) {
 
   return (
     <div data-testid="jobItemsList">
-      <div className="card overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="card overflow-x-auto">
+        <table className="w-full text-sm min-w-[600px]">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
               <th className="px-4 py-3 text-left font-semibold text-slate-700">Ítem</th>
               <th className="px-4 py-3 text-center font-semibold text-slate-700">Cant.</th>
               <th className="px-4 py-3 text-right font-semibold text-slate-700">Precio</th>
               <th className="px-4 py-3 text-right font-semibold text-slate-700">Subtotal</th>
-              <th className="px-4 py-3 text-right font-semibold text-slate-700"></th>
+              <th className="px-4 py-3 text-center font-semibold text-slate-700">Acción</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100" data-testid="items_table_body">
@@ -91,10 +91,10 @@ export default function JobItemsList({ trabajoId, items }: JobItemsListProps) {
                 >
                   ${(i.cantidad * (i.catalogo_items?.precio || 0)).toFixed(2)}
                 </td>
-                <td className="px-4 py-3 text-right">
+                <td className="px-4 py-3 text-center">
                   <button
                     onClick={() => setDeleteTarget(i)}
-                    className="text-red-500 hover:text-red-700 p-1"
+                    className="p-2 text-red-600 hover:bg-red-50 rounded-full transition-colors inline-flex items-center justify-center"
                     title="Eliminar ítem"
                     data-testid="delete_item_button"
                   >
@@ -109,7 +109,7 @@ export default function JobItemsList({ trabajoId, items }: JobItemsListProps) {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                       />
                     </svg>
                   </button>
