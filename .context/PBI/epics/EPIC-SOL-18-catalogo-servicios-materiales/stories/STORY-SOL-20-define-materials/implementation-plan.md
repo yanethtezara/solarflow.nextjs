@@ -2,13 +2,13 @@
 
 ## Overview
 
-Implementar la gestión de materiales comunes (ej. Paneles, Inversores, Cableado) para estandarizar los costos de insumos en los presupuestos y trabajos.
+Implementar la gestión de materiales comunes (ej. Paneles, Inversores, Cableado) para estandarizar los costos de insumos en los presupuestos y instalaciones.
 
 **Acceptance Criteria a cumplir:**
 
 - Crear material con nombre y costo (obligatorio, mayor a 0).
 - Listar solo ítems de tipo "Material".
-- Bloquear eliminación de materiales ya utilizados en trabajos.
+- Bloquear eliminación de materiales ya utilizados en instalaciones.
 - Moneda única en USD.
 - El usuario escribe la unidad de medida en el nombre (ej. "Cable 4mm (m)").
 

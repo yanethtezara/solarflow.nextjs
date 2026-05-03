@@ -14,10 +14,10 @@
 
 **User Persona Affected:**
 
-- **Primary:** David Rojas (Líder) - Necesita ver la distribución de trabajos en el tiempo.
+- **Primary:** David Rojas (Líder) - Necesita ver la distribución de instalaciones en el tiempo.
   **Business Value:**
 - **Value Proposition:** Optimización de la agenda.
-- **Business Impact:** Reduce el riesgo de solapamiento de trabajos y mejora la puntualidad.
+- **Business Impact:** Reduce el riesgo de solapamiento de instalaciones y mejora la puntualidad.
 
 ### Technical Context of This Story
 
@@ -37,8 +37,8 @@
 
 ### Ambiguities Identified
 
-- **Ambiguity 1:** ¿Qué sucede con los trabajos sin hora especificada (si existieran)?
-  - **Suggested Clarification:** Todos los trabajos en SolarFlow requieren hora (SOL-23), por lo que siempre deben tener posición horaria.
+- **Ambiguity 1:** ¿Qué sucede con los instalaciones sin hora especificada (si existieran)?
+  - **Suggested Clarification:** Todos los instalaciones en SolarFlow requieren hora (SOL-23), por lo que siempre deben tener posición horaria.
 
 ### Missing Information / Gaps
 
@@ -72,13 +72,13 @@
 #### **Validar carga de eventos por rango**
 
 - **Type:** Integration | **Level:** API/UI
-- **Expected Result:** Si el calendario pide Abril, la API no debe devolver trabajos de Mayo.
+- **Expected Result:** Si el calendario pide Abril, la API no debe devolver instalaciones de Mayo.
 
 #### **Validar consistencia de zona horaria**
 
 - **Verify:** Que las horas mostradas en el calendario coincidan con las ingresadas en el formulario de creación, evitando desfases por UTC.
 
-#### **Validar comportamiento en días sin trabajos**
+#### **Validar comportamiento en días sin instalaciones**
 
 - **Expected Result:** El calendario se muestra limpio, sin errores, y permite interactuar con los días vacíos.
 
@@ -88,7 +88,7 @@
 
 - [ ] Vistas mensual y semanal funcionando.
 - [ ] Navegación temporal validada.
-- [ ] Integración con la API de trabajos optimizada por rango.
+- [ ] Integración con la API de instalaciones optimizada por rango.
 
 ---
 

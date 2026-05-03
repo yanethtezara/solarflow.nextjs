@@ -1,4 +1,4 @@
-# Como David (jefe de cuadrilla), quiero poder iniciar sesión con mis credenciales para acceder a la información de mis trabajos.
+# Como David (jefe de cuadrilla), quiero poder iniciar sesión con mis credenciales para acceder a la información de mis instalaciones.
 
 **Jira Key:** SOL-12
 **Epic:** SOL-10 (Autenticación y Seguridad de Cuenta)
@@ -13,7 +13,7 @@
 
 **As a** David (jefe de cuadrilla)
 **I want to** poder iniciar sesión con mis credenciales
-**So that** acceder a la información de mis trabajos
+**So that** acceder a la información de mis instalaciones
 
 ---
 

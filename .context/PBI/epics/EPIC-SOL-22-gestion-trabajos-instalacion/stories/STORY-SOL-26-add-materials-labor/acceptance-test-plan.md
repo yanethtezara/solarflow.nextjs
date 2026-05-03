@@ -3,7 +3,7 @@
 **Fecha:** 2026-04-05
 **QA Engineer:** AI-Generated (Gemini CLI)
 **Story Jira Key:** SOL-26
-**Epic:** EPIC-SOL-22 - Gestión de Trabajos de Instalación
+**Epic:** EPIC-SOL-22 - Gestión de Instalaciones de Instalación
 **Status:** Draft - Pending PO/Dev Review
 
 ---
@@ -27,7 +27,7 @@
 - Search: Selector de ítems con búsqueda simple.
   **Backend:**
 - API: `POST /api/trabajos/[id]/items`.
-- Transaction: Debe insertar el ítem y recalcular el total del trabajo (o el total se calcula bajo demanda).
+- Transaction: Debe insertar el ítem y recalcular el total del instalación (o el total se calcula bajo demanda).
   **Database:**
 - Tabla asociativa `trabajos_items`.
 
@@ -42,7 +42,7 @@
 
 ### Missing Information / Gaps
 
-- **Gap 1:** Snapshot de precios. Es CRÍTICO que el precio guardado en el trabajo no cambie si el catálogo se actualiza mañana.
+- **Gap 1:** Snapshot de precios. Es CRÍTICO que el precio guardado en el instalación no cambie si el catálogo se actualiza mañana.
 
 ---
 
@@ -50,7 +50,7 @@
 
 ### Scenario 1: Agregar Material (Happy Path)
 
-- **Given:** Trabajo ID `123` existe.
+- **Given:** Instalación ID `123` existe.
 - **When:** Selecciona "Panel Solar", cantidad "5", clic en agregar.
 - **Then:**
   - Status 201 Created.
@@ -63,9 +63,9 @@
 
 ### Scenario 3: Recálculo de Total
 
-- **Given:** El trabajo tiene un material de $100.
+- **Given:** El instalación tiene un material de $100.
 - **When:** Se agrega un servicio de $50.
-- **Then:** El total del trabajo mostrado en la UI debe ser exactamente $150.
+- **Then:** El total del instalación mostrado en la UI debe ser exactamente $150.
 
 ---
 
@@ -75,14 +75,14 @@
 
 - **Type:** Integration | **Level:** DB/API
 - **Steps:**
-  1. Agregar ítem con precio X al trabajo.
+  1. Agregar ítem con precio X al instalación.
   2. Cambiar precio del ítem en catálogo a Y.
-- **Expected Result:** El trabajo debe seguir mostrando precio X.
+- **Expected Result:** El instalación debe seguir mostrando precio X.
 
 #### **Validar eliminación de ítem y actualización de total**
 
 - **Type:** Positive | **Level:** E2E
-- **Expected Result:** Al borrar el último ítem, el costo total del trabajo debe volver a $0.00.
+- **Expected Result:** Al borrar el último ítem, el costo total del instalación debe volver a $0.00.
 
 #### **Validar que no se permiten ítems duplicados (opcional)**
 
@@ -93,7 +93,7 @@
 
 ## 🎯 Definition of Done (QA)
 
-- [ ] Listado de ítems por trabajo funcional.
+- [ ] Listado de ítems por instalación funcional.
 - [ ] Cálculos matemáticos validados (precisión decimal).
 - [ ] Protección RLS para la tabla asociativa.
 

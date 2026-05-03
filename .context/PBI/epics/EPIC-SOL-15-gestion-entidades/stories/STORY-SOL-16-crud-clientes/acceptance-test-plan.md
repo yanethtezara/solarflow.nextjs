@@ -17,7 +17,7 @@
 - **Primary:** Javi Morales (Instalador) - Necesita guardar los datos de sus clientes residenciales.
   **Business Value:**
 - **Value Proposition:** Base de datos centralizada.
-- **Business Impact:** Agiliza la creación de trabajos en terreno.
+- **Business Impact:** Agiliza la creación de instalaciones en terreno.
 
 ### Technical Context of This Story
 

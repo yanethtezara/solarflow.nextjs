@@ -19,7 +19,7 @@ Permitir un acceso seguro y gestionado a la plataforma, lo cual es fundamental p
 ## User Stories
 
 1. **SOL-11** - As a Javi (instalador), I want to poder registrarme en la plataforma usando mi email y una contraseña para tener una cuenta segura y privada.
-2. **SOL-12** - As a David (jefe de cuadrilla), I want to poder iniciar sesión con mis credenciales para acceder a la información de mis trabajos.
+2. **SOL-12** - As a David (jefe de cuadrilla), I want to poder iniciar sesión con mis credenciales para acceder a la información de mis instalaciones.
 3. **SOL-13** - As a Javi, I want to una opción para "recuperar mi contraseña" si la olvido, para no perder el acceso a mi cuenta.
 4. **SOL-14** - As a usuario, I want to poder cerrar sesión de forma segura para proteger mi información en dispositivos compartidos.
 
@@ -31,16 +31,16 @@ Permitir un acceso seguro y gestionado a la plataforma, lo cual es fundamental p
 
 ### In Scope
 
--   Flujo de registro con email y contraseña.
--   Flujo de inicio de sesión.
--   Flujo de recuperación de contraseña vía email.
--   Cierre de sesión.
+- Flujo de registro con email y contraseña.
+- Flujo de inicio de sesión.
+- Flujo de recuperación de contraseña vía email.
+- Cierre de sesión.
 
 ### Out of Scope (Future)
 
--   Autenticación con proveedores de OAuth (Google, etc.).
--   Autenticación de dos factores (2FA).
--   Roles de usuario y permisos avanzados.
+- Autenticación con proveedores de OAuth (Google, etc.).
+- Autenticación de dos factores (2FA).
+- Roles de usuario y permisos avanzados.
 
 ---
 
@@ -54,10 +54,10 @@ Permitir un acceso seguro y gestionado a la plataforma, lo cual es fundamental p
 
 ## Related Functional Requirements
 
--   **FR-001:** El sistema debe permitir el registro de nuevos usuarios.
--   **FR-002:** El sistema debe permitir el inicio de sesión de usuarios existentes.
--   **FR-003:** El sistema debe proveer una funcionalidad de recuperación de contraseña.
--   **FR-004:** El sistema debe permitir el cierre de sesión.
+- **FR-001:** El sistema debe permitir el registro de nuevos usuarios.
+- **FR-002:** El sistema debe permitir el inicio de sesión de usuarios existentes.
+- **FR-003:** El sistema debe proveer una funcionalidad de recuperación de contraseña.
+- **FR-004:** El sistema debe permitir el cierre de sesión.
 
 See: `.context/SRS/functional-specs.md`
 
@@ -67,14 +67,14 @@ See: `.context/SRS/functional-specs.md`
 
 ### Backend
 
--   Se utilizará Supabase Auth para gestionar toda la lógica de autenticación.
--   Las API Routes de Next.js actuarán como backend, validando los tokens JWT de Supabase.
+- Se utilizará Supabase Auth para gestionar toda la lógica de autenticación.
+- Las API Routes de Next.js actuarán como backend, validando los tokens JWT de Supabase.
 
 ### Security Requirements
 
--   Implementación de Row Level Security (RLS) en Supabase para aislar los datos de los usuarios.
--   Toda la comunicación debe ser sobre HTTPS.
--   Las contraseñas deben ser hasheadas de forma segura por Supabase.
+- Implementación de Row Level Security (RLS) en Supabase para aislar los datos de los usuarios.
+- Toda la comunicación debe ser sobre HTTPS.
+- Las contraseñas deben ser hasheadas de forma segura por Supabase.
 
 ---
 
@@ -82,15 +82,15 @@ See: `.context/SRS/functional-specs.md`
 
 ### External Dependencies
 
--   Supabase Cloud Platform (Auth).
+- Supabase Cloud Platform (Auth).
 
 ### Internal Dependencies
 
--   Esta épica es una dependencia fundamental para todas las demás.
+- Esta épica es una dependencia fundamental para todas las demás.
 
 ### Blocks
 
--   Todas las épicas que requieren un usuario autenticado están bloqueadas por esta.
+- Todas las épicas que requieren un usuario autenticado están bloqueadas por esta.
 
 ---
 
@@ -98,21 +98,21 @@ See: `.context/SRS/functional-specs.md`
 
 ### Functional Metrics
 
--   Tasa de éxito en registros y logins > 99%.
--   Tiempo de respuesta de la API de login/registro < 500ms.
+- Tasa de éxito en registros y logins > 99%.
+- Tiempo de respuesta de la API de login/registro < 500ms.
 
 ### Business Metrics
 
--   Tasa de Activación de Usuario > 60% (usuarios que crean su primer trabajo en la primera semana).
+- Tasa de Activación de Usuario > 60% (usuarios que crean su primer instalación en la primera semana).
 
 ---
 
 ## Risks & Mitigations
 
-| Risk | Impact | Probability | Mitigation |
-| :--- | :--- | :--- | :--- |
-| Vulnerabilidad de seguridad en Auth | High | Low | Confiar en la robustez de Supabase Auth, mantener dependencias actualizadas, seguir las mejores prácticas de seguridad. |
-| Fallo en el servicio de Supabase | High | Low | Monitorizar el status de Supabase y tener un plan de comunicación para los usuarios en caso de caída del servicio. |
+| Risk                                | Impact | Probability | Mitigation                                                                                                              |
+| :---------------------------------- | :----- | :---------- | :---------------------------------------------------------------------------------------------------------------------- |
+| Vulnerabilidad de seguridad en Auth | High   | Low         | Confiar en la robustez de Supabase Auth, mantener dependencias actualizadas, seguir las mejores prácticas de seguridad. |
+| Fallo en el servicio de Supabase    | High   | Low         | Monitorizar el status de Supabase y tener un plan de comunicación para los usuarios en caso de caída del servicio.      |
 
 ---
 

@@ -16,12 +16,12 @@ Esta épica organiza la información base necesaria para la operación diaria. L
 **Key Value Proposition:**
 
 - **Orden Operativo:** Información de contacto siempre a mano.
-- **Trazabilidad:** Historial de clientes y sus respectivos trabajos.
+- **Trazabilidad:** Historial de clientes y sus respectivos instalaciones.
 
 **Success Metrics (KPIs):**
 
 - **Adopción:** Promedio de >3 entidades creadas por usuario en su primer mes.
-- **Eficiencia:** Reducción del tiempo de creación de un trabajo al tener los datos pre-cargados.
+- **Eficiencia:** Reducción del tiempo de creación de un instalación al tener los datos pre-cargados.
 
 **User Impact:**
 
@@ -105,7 +105,7 @@ Esta épica organiza la información base necesaria para la operación diaria. L
 ### Exit Criteria
 
 - 100% de las operaciones CRUD validadas.
-- Confirmación de que el borrado de una entidad no rompe la consistencia de trabajos (o se bloquea si hay trabajos activos).
+- Confirmación de que el borrado de una entidad no rompe la consistencia de instalaciones (o se bloquea si hay instalaciones activos).
 
 ---
 

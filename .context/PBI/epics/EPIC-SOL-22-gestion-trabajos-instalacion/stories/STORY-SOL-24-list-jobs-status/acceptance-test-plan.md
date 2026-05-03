@@ -1,9 +1,9 @@
-# Acceptance Test Plan: STORY-SOL-24 - Listado y Filtros de Trabajos
+# Acceptance Test Plan: STORY-SOL-24 - Listado y Filtros de Instalaciones
 
 **Fecha:** 2026-04-05
 **QA Engineer:** AI-Generated (Gemini CLI)
 **Story Jira Key:** SOL-24
-**Epic:** EPIC-SOL-22 - Gestión de Trabajos de Instalación
+**Epic:** EPIC-SOL-22 - Gestión de Instalaciones de Instalación
 **Status:** Draft - Pending PO/Dev Review
 
 ---
@@ -17,7 +17,7 @@
 - **Primary:** David Rojas (Líder) - Necesita supervisar el progreso de las instalaciones.
   **Business Value:**
 - **Value Proposition:** Monitoreo operativo.
-- **Business Impact:** Permite priorizar trabajos urgentes o retrasados.
+- **Business Impact:** Permite priorizar instalaciones urgentes o retrasados.
 
 ### Technical Context of This Story
 
@@ -35,8 +35,8 @@
 
 ### Ambiguities Identified
 
-- **Ambiguity 1:** ¿Cómo se visualizan los trabajos de "Hoy"?
-  - **Suggested Clarification:** Resaltar visualmente (ej. borde de color) los trabajos cuya fecha coincida con la fecha actual del sistema.
+- **Ambiguity 1:** ¿Cómo se visualizan los instalaciones de "Hoy"?
+  - **Suggested Clarification:** Resaltar visualmente (ej. borde de color) los instalaciones cuya fecha coincida con la fecha actual del sistema.
 
 ### Missing Information / Gaps
 
@@ -48,7 +48,7 @@
 
 ### Scenario 1: Visualización de lista (Happy Path)
 
-- **Given:** Existen trabajos creados.
+- **Given:** Existen instalaciones creados.
 - **When:** Carga la página de lista.
 - **Then:** Se muestran en tarjetas o tabla con info clave (Cliente, Fecha).
 
@@ -59,7 +59,7 @@
 
 ### Scenario 3: Acceso directo por URL
 
-- **When:** Navega a `/trabajos?estado=agendado`.
+- **When:** Navega a `/instalaciones?estado=agendado`.
 - **Then:** La lista carga pre-filtrada correctamente.
 
 ---
@@ -69,7 +69,7 @@
 #### **Validar ordenación cronológica**
 
 - **Type:** Positive | **Level:** E2E
-- **Expected Result:** Los trabajos con fecha más antigua aparecen al principio (o según configuración de orden).
+- **Expected Result:** Los instalaciones con fecha más antigua aparecen al principio (o según configuración de orden).
 
 #### **Validar mensaje de "No resultados"**
 
@@ -78,14 +78,14 @@
 
 #### **Validar que la lista es reactiva**
 
-- **When:** Se edita un trabajo y se vuelve a la lista.
+- **When:** Se edita un instalación y se vuelve a la lista.
 - **Then:** El cambio (ej. de estado) es visible inmediatamente.
 
 ---
 
 ## 🎯 Definition of Done (QA)
 
-- [ ] Lista de trabajos funcional.
+- [ ] Lista de instalaciones funcional.
 - [ ] Filtros por estado validados.
 - [ ] Seguridad RLS confirmada (aislamiento).
 

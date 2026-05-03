@@ -11,16 +11,16 @@
 
 ### Business Value
 
-Esta épica proporciona la estructura de costos necesaria para la rentabilidad del negocio. Al predefinir servicios y materiales, el instalador evita la inconsistencia en los precios cobrados a los clientes y asegura que los márgenes de ganancia sean claros desde la planificación del trabajo.
+Esta épica proporciona la estructura de costos necesaria para la rentabilidad del negocio. Al predefinir servicios y materiales, el instalador evita la inconsistencia en los precios cobrados a los clientes y asegura que los márgenes de ganancia sean claros desde la planificación del instalación.
 
 **Key Value Proposition:**
 
 - **Consistencia:** Precios uniformes para todos los clientes.
-- **Rapidez:** Carga de ítems en segundos al crear presupuestos o reportes de trabajo.
+- **Rapidez:** Carga de ítems en segundos al crear presupuestos o reportes de instalación.
 
 **Success Metrics (KPIs):**
 
-- **Uso de Catálogo:** > 80% de los trabajos creados deben usar al menos un ítem del catálogo.
+- **Uso de Catálogo:** > 80% de los instalaciones creados deben usar al menos un ítem del catálogo.
 - **Precisión:** Reducción de errores manuales en la entrada de precios.
 
 **User Impact:**
@@ -42,7 +42,7 @@ Esta épica proporciona la estructura de costos necesaria para la rentabilidad d
 ### Integration Points
 
 - **Data Flow:** Form Input -> Frontend Validation -> API Request -> RLS check -> DB Transaction.
-- **Dependency:** El módulo de Trabajos (SOL-22+) dependerá de esta tabla para los selectores de ítems.
+- **Dependency:** El módulo de Instalaciones (SOL-22+) dependerá de esta tabla para los selectores de ítems.
 
 ---
 
@@ -50,7 +50,7 @@ Esta épica proporciona la estructura de costos necesaria para la rentabilidad d
 
 ### Technical Risks
 
-1. **Pérdida de Integridad Referencial:** Eliminar un panel solar del catálogo que ya está referenciado en un trabajo activo.
+1. **Pérdida de Integridad Referencial:** Eliminar un panel solar del catálogo que ya está referenciado en un instalación activo.
    - **Mitigación:** Impedir borrado físico si existen FKs activas o implementar marcas de "Inactivo".
 2. **Precisión Numérica:** Errores de redondeo en precios/costos decimales.
    - **Mitigación:** Usar tipos de datos `decimal` o `numeric` en Postgres y manejar centavos correctamente.
@@ -119,8 +119,8 @@ Esta épica proporciona la estructura de costos necesaria para la rentabilidad d
 
 **@[Product Owner]:**
 
-- ¿El precio de los servicios es por hora o por unidad de trabajo?
-- ¿Se debe permitir eliminar ítems que ya están en facturas o trabajos?
+- ¿El precio de los servicios es por hora o por unidad de instalación?
+- ¿Se debe permitir eliminar ítems que ya están en facturas o instalaciones?
 
 **@[Dev Lead]:**
 

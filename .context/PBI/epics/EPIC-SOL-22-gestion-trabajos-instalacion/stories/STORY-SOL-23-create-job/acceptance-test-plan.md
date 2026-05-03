@@ -1,9 +1,9 @@
-# Acceptance Test Plan: STORY-SOL-23 - Crear Nuevo Trabajo
+# Acceptance Test Plan: STORY-SOL-23 - Crear Nuevo Instalación
 
 **Fecha:** 2026-04-05
 **QA Engineer:** AI-Generated (Gemini CLI)
 **Story Jira Key:** SOL-23
-**Epic:** EPIC-SOL-22 - Gestión de Trabajos de Instalación
+**Epic:** EPIC-SOL-22 - Gestión de Instalaciones de Instalación
 **Status:** Draft - Pending PO/Dev Review
 
 ---
@@ -28,7 +28,7 @@
   **Backend:**
 - Endpoint: `POST /api/trabajos`.
   **Database:**
-- Tabla `trabajos`. Campos obligatorios: `cliente_id`, `fecha`, `hora`.
+- Tabla `instalaciones`. Campos obligatorios: `cliente_id`, `fecha`, `hora`.
 
 ---
 
@@ -37,11 +37,11 @@
 ### Ambiguities Identified
 
 - **Ambiguity 1:** ¿La ubicación es la dirección del cliente o una dirección de obra específica?
-  - **Suggested Clarification:** Pre-cargar la dirección del cliente pero permitir sobrescribirla para la ubicación del trabajo.
+  - **Suggested Clarification:** Pre-cargar la dirección del cliente pero permitir sobrescribirla para la ubicación del instalación.
 
 ### Missing Information / Gaps
 
-- **Gap 1:** Validación de horas de trabajo (ej. no permitir 03:00 AM sin advertencia).
+- **Gap 1:** Validación de horas de instalación (ej. no permitir 03:00 AM sin advertencia).
 
 ---
 
@@ -50,10 +50,10 @@
 ### Scenario 1: Creación exitosa (Happy Path)
 
 - **Given:** Javi tiene al cliente "Juan Pérez".
-- **When:** Crea trabajo para mañana a las 10:00 en "Obra A".
+- **When:** Crea instalación para mañana a las 10:00 en "Obra A".
 - **Then:**
   - Status 201.
-  - El trabajo aparece en "Agendados".
+  - El instalación aparece en "Agendados".
 
 ### Scenario 2: Omisión de cliente
 
@@ -69,10 +69,10 @@
 
 ## 🧪 Paso 4: Test Design (Outlines)
 
-#### **Validar creación de trabajo con empresa opcional**
+#### **Validar creación de instalación con empresa opcional**
 
 - **Type:** Positive | **Level:** E2E (Playwright)
-- **Expected Result:** El trabajo se crea correctamente vinculando ambas entidades.
+- **Expected Result:** El instalación se crea correctamente vinculando ambas entidades.
 
 #### **Validar que un usuario no puede inyectar clientes de otros**
 
@@ -82,7 +82,7 @@
 
 #### **Validar estado inicial por defecto**
 
-- **When:** Se crea un trabajo nuevo.
+- **When:** Se crea un instalación nuevo.
 - **Then:** El campo `estado` en la DB debe ser obligatoriamente 'Agendado'.
 
 ---

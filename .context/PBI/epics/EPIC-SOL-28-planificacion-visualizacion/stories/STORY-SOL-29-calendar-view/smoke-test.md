@@ -19,12 +19,12 @@
 - [ ] **Navegación entre meses/semanas**
   - Los controles de "Siguiente" y "Anterior" funcionan.
 - [ ] **Visualización de Eventos**
-  - Los trabajos programados aparecen como eventos en el calendario.
+  - Los instalaciones programados aparecen como eventos en el calendario.
 
 ### 3. Integración Backend
 
 - [ ] **Sincronización**
-  - Los datos del calendario coinciden con la lista de trabajos.
+  - Los datos del calendario coinciden con la lista de instalaciones.
 
 ---
 

@@ -1,8 +1,8 @@
-# Implementation Plan: STORY-SOL-31 - Crear Trabajo desde Calendario
+# Implementation Plan: STORY-SOL-31 - Crear Instalación desde Calendario
 
 ## Overview
 
-Implementar la capacidad de iniciar la creación de un trabajo haciendo clic directamente en un día del calendario, agilizando el proceso de planificación para el instalador.
+Implementar la capacidad de iniciar la creación de un instalación haciendo clic directamente en un día del calendario, agilizando el proceso de planificación para el instalador.
 
 **Acceptance Criteria a cumplir:**
 
@@ -42,7 +42,7 @@ Implementar la capacidad de iniciar la creación de un trabajo haciendo clic dir
 │           ^ clic aquí                │
 └──────────────────────────────────────┘
       ┌──────────────────────────┐
-      │ Nuevo Trabajo (20 May)   │
+      │ Nuevo Instalación (20 May)   │
       │ ------------------------ │
       │ Cliente: [ Seleccionar ] │
       │ [ [ Agendar ] ]          │
@@ -63,7 +63,7 @@ Implementar la capacidad de iniciar la creación de un trabajo haciendo clic dir
 ## Content Writing
 
 - **Modal Header:** "Planificar para el {fecha}"
-- **Tooltip:** "Clic para añadir trabajo"
+- **Tooltip:** "Clic para añadir instalación"
 
 ---
 
@@ -82,7 +82,7 @@ Implementar la capacidad de iniciar la creación de un trabajo haciendo clic dir
 ### **Step 3: Refresco de Datos**
 
 **Task:** Conectar el callback `onSuccess` del formulario con el disparador de recarga del calendario.
-**Testing:** Crear un trabajo y verificar que el "punto" o badge de evento aparezca en el día correspondiente sin recargar la página.
+**Testing:** Crear un instalación y verificar que el "punto" o badge de evento aparezca en el día correspondiente sin recargar la página.
 
 ---
 

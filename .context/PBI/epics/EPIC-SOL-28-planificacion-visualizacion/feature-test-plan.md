@@ -11,12 +11,12 @@
 
 ### Business Value
 
-La capacidad de visualizar el trabajo en un calendario transforma a SolarFlow de un simple CRUD a una herramienta de planificación real. Permite al instalador ver su disponibilidad futura y optimizar sus días de trabajo, reduciendo el "tiempo muerto" entre instalaciones.
+La capacidad de visualizar el instalación en un calendario transforma a SolarFlow de un simple CRUD a una herramienta de planificación real. Permite al instalador ver su disponibilidad futura y optimizar sus días de instalación, reduciendo el "tiempo muerto" entre instalaciones.
 
 **Key Value Proposition:**
 
-- **Organización Visual:** Entender la carga de trabajo de un vistazo.
-- **Agilidad:** Creación de trabajos contextual (hacer clic en un hueco libre).
+- **Organización Visual:** Entender la carga de instalación de un vistazo.
+- **Agilidad:** Creación de instalaciones contextual (hacer clic en un hueco libre).
 
 **Success Metrics (KPIs):**
 
@@ -42,7 +42,7 @@ La capacidad de visualizar el trabajo en un calendario transforma a SolarFlow de
 ### Integration Points
 
 - **Data Fetching:** Sincronización entre la navegación del calendario (flechas mes ant/sig) y los re-fetches de la API.
-- **Navigation:** Click en evento de calendario -> Ir al detalle del trabajo (SOL-24).
+- **Navigation:** Click en evento de calendario -> Ir al detalle del instalación (SOL-24).
 
 ---
 
@@ -67,8 +67,8 @@ La capacidad de visualizar el trabajo en un calendario transforma a SolarFlow de
 ### Test Levels
 
 - **Unit Testing (Vitest):** Funciones de utilidad para generar cuadrículas de días y meses.
-- **Integration Testing:** Verificar que la API de trabajos filtra correctamente por rango cuando el calendario lo solicita.
-- **E2E Testing (Playwright):** Probar el cambio de mes, cambio de vista (Cal -> Lista) y creación de trabajo desde un slot de fecha.
+- **Integration Testing:** Verificar que la API de instalaciones filtra correctamente por rango cuando el calendario lo solicita.
+- **E2E Testing (Playwright):** Probar el cambio de mes, cambio de vista (Cal -> Lista) y creación de instalación desde un slot de fecha.
 
 ---
 
@@ -96,8 +96,8 @@ La capacidad de visualizar el trabajo en un calendario transforma a SolarFlow de
 
 ## 🗂️ Test Data Requirements
 
-- Trabajos distribuidos en diferentes semanas y meses.
-- Trabajos en diferentes estados (colores).
+- Instalaciones distribuidos en diferentes semanas y meses.
+- Instalaciones en diferentes estados (colores).
 
 ---
 
@@ -105,7 +105,7 @@ La capacidad de visualizar el trabajo en un calendario transforma a SolarFlow de
 
 ### Entry Criteria
 
-- API de trabajos con soporte para filtros de fecha.
+- API de instalaciones con soporte para filtros de fecha.
 - Componente de calendario base integrado en el proyecto.
 
 ### Exit Criteria
@@ -120,7 +120,7 @@ La capacidad de visualizar el trabajo en un calendario transforma a SolarFlow de
 **@[Product Owner]:**
 
 - ¿Se mostrará la ubicación en el pequeño recuadro del calendario o solo el nombre del cliente?
-- ¿Permitimos la creación de trabajos en días pasados desde el calendario?
+- ¿Permitimos la creación de instalaciones en días pasados desde el calendario?
 
 **@[Dev Lead]:**
 
@@ -132,4 +132,4 @@ La capacidad de visualizar el trabajo en un calendario transforma a SolarFlow de
 **Next Steps:**
 
 - Generar `acceptance-test-plan.md` para las historias de planificación.
-- Validar el performance del endpoint de trabajos con filtros de fecha.
+- Validar el performance del endpoint de instalaciones con filtros de fecha.

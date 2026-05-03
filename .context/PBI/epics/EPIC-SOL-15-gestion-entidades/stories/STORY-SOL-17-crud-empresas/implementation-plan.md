@@ -2,14 +2,14 @@
 
 ## Overview
 
-Implementar la gestión de empresas contratantes (subcontratistas o clientes corporativos), permitiendo a Javi y David organizar sus trabajos por entidad pagadora.
+Implementar la gestión de empresas contratantes (subcontratistas o clientes corporativos), permitiendo a Javi y David organizar sus instalaciones por entidad pagadora.
 
 **Acceptance Criteria a cumplir:**
 
 - Crear empresa con nombre (obligatorio), contacto responsable y teléfono (obligatorio).
 - Listar solo las empresas pertenecientes al usuario autenticado.
 - Editar información de empresas existentes.
-- Bloquear la eliminación de empresas que tengan trabajos asociados.
+- Bloquear la eliminación de empresas que tengan instalaciones asociados.
 - Impedir nombres de empresas duplicados para el mismo usuario.
 - Diálogo de confirmación antes de eliminar.
 
@@ -38,7 +38,7 @@ Implementar la gestión de empresas contratantes (subcontratistas o clientes cor
 ### Estados de UI:
 
 - **Loading:** Skeleton de tabla mientras se obtienen los datos.
-- **Error de Integridad:** Mensaje: "Esta empresa no puede ser eliminada porque tiene trabajos vinculados."
+- **Error de Integridad:** Mensaje: "Esta empresa no puede ser eliminada porque tiene instalaciones vinculados."
 
 ---
 
@@ -94,14 +94,14 @@ Implementar la gestión de empresas contratantes (subcontratistas o clientes cor
 ### **Step 4: Validación de Eliminación**
 
 **Task:** Implementar borrado con restricción de integridad.
-**Testing:** Intentar borrar una empresa con trabajos asociados y confirmar que el sistema lo impide con un mensaje amigable.
+**Testing:** Intentar borrar una empresa con instalaciones asociados y confirmar que el sistema lo impide con un mensaje amigable.
 
 ---
 
 ## Dependencies
 
 - [x] EPIC-SOL-10 (Autenticación).
-- [ ] EPIC-SOL-22 (Trabajos) para pruebas de integridad referencial.
+- [ ] EPIC-SOL-22 (Instalaciones) para pruebas de integridad referencial.
 
 ---
 

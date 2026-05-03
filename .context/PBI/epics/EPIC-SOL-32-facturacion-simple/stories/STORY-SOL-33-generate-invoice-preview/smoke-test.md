@@ -1,6 +1,6 @@
 # Smoke Test: EPIC-SOL-32 - Facturación Simple
 
-**Staging URL:** https://solarflow-nextjs-staging.vercel.app/dashboard/trabajos/[id]/factura
+**Staging URL:** https://solarflow-nextjs-staging.vercel.app/dashboard/instalaciones/[id]/factura
 **Fecha:** 2026-04-14
 **QA:** AI-Assigned (Gemini CLI)
 
@@ -11,7 +11,7 @@
 ### 1. Acceso Básico
 
 - [ ] **Vista de Factura accesible**
-  - Desde un trabajo completado, hacer clic en "Ver Factura".
+  - Desde un instalación completado, hacer clic en "Ver Factura".
   - La página `/factura` debe cargar con el diseño profesional.
 
 ### 2. Funcionalidad Core (Happy Path)

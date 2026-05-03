@@ -2,7 +2,7 @@
 
 ## Overview
 
-Implementar la capacidad de modificar precios/costos y eliminar ítems del catálogo, asegurando que los cambios no afecten la integridad histórica de los trabajos ya creados.
+Implementar la capacidad de modificar precios/costos y eliminar ítems del catálogo, asegurando que los cambios no afecten la integridad histórica de los instalaciones ya creados.
 
 **Acceptance Criteria a cumplir:**
 
@@ -36,7 +36,7 @@ Implementar la capacidad de modificar precios/costos y eliminar ítems del catá
 ### Estados de UI:
 
 - **Confirmación:** " ¿Estás seguro de que deseas eliminar este ítem? Esta acción no se puede deshacer si no está en uso."
-- **Bloqueo:** "Este ítem está siendo usado en 3 trabajos y no puede eliminarse."
+- **Bloqueo:** "Este ítem está siendo usado en 3 instalaciones y no puede eliminarse."
 
 ---
 
@@ -53,7 +53,7 @@ Implementar la capacidad de modificar precios/costos y eliminar ítems del catá
 
 - **Título Modal:** "Editar Ítem"
 - **CTA:** "Actualizar precio"
-- **Aviso:** "Los cambios de precio solo aplicarán a los nuevos trabajos que crees."
+- **Aviso:** "Los cambios de precio solo aplicarán a los nuevos instalaciones que crees."
 
 ---
 

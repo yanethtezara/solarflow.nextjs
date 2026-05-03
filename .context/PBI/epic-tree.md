@@ -20,7 +20,7 @@ Jira Project: (URL del proyecto en Jira, una vez conocido)
 **User Stories (estimado: 4):**
 
 1. SOL-TBD - As a Javi (instalador), I want to poder registrarme en la plataforma usando mi email y una contraseña para tener una cuenta segura y privada.
-2. SOL-TBD - As a David (jefe de cuadrilla), I want to poder iniciar sesión con mis credenciales para acceder a la información de mis trabajos.
+2. SOL-TBD - As a David (jefe de cuadrilla), I want to poder iniciar sesión con mis credenciales para acceder a la información de mis instalaciones.
 3. SOL-TBD - As a Javi, I want to una opción para "recuperar mi contraseña" si la olvido, para no perder el acceso a mi cuenta.
 4. SOL-TBD - As a usuario, I want to poder cerrar sesión de forma segura para proteger mi información en dispositivos compartidos.
 
@@ -35,23 +35,23 @@ Jira Project: (URL del proyecto en Jira, una vez conocido)
 **User Stories (estimado: 2):**
 
 1. SOL-TBD - As a Javi, I want to poder agregar, ver, editar y eliminar la información de mis clientes para tener una base de datos centralizada.
-2. SOL-TBD - As a David, I want to poder agregar, ver, editar y eliminar los datos de las empresas que me contratan para poder asociarlas a los trabajos.
+2. SOL-TBD - As a David, I want to poder agregar, ver, editar y eliminar los datos de las empresas que me contratan para poder asociarlas a los instalaciones.
 
 ---
 
-### EPIC 3: Gestión de Trabajos de Instalación (Core)
+### EPIC 3: Gestión de Instalaciones de Instalación (Core)
 
 **Planned Jira Key:** SOL-TBD
 **Priority:** CRITICAL
-**Description:** Funcionalidades para la creación y gestión del ciclo de vida de los trabajos de instalación.
+**Description:** Funcionalidades para la creación y gestión del ciclo de vida de los instalaciones de instalación.
 
 **User Stories (estimado: 5):**
 
-1. SOL-TBD - As a Javi, I want to poder crear un nuevo trabajo de instalación asociando un cliente, una empresa, una fecha, una hora y una ubicación.
-2. SOL-TBD - As a David, I want to poder ver un listado de todos mis trabajos con su estado para conocer mi carga de trabajo.
-3. SOL-TBD - As a Javi, I want to poder editar los detalles de un trabajo existente para actualizar la información.
-4. SOL-TBD - As a David, I want to poder agregar materiales y costos de mano de obra específicos a un trabajo.
-5. SOL-TBD - As a Javi, I want to poder marcar un trabajo como "Completado" para saber qué está listo para facturar.
+1. SOL-TBD - As a Javi, I want to poder crear un nuevo instalación de instalación asociando un cliente, una empresa, una fecha, una hora y una ubicación.
+2. SOL-TBD - As a David, I want to poder ver un listado de todos mis instalaciones con su estado para conocer mi carga de instalación.
+3. SOL-TBD - As a Javi, I want to poder editar los detalles de un instalación existente para actualizar la información.
+4. SOL-TBD - As a David, I want to poder agregar materiales y costos de mano de obra específicos a un instalación.
+5. SOL-TBD - As a Javi, I want to poder marcar un instalación como "Completado" para saber qué está listo para facturar.
 
 ---
 
@@ -59,13 +59,13 @@ Jira Project: (URL del proyecto en Jira, una vez conocido)
 
 **Planned Jira Key:** SOL-TBD
 **Priority:** MEDIUM
-**Description:** Vistas de calendario y lista para organizar y visualizar los trabajos.
+**Description:** Vistas de calendario y lista para organizar y visualizar los instalaciones.
 
 **User Stories (estimado: 3):**
 
-1. SOL-TBD - As a David, I want to poder ver mis trabajos agendados en una vista de calendario.
+1. SOL-TBD - As a David, I want to poder ver mis instalaciones agendados en una vista de calendario.
 2. SOL-TBD - As a Javi, I want to poder alternar entre una vista de lista y una vista de calendario.
-3. SOL-TBD - As a Javi, I want to poder crear un nuevo trabajo directamente desde la vista de calendario.
+3. SOL-TBD - As a Javi, I want to poder crear un nuevo instalación directamente desde la vista de calendario.
 
 ---
 
@@ -73,7 +73,7 @@ Jira Project: (URL del proyecto en Jira, una vez conocido)
 
 **Planned Jira Key:** SOL-TBD
 **Priority:** HIGH
-**Description:** Gestión de un catálogo de servicios y materiales para agilizar la asignación a trabajos.
+**Description:** Gestión de un catálogo de servicios y materiales para agilizar la asignación a instalaciones.
 
 **User Stories (estimado: 3):**
 
@@ -87,11 +87,11 @@ Jira Project: (URL del proyecto en Jira, una vez conocido)
 
 **Planned Jira Key:** SOL-TBD
 **Priority:** HIGH
-**Description:** Generación de facturas en formato PDF a partir de trabajos completados.
+**Description:** Generación de facturas en formato PDF a partir de instalaciones completados.
 
 **User Stories (estimado: 3):**
 
-1. SOL-TBD - As a Javi, I want to poder generar una vista de factura para un trabajo "Completado" con un solo clic.
+1. SOL-TBD - As a Javi, I want to poder generar una vista de factura para un instalación "Completado" con un solo clic.
 2. SOL-TBD - As a David, I want to que la factura generada incluya los datos de mi empresa, los datos del cliente, y el desglose de conceptos.
 3. SOL-TBD - As a Javi, I want to poder descargar la factura en formato PDF.
 
@@ -107,7 +107,7 @@ Jira Project: (URL del proyecto en Jira, una vez conocido)
 
 ### Phase 2: Core Features (Sprint 3-4)
 
-4. EPIC 3 - Gestión de Trabajos de Instalación (Core)
+4. EPIC 3 - Gestión de Instalaciones de Instalación (Core)
 5. EPIC 4 - Planificación y Visualización
 
 ### Phase 3: Business Value (Sprint 5)

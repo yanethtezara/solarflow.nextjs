@@ -1,4 +1,4 @@
-# Acceptance Test Plan: STORY-SOL-31 - Crear Trabajo desde Calendario
+# Acceptance Test Plan: STORY-SOL-31 - Crear Instalación desde Calendario
 
 **Fecha:** 2026-04-05
 **QA Engineer:** AI-Generated (Gemini CLI)
@@ -58,7 +58,7 @@
 
 ### Scenario 3: Refresco inmediato
 
-- **When:** Guarda el trabajo exitosamente.
+- **When:** Guarda el instalación exitosamente.
 - **Then:** El nuevo evento aparece en el calendario sin necesidad de recargar la página completa.
 
 ---
@@ -72,7 +72,7 @@
 
 #### **Validar que el modal se cierra tras éxito**
 
-- **Expected Result:** El flujo termina volviendo al calendario limpio, con el nuevo trabajo renderizado.
+- **Expected Result:** El flujo termina volviendo al calendario limpio, con el nuevo instalación renderizado.
 
 #### **Validar validaciones de Zod en Modal**
 

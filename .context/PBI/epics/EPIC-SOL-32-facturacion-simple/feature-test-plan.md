@@ -15,12 +15,12 @@ La facturación es el cierre del ciclo de valor de SolarFlow. Permitir que un in
 
 **Key Value Proposition:**
 
-- **Agilidad:** De trabajo completado a factura en un clic.
+- **Agilidad:** De instalación completado a factura en un clic.
 - **Consistencia:** Cálculos automáticos basados en la data real del proyecto.
 
 **Success Metrics (KPIs):**
 
-- **Adopción:** > 70% de trabajos completados deben descargar al menos 1 PDF de factura.
+- **Adopción:** > 70% de instalaciones completados deben descargar al menos 1 PDF de factura.
 - **Precisión:** Cero errores de redondeo reportados.
 
 **User Impact:**
@@ -36,12 +36,12 @@ La facturación es el cierre del ciclo de valor de SolarFlow. Permitir que un in
 
 - **Frontend:** Next.js 15. Vista de impresión CSS-in-JS.
 - **Backend:** API Route `/api/facturas/[id]` para agregación de datos.
-- **Database:** Relación entre `trabajos`, `trabajos_items`, `clientes` y `user_profiles`.
+- **Database:** Relación entre `instalaciones`, `trabajos_items`, `clientes` y `user_profiles`.
 - **Media:** Supabase Storage para logos.
 
 ### Integration Points
 
-- **Data Aggregator:** Endpoint que consulta el estado del trabajo y une con la info fiscal del usuario.
+- **Data Aggregator:** Endpoint que consulta el estado del instalación y une con la info fiscal del usuario.
 - **PDF Export:** Librería cliente (ej. jsPDF) o servidor para generar el archivo estático.
 
 ---
@@ -50,7 +50,7 @@ La facturación es el cierre del ciclo de valor de SolarFlow. Permitir que un in
 
 ### Technical Risks
 
-1. **Fugacidad de Precios:** Si el catálogo cambia, la factura debe preservar lo que se guardó en el trabajo.
+1. **Fugacidad de Precios:** Si el catálogo cambia, la factura debe preservar lo que se guardó en el instalación.
    - **Mitigación:** Uso estricto de la tabla de snapshots `trabajos_items`.
 2. **Incompatibilidad de Fuentes en PDF:** Caracteres especiales o logos que no cargan.
    - **Mitigación:** Embed de fuentes y validación de URLs de Supabase Storage.
@@ -67,7 +67,7 @@ La facturación es el cierre del ciclo de valor de SolarFlow. Permitir que un in
 ### Test Levels
 
 - **Unit Testing (Vitest):** Funciones de cálculo de subtotales y totales.
-- **Integration Testing:** Validación de que la API de facturas solo permite acceso al dueño del trabajo.
+- **Integration Testing:** Validación de que la API de facturas solo permite acceso al dueño del instalación.
 - **E2E Testing (Playwright):** Proceso completo desde la marca de "Completado" hasta la obtención del archivo .pdf.
 
 ---
@@ -78,7 +78,7 @@ La facturación es el cierre del ciclo de valor de SolarFlow. Permitir que un in
 
 **Complexity:** Medium | **Estimated Test Cases:** 6
 
-- Cálculo automático, visibilidad del desglose, estado de error si el trabajo no está completado.
+- Cálculo automático, visibilidad del desglose, estado de error si el instalación no está completado.
 
 ### STORY-SOL-34: Detalles Profesionales
 
@@ -96,7 +96,7 @@ La facturación es el cierre del ciclo de valor de SolarFlow. Permitir que un in
 
 ## 🗂️ Test Data Requirements
 
-- Trabajos con mezcla de servicios y materiales.
+- Instalaciones con mezcla de servicios y materiales.
 - Perfiles con datos fiscales completos.
 
 ---
@@ -105,7 +105,7 @@ La facturación es el cierre del ciclo de valor de SolarFlow. Permitir que un in
 
 ### Entry Criteria
 
-- Épica de Trabajos (SOL-22) funcional.
+- Épica de Instalaciones (SOL-22) funcional.
 - Tabla `user_profiles` creada.
 
 ### Exit Criteria

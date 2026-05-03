@@ -14,7 +14,7 @@ Feature: View Toggle
 
 @high @regression @automation-candidate @SOL-39-FIX
 Scenario Outline: Validar alternancia entre vista de lista y calendario
-Given el usuario se encuentra en "/dashboard/trabajos"
+Given el usuario se encuentra en "/dashboard/instalaciones"
 And la vista inicial es "lista"
 When el usuario hace clic en el botón de vista "Calendario"
 Then el sistema oculta el componente trabajosList

@@ -1,4 +1,4 @@
-# Feature Test Plan: EPIC-SOL-22 - Gestión de Trabajos de Instalación (Core)
+# Feature Test Plan: EPIC-SOL-22 - Gestión de Instalaciones de Instalación (Core)
 
 **Fecha:** 2026-04-05
 **QA Lead:** AI-Generated (Gemini CLI)
@@ -11,7 +11,7 @@
 
 ### Business Value
 
-Esta épica es el núcleo de SolarFlow. Representa la actividad productiva del instalador. Un "Trabajo" bien gestionado garantiza que se use el material correcto, se cobre lo justo y se cumplan los tiempos con el cliente. Es el habilitador para la facturación y la analítica futura.
+Esta épica es el núcleo de SolarFlow. Representa la actividad productiva del instalador. Un "Instalación" bien gestionado garantiza que se use el material correcto, se cobre lo justo y se cumplan los tiempos con el cliente. Es el habilitador para la facturación y la analítica futura.
 
 **Key Value Proposition:**
 
@@ -20,13 +20,13 @@ Esta épica es el núcleo de SolarFlow. Representa la actividad productiva del i
 
 **Success Metrics (KPIs):**
 
-- **Volumen Operativo:** Número de trabajos creados por semana.
-- **Completitud:** % de trabajos que llegan al estado "Completado" con ítems asignados.
+- **Volumen Operativo:** Número de instalaciones creados por semana.
+- **Completitud:** % de instalaciones que llegan al estado "Completado" con ítems asignados.
 
 **User Impact:**
 
 - **Javier Morales:** Usa esta sección como su diario de campo digital.
-- **David Rojas:** Gestiona la carga de trabajo de múltiples proyectos simultáneos.
+- **David Rojas:** Gestiona la carga de instalación de múltiples proyectos simultáneos.
 
 ---
 
@@ -37,8 +37,8 @@ Esta épica es el núcleo de SolarFlow. Representa la actividad productiva del i
 - **Frontend:** Next.js 15. Páginas dinámicas con carga de datos relacionales (Selectores de Clientes/Empresas).
 - **Backend:** API Routes con validación de integridad referencial.
 - **Database:**
-  - `trabajos`: Tabla principal de encabezado.
-  - `trabajos_items`: Tabla de detalle (muchos a muchos entre trabajos y catálogo).
+  - `instalaciones`: Tabla principal de encabezado.
+  - `trabajos_items`: Tabla de detalle (muchos a muchos entre instalaciones y catálogo).
 - **Security:** RLS de Supabase aplicado a ambas tablas vinculadas.
 
 ### Integration Points
@@ -52,14 +52,14 @@ Esta épica es el núcleo de SolarFlow. Representa la actividad productiva del i
 
 ### Technical Risks
 
-1. **Snapshoting de Precios:** Si el precio de un panel cambia en el catálogo, no debería cambiar en trabajos ya cerrados o agendados.
+1. **Snapshoting de Precios:** Si el precio de un panel cambia en el catálogo, no debería cambiar en instalaciones ya cerrados o agendados.
    - **Mitigación:** La tabla `trabajos_items` debe guardar una copia del precio/costo al momento de la inserción.
-2. **Carga en Cascada:** Al eliminar un cliente, ¿qué pasa con sus trabajos?
-   - **Mitigación:** Implementar restricciones de FK (No permitir borrado de cliente con trabajos activos).
+2. **Carga en Cascada:** Al eliminar un cliente, ¿qué pasa con sus instalaciones?
+   - **Mitigación:** Implementar restricciones de FK (No permitir borrado de cliente con instalaciones activos).
 
 ### Business Risks
 
-1. **Agendamiento Conflictivo:** Dos trabajos a la misma hora para el mismo instalador.
+1. **Agendamiento Conflictivo:** Dos instalaciones a la misma hora para el mismo instalador.
    - **Mitigación:** (V2) Alerta de conflicto. Para MVP, permitir pero resaltar en la UI.
 
 ---
@@ -70,13 +70,13 @@ Esta épica es el núcleo de SolarFlow. Representa la actividad productiva del i
 
 - **Unit Testing (Vitest):** Lógica de suma de subtotales y cálculo de impuestos (si aplica).
 - **Integration Testing:** Validar que solo se puedan asociar ítems de catálogo que pertenezcan al mismo usuario.
-- **E2E Testing (Playwright):** Flujo "End-to-End": Login -> Crear Cliente -> Crear Material -> Crear Trabajo -> Añadir Material al Trabajo -> Marcar como Completado.
+- **E2E Testing (Playwright):** Flujo "End-to-End": Login -> Crear Cliente -> Crear Material -> Crear Instalación -> Añadir Material al Instalación -> Marcar como Completado.
 
 ---
 
 ## 📊 Test Cases Summary by Story
 
-### STORY-SOL-23: Crear Trabajo
+### STORY-SOL-23: Crear Instalación
 
 **Complexity:** High | **Estimated Test Cases:** 8
 
@@ -120,12 +120,12 @@ Esta épica es el núcleo de SolarFlow. Representa la actividad productiva del i
 ### Entry Criteria
 
 - CRUD de Entidades y Catálogo funcional.
-- Esquema de DB para `trabajos` y `trabajos_items` desplegado.
+- Esquema de DB para `instalaciones` y `trabajos_items` desplegado.
 
 ### Exit Criteria
 
 - Flujo transaccional completo validado sin errores de integridad.
-- RLS confirmado (un usuario no puede añadir ítems al trabajo de otro).
+- RLS confirmado (un usuario no puede añadir ítems al instalación de otro).
 
 ---
 
@@ -134,7 +134,7 @@ Esta épica es el núcleo de SolarFlow. Representa la actividad productiva del i
 **@[Product Owner]:**
 
 - ¿El estado "Completado" bloquea la edición de materiales? (Recomendado: Sí).
-- ¿Se permite la creación de trabajos sin empresa asociada? (Confirmado en story como opcional).
+- ¿Se permite la creación de instalaciones sin empresa asociada? (Confirmado en story como opcional).
 
 **@[Dev Lead]:**
 

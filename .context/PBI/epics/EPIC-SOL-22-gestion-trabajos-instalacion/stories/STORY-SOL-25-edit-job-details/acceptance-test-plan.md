@@ -1,9 +1,9 @@
-# Acceptance Test Plan: STORY-SOL-25 - Edición de Detalles de Trabajo
+# Acceptance Test Plan: STORY-SOL-25 - Edición de Detalles de Instalación
 
 **Fecha:** 2026-04-05
 **QA Engineer:** AI-Generated (Gemini CLI)
 **Story Jira Key:** SOL-25
-**Epic:** EPIC-SOL-22 - Gestión de Trabajos de Instalación
+**Epic:** EPIC-SOL-22 - Gestión de Instalaciones de Instalación
 **Status:** Draft - Pending PO/Dev Review
 
 ---
@@ -28,7 +28,7 @@
   **Backend:**
 - API: `PUT /api/trabajos/[id]`.
   **Security:**
-- Validación de que el `user_id` del trabajo coincida con el usuario de la sesión.
+- Validación de que el `user_id` del instalación coincida con el usuario de la sesión.
 
 ---
 
@@ -36,8 +36,8 @@
 
 ### Ambiguities Identified
 
-- **Ambiguity 1:** ¿Qué sucede si el trabajo ya está en progreso o completado?
-  - **Suggested Clarification:** Limitar la edición de campos críticos (Cliente/Empresa) si el trabajo ya está "En Progreso" para evitar inconsistencias de facturación.
+- **Ambiguity 1:** ¿Qué sucede si el instalación ya está en progreso o completado?
+  - **Suggested Clarification:** Limitar la edición de campos críticos (Cliente/Empresa) si el instalación ya está "En Progreso" para evitar inconsistencias de facturación.
 
 ### Missing Information / Gaps
 
@@ -52,13 +52,13 @@
 - **When:** Javi edita la ubicación y guarda.
 - **Then:**
   - Status 200 OK.
-  - Redirección al detalle del trabajo.
+  - Redirección al detalle del instalación.
   - La nueva ubicación es visible.
 
 ### Scenario 2: Cambio de cliente
 
 - **When:** Javi selecciona un nuevo cliente de la lista.
-- **Then:** El trabajo se vincula correctamente al nuevo ID de cliente.
+- **Then:** El instalación se vincula correctamente al nuevo ID de cliente.
 
 ### Scenario 3: Bloqueo de campos obligatorios
 
@@ -74,13 +74,13 @@
 - **Type:** Positive | **Level:** E2E (Playwright)
 - **Expected Result:** El campo `ubicacion` en la tabla de la DB se actualiza correctamente.
 
-#### **Validar que un usuario no puede editar trabajos de otros**
+#### **Validar que un usuario no puede editar instalaciones de otros**
 
 - **Type:** Negative (Security) | **Level:** API (Integration)
-- **Steps:** Intentar un `PUT` a un ID de trabajo que no le pertenece.
+- **Steps:** Intentar un `PUT` a un ID de instalación que no le pertenece.
 - **Expected Result:** Status 403 Forbidden o 404 Not Found.
 
-#### **Validar que la edición no cambia el ID del trabajo**
+#### **Validar que la edición no cambia el ID del instalación**
 
 - **Verify:** Tras editar, el ID del registro en la DB sigue siendo el mismo (evitar duplicados por error de lógica de save).
 

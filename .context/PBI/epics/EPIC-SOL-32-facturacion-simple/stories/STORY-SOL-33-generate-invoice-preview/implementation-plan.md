@@ -2,11 +2,11 @@
 
 ## Overview
 
-Implementar la lógica para ensamblar todos los datos de un trabajo completado (materiales, mano de obra, cliente) y mostrarlos en una interfaz de factura profesional antes de su exportación.
+Implementar la lógica para ensamblar todos los datos de un instalación completado (materiales, mano de obra, cliente) y mostrarlos en una interfaz de factura profesional antes de su exportación.
 
 **Acceptance Criteria a cumplir:**
 
-- Botón "Generar Factura" visible solo en trabajos con estado "Completado".
+- Botón "Generar Factura" visible solo en instalaciones con estado "Completado".
 - Calcular automáticamente el total sumando (cantidad \* precio_snapshot).
 - Mostrar desglose detallado de ítems.
 - Precios incluyen IVA por defecto.
@@ -16,7 +16,7 @@ Implementar la lógica para ensamblar todos los datos de un trabajo completado (
 
 ## Technical Approach
 
-**Chosen approach:** Crear un endpoint de agregación `/api/facturas/[jobId]` que realice un join entre `trabajos`, `trabajos_items`, `clientes` y `profiles`. La vista previa se renderizará en una ruta dedicada `/dashboard/trabajos/[id]/factura`. Utilizaremos un componente `InvoiceTemplate` que servirá tanto para la vista web como para la base de la generación del PDF (SOL-35).
+**Chosen approach:** Crear un endpoint de agregación `/api/facturas/[jobId]` que realice un join entre `instalaciones`, `trabajos_items`, `clientes` y `profiles`. La vista previa se renderizará en una ruta dedicada `/dashboard/instalaciones/[id]/factura`. Utilizaremos un componente `InvoiceTemplate` que servirá tanto para la vista web como para la base de la generación del PDF (SOL-35).
 
 **Why this approach:**
 
@@ -58,7 +58,7 @@ Implementar la lógica para ensamblar todos los datos de un trabajo completado (
 
 **Tipos a usar:**
 
-- Interface `InvoiceData` que combine el Trabajo, sus Items y el Cliente.
+- Interface `InvoiceData` que combine el Instalación, sus Items y el Cliente.
 - Lógica de numeración: `INV-` + correlativo.
 
 ---
@@ -91,7 +91,7 @@ Implementar la lógica para ensamblar todos los datos de un trabajo completado (
 
 ## Dependencies
 
-- [x] STORY-27 (Trabajo Completado).
+- [x] STORY-27 (Instalación Completado).
 - [x] STORY-26 (Items con Snapshots).
 
 ---

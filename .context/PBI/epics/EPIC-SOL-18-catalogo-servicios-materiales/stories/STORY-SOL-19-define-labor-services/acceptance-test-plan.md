@@ -14,7 +14,7 @@
 
 **User Persona Affected:**
 
-- **Primary:** David Rojas (Líder) - Define el costo del trabajo de sus técnicos.
+- **Primary:** David Rojas (Líder) - Define el costo del instalación de sus técnicos.
   **Business Value:**
 - **Value Proposition:** Estandarización de tarifas.
 - **Business Impact:** Evita discrepancias en presupuestos entregados a diferentes clientes.

@@ -1,12 +1,12 @@
-# Implementation Plan: STORY-SOL-24 - Listado de Trabajos
+# Implementation Plan: STORY-SOL-24 - Listado de Instalaciones
 
 ## Overview
 
-Implementar la vista principal de gestión de trabajos, permitiendo a los usuarios visualizar su carga operativa filtrada por estado y ordenada cronológicamente.
+Implementar la vista principal de gestión de instalaciones, permitiendo a los usuarios visualizar su carga operativa filtrada por estado y ordenada cronológicamente.
 
 **Acceptance Criteria a cumplir:**
 
-- Mostrar lista de trabajos con: Cliente, Fecha, Hora y Estado.
+- Mostrar lista de instalaciones con: Cliente, Fecha, Hora y Estado.
 - Ordenar automáticamente por fecha (más próxima primero).
 - Implementar filtros por estado (Agendado, En Progreso, Completado, Cancelado).
 - Sincronización de filtros con la URL para permitir refrescos de página.
@@ -16,13 +16,13 @@ Implementar la vista principal de gestión de trabajos, permitiendo a los usuari
 
 ## Technical Approach
 
-**Chosen approach:** Utilizar una página dinámica `/dashboard/trabajos` que consuma la API de Supabase. El filtrado por estado se manejará mediante Query Params en la URL, lo que permitirá que el hook `useJobs` (basado en React Query) revalide los datos automáticamente cuando cambie la URL. Los estados visuales se representarán mediante "Chips" o "Badges" de colores definidos en el Design System.
+**Chosen approach:** Utilizar una página dinámica `/dashboard/instalaciones` que consuma la API de Supabase. El filtrado por estado se manejará mediante Query Params en la URL, lo que permitirá que el hook `useJobs` (basado en React Query) revalide los datos automáticamente cuando cambie la URL. Los estados visuales se representarán mediante "Chips" o "Badges" de colores definidos en el Design System.
 
 **Why this approach:**
 
 - ✅ **Navegación Intuitiva:** El usuario puede usar el botón "Atrás" del navegador y mantener sus filtros.
 - ✅ **Rendimiento:** Solo se piden a la DB los registros que coinciden con el filtro activo.
-- ✅ **SEO/Compartibilidad:** Permite enviar un enlace directo a "Trabajos Completados" si fuera necesario.
+- ✅ **SEO/Compartibilidad:** Permite enviar un enlace directo a "Instalaciones Completados" si fuera necesario.
 
 ---
 
@@ -38,7 +38,7 @@ Implementar la vista principal de gestión de trabajos, permitiendo a los usuari
 
 ```
 ┌──────────────────────────────────────┐
-│ [≡] Mis Trabajos          [+ Nuevo]  │
+│ [≡] Mis Instalaciones          [+ Nuevo]  │
 ├──────────────────────────────────────┤
 │ [ Todos ] [Agendados] [En Progreso]  │
 ├──────────────────────────────────────┤
@@ -54,8 +54,8 @@ Implementar la vista principal de gestión de trabajos, permitiendo a los usuari
 
 ### Estados de UI:
 
-- **Hoy:** Los trabajos de la fecha actual tendrán un borde resaltado.
-- **Vencidos:** Trabajos agendados en el pasado que no están completados se mostrarán con una alerta de "Retrasado".
+- **Hoy:** Los instalaciones de la fecha actual tendrán un borde resaltado.
+- **Vencidos:** Instalaciones agendados en el pasado que no están completados se mostrarán con una alerta de "Retrasado".
 
 ---
 
@@ -63,7 +63,7 @@ Implementar la vista principal de gestión de trabajos, permitiendo a los usuari
 
 **Tipos a usar:**
 
-- Tipo `Trabajo` extendido con el `Nombre del Cliente` (vía join de Supabase).
+- Tipo `Instalación` extendido con el `Nombre del Cliente` (vía join de Supabase).
 - Enum de estados para los filtros.
 
 ---
@@ -71,7 +71,7 @@ Implementar la vista principal de gestión de trabajos, permitiendo a los usuari
 ## Content Writing
 
 - **Vacío General:** "Tu agenda está despejada. ¡Es un buen momento para captar nuevos clientes!"
-- **Vacío Filtrado:** "No hay trabajos con el estado seleccionado."
+- **Vacío Filtrado:** "No hay instalaciones con el estado seleccionado."
 
 ---
 
@@ -99,7 +99,7 @@ Implementar la vista principal de gestión de trabajos, permitiendo a los usuari
 
 ## Dependencies
 
-- [x] STORY-SOL-23 (Creación de trabajos).
+- [x] STORY-SOL-23 (Creación de instalaciones).
 - [x] EPIC-SOL-15 (Integridad de Clientes).
 
 ---

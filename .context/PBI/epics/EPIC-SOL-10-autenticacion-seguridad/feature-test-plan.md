@@ -20,7 +20,7 @@ Esta épica es el pilar fundamental de SolarFlow. La seguridad y la privacidad s
 
 **Success Metrics (KPIs):**
 
-- **Tasa de Activación:** > 60% de usuarios registrados crean su primer trabajo en 7 días.
+- **Tasa de Activación:** > 60% de usuarios registrados crean su primer instalación en 7 días.
 - **Confiabilidad:** Disponibilidad del servicio de auth del 99.9%.
 
 **User Impact:**
@@ -119,7 +119,7 @@ Esta épica es el pilar fundamental de SolarFlow. La seguridad y la privacidad s
 ### Exit Criteria
 
 - 100% de los casos críticos de seguridad pasando.
-- RLS validado para todas las tablas core (Clientes, Trabajos).
+- RLS validado para todas las tablas core (Clientes, Instalaciones).
 - No hay bugs de prioridad Alta/Crítica abiertos.
 
 ---

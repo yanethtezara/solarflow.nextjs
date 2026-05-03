@@ -61,7 +61,7 @@
 ### Scenario 3: Datos del receptor correctos
 
 - **Given:** Cliente "Solar Systems SL" con dirección "Calle Industria 1".
-- **When:** Se factura su trabajo.
+- **When:** Se factura su instalación.
 - **Then:** Ambos datos aparecen en la sección "Para:".
 
 ---

@@ -41,7 +41,7 @@ El botón se ubicará en la parte inferior del Sidebar:
 ┌─────────────────┐
 │ [Dashboard]     │
 │ [Clientes]      │
-│ [Trabajos]      │
+│ [Instalaciones]      │
 │                 │
 │ [ Cerrar Sesión]│
 └─────────────────┘

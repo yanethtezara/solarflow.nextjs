@@ -1,9 +1,9 @@
-# Acceptance Test Plan: STORY-SOL-27 - Completar y Gestionar Estados de Trabajo
+# Acceptance Test Plan: STORY-SOL-27 - Completar y Gestionar Estados de Instalación
 
 **Fecha:** 2026-04-05
 **QA Engineer:** AI-Generated (Gemini CLI)
 **Story Jira Key:** SOL-27
-**Epic:** EPIC-SOL-22 - Gestión de Trabajos de Instalación
+**Epic:** EPIC-SOL-22 - Gestión de Instalaciones de Instalación
 **Status:** Draft - Pending PO/Dev Review
 
 ---
@@ -17,7 +17,7 @@
 - **Primary:** Javi Morales (Instalador) - Necesita cerrar sus tareas diarias para facturar.
   **Business Value:**
 - **Value Proposition:** Control del progreso.
-- **Business Impact:** Habilita el flujo de caja al identificar trabajos listos para cobro.
+- **Business Impact:** Habilita el flujo de caja al identificar instalaciones listos para cobro.
 
 ### Technical Context of This Story
 
@@ -28,7 +28,7 @@
   **Backend:**
 - Endpoint: `PATCH /api/trabajos/[id]/status` (preferible PATCH para actualización parcial).
   **Database:**
-- Tabla `trabajos`, columna `estado`.
+- Tabla `instalaciones`, columna `estado`.
 
 ---
 
@@ -47,18 +47,18 @@
 
 ## ✅ Paso 3: Refined Acceptance Criteria
 
-### Scenario 1: Finalización de trabajo (Happy Path)
+### Scenario 1: Finalización de instalación (Happy Path)
 
-- **Given:** Trabajo activo.
+- **Given:** Instalación activo.
 - **When:** Usuario selecciona "Completado".
 - **Then:**
   - Toast de confirmación.
   - El estado cambia visualmente (ej. color verde).
 
-### Scenario 2: Cancelación de trabajo
+### Scenario 2: Cancelación de instalación
 
 - **When:** Usuario selecciona "Cancelado".
-- **Then:** El trabajo se actualiza y se muestra un aviso de que no es editable.
+- **Then:** El instalación se actualiza y se muestra un aviso de que no es editable.
 
 ### Scenario 3: Integridad de datos en el cambio
 
@@ -76,7 +76,7 @@
 #### **Validar seguridad RLS en cambio de estado**
 
 - **Type:** Negative (Security) | **Level:** API
-- **Expected Result:** Solo el dueño del trabajo puede ejecutar el cambio de estado.
+- **Expected Result:** Solo el dueño del instalación puede ejecutar el cambio de estado.
 
 #### **Validar estados permitidos**
 
@@ -88,7 +88,7 @@
 ## 🎯 Definition of Done (QA)
 
 - [ ] Selector de estados funcional.
-- [ ] Reflejo inmediato en la lista de trabajos.
+- [ ] Reflejo inmediato en la lista de instalaciones.
 - [ ] Validación de permisos completada.
 
 ---

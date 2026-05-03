@@ -1,4 +1,4 @@
-# Implementation Plan: STORY-SOL-23 - Crear Nuevo Trabajo
+# Implementation Plan: STORY-SOL-23 - Crear Nuevo Instalación
 
 ## Overview
 
@@ -6,7 +6,7 @@ Implementar la funcionalidad para agendar nuevas instalaciones, permitiendo asoc
 
 **Acceptance Criteria a cumplir:**
 
-- Crear trabajo con Cliente, Fecha, Hora y Ubicación.
+- Crear instalación con Cliente, Fecha, Hora y Ubicación.
 - El estado inicial debe ser siempre "Agendado".
 - El selector de cliente debe cargar solo los clientes del usuario logueado.
 - Sugerir la dirección del cliente seleccionado como ubicación inicial.
@@ -16,7 +16,7 @@ Implementar la funcionalidad para agendar nuevas instalaciones, permitiendo asoc
 
 ## Technical Approach
 
-**Chosen approach:** Implementar un formulario de creación utilizando un componente `Combobox` para la selección de clientes y empresas (para manejar listas largas eficientemente). Utilizaremos un `Effect` de React para detectar el cambio de cliente y disparar la sugerencia de ubicación. La persistencia se realizará mediante un `INSERT` en la tabla `trabajos`, manejando la integridad referencial de las FKs.
+**Chosen approach:** Implementar un formulario de creación utilizando un componente `Combobox` para la selección de clientes y empresas (para manejar listas largas eficientemente). Utilizaremos un `Effect` de React para detectar el cambio de cliente y disparar la sugerencia de ubicación. La persistencia se realizará mediante un `INSERT` en la tabla `instalaciones`, manejando la integridad referencial de las FKs.
 
 **Why this approach:**
 
@@ -39,7 +39,7 @@ Implementar la funcionalidad para agendar nuevas instalaciones, permitiendo asoc
 
 ```
 ┌──────────────────────────────────────┐
-│ [←] Nuevo Trabajo                    │
+│ [←] Nuevo Instalación                    │
 ├──────────────────────────────────────┤
 │ Cliente: [ Seleccionar... 🔍 ]       │
 │ Empresa: [ Seleccionar... 🔍 ]       │
@@ -48,7 +48,7 @@ Implementar la funcionalidad para agendar nuevas instalaciones, permitiendo asoc
 │                                      │
 │ Ubicación: [ Calle Ejemplo 123...  ] │
 │                                      │
-│ [ [ Agendar Trabajo ] ]              │
+│ [ [ Agendar Instalación ] ]              │
 └──────────────────────────────────────┘
 ```
 
@@ -58,7 +58,7 @@ Implementar la funcionalidad para agendar nuevas instalaciones, permitiendo asoc
 
 **Tipos a usar:**
 
-- Tipo `Trabajo` del esquema Supabase.
+- Tipo `Instalación` del esquema Supabase.
 - Schema de Zod:
   ```typescript
   const jobSchema = z.object({
@@ -76,7 +76,7 @@ Implementar la funcionalidad para agendar nuevas instalaciones, permitiendo asoc
 ## Content Writing
 
 - **Título:** "Agendar Instalación"
-- **CTA:** "Crear Trabajo"
+- **CTA:** "Crear Instalación"
 - **Placeholder Ubicación:** "Dirección exacta de la obra..."
 
 ---
@@ -85,8 +85,8 @@ Implementar la funcionalidad para agendar nuevas instalaciones, permitiendo asoc
 
 ### **Step 1: Endpoint de Creación**
 
-**Task:** Validar que la tabla `trabajos` en Supabase esté lista con sus FKs y RLS.
-**Testing:** Insertar un trabajo manual con un ID de cliente inválido y verificar que falle por FK.
+**Task:** Validar que la tabla `instalaciones` en Supabase esté lista con sus FKs y RLS.
+**Testing:** Insertar un instalación manual con un ID de cliente inválido y verificar que falle por FK.
 
 ### **Step 2: Componente Selector de Clientes**
 
@@ -100,8 +100,8 @@ Implementar la funcionalidad para agendar nuevas instalaciones, permitiendo asoc
 
 ### **Step 4: Persistencia y Redirección**
 
-**Task:** Ejecutar el `insert` y navegar a `/dashboard/trabajos`.
-**Testing:** Tras guardar, el nuevo trabajo debe aparecer al principio de la lista.
+**Task:** Ejecutar el `insert` y navegar a `/dashboard/instalaciones`.
+**Testing:** Tras guardar, el nuevo instalación debe aparecer al principio de la lista.
 
 ---
 

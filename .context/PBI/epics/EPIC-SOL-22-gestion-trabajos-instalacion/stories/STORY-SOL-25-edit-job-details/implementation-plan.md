@@ -1,22 +1,22 @@
-# Implementation Plan: STORY-SOL-25 - Edición de Detalles de Trabajo
+# Implementation Plan: STORY-SOL-25 - Edición de Detalles de Instalación
 
 ## Overview
 
-Implementar la capacidad de modificar la información de un trabajo agendado (ubicación, fecha, cliente, etc.) para mantener la exactitud de la agenda operativa.
+Implementar la capacidad de modificar la información de un instalación agendado (ubicación, fecha, cliente, etc.) para mantener la exactitud de la agenda operativa.
 
 **Acceptance Criteria a cumplir:**
 
-- Editar todos los campos del encabezado del trabajo.
+- Editar todos los campos del encabezado del instalación.
 - Pre-cargar los datos existentes en el formulario de edición.
 - Validar que los campos obligatorios sigan siendo requeridos tras la edición.
-- Bloquear la edición si el usuario no es el dueño del trabajo (RLS).
-- Redirección al detalle del trabajo tras guardar los cambios.
+- Bloquear la edición si el usuario no es el dueño del instalación (RLS).
+- Redirección al detalle del instalación tras guardar los cambios.
 
 ---
 
 ## Technical Approach
 
-**Chosen approach:** Reutilizar el componente `JobForm` (creado en SOL-23) en modo "update". Utilizaremos una ruta dinámica `/dashboard/trabajos/[id]/editar` que realice un fetch inicial de los datos. La mutación se realizará mediante `UPDATE trabajos SET ... WHERE id = id AND user_id = auth.uid()`.
+**Chosen approach:** Reutilizar el componente `JobForm` (creado en SOL-23) en modo "update". Utilizaremos una ruta dinámica `/dashboard/instalaciones/[id]/editar` que realice un fetch inicial de los datos. La mutación se realizará mediante `UPDATE instalaciones SET ... WHERE id = id AND user_id = auth.uid()`.
 
 **Why this approach:**
 
@@ -36,7 +36,7 @@ Implementar la capacidad de modificar la información de un trabajo agendado (ub
 ### Estados de UI:
 
 - **Fetching:** Mostrar un spinner o esqueleto de formulario mientras cargan los datos originales.
-- **Error 404:** Si el trabajo no existe o el usuario no tiene permisos, mostrar pantalla de error amigable.
+- **Error 404:** Si el instalación no existe o el usuario no tiene permisos, mostrar pantalla de error amigable.
 
 ---
 
@@ -44,14 +44,14 @@ Implementar la capacidad de modificar la información de un trabajo agendado (ub
 
 **Tipos a usar:**
 
-- Tipo `Trabajo` del esquema generado.
+- Tipo `Instalación` del esquema generado.
 - Schema de Zod extendido para incluir el ID del registro.
 
 ---
 
 ## Content Writing
 
-- **Título:** "Editar Detalles del Trabajo"
+- **Título:** "Editar Detalles del Instalación"
 - **CTA:** "Guardar Cambios"
 - **Éxito:** "Información actualizada correctamente."
 

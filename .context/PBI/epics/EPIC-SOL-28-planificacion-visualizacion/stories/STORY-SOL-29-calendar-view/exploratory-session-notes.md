@@ -28,7 +28,7 @@ The monthly calendar view is functional and correctly synchronized with the jobs
 ### 3. Create Job Shortcut - [PASSED]
 
 - **Steps:** Check for the "+" link in each day cell.
-- **Result:** Every day has a link to `/dashboard/trabajos/nuevo` with the `fecha` query parameter.
+- **Result:** Every day has a link to `/dashboard/instalaciones/nuevo` with the `fecha` query parameter.
 
 ### 4. Weekly View - [FAILED]
 
@@ -54,6 +54,6 @@ The monthly calendar view is functional and correctly synchronized with the jobs
 ## Next Steps
 
 - [ ] Implement `WeeklyView` component.
-- [ ] Add view toggle in `/dashboard/trabajos` to switch to calendar mode.
+- [ ] Add view toggle in `/dashboard/instalaciones` to switch to calendar mode.
 - [ ] Add `data-testid` attributes to calendar elements for better automation.
 - [ ] Re-test after scope completion.

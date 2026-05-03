@@ -2,15 +2,15 @@
 
 ## Overview
 
-Implementar una vista visual de calendario que permita a los instaladores ver la distribución de sus trabajos en el tiempo, facilitando la planificación de su disponibilidad.
+Implementar una vista visual de calendario que permita a los instaladores ver la distribución de sus instalaciones en el tiempo, facilitando la planificación de su disponibilidad.
 
 **Acceptance Criteria a cumplir:**
 
-- Visualizar trabajos en una cuadrícula mensual y semanal.
-- Diferenciar los trabajos por colores según su estado (Azul, Naranja, Verde, Gris).
+- Visualizar instalaciones en una cuadrícula mensual y semanal.
+- Diferenciar los instalaciones por colores según su estado (Azul, Naranja, Verde, Gris).
 - Navegar entre meses (limitado a 6 meses atrás y 12 meses adelante).
-- Ver resumen del trabajo (Cliente + Hora) al hacer clic o hover.
-- Cargar solo los trabajos del usuario autenticado (RLS).
+- Ver resumen del instalación (Cliente + Hora) al hacer clic o hover.
+- Cargar solo los instalaciones del usuario autenticado (RLS).
 
 ---
 
@@ -20,9 +20,9 @@ Implementar una vista visual de calendario que permita a los instaladores ver la
 
 **Why this approach:**
 
-- ✅ **Performance:** El filtrado por rango en el servidor evita descargar todo el historial de trabajos innecesariamente.
+- ✅ **Performance:** El filtrado por rango en el servidor evita descargar todo el historial de instalaciones innecesariamente.
 - ✅ **UX Familiar:** Un calendario es la herramienta estándar para cualquier profesional que maneje citas.
-- ✅ **Consistencia:** Reutiliza la lógica de seguridad y datos ya implementada en la Épica de Trabajos.
+- ✅ **Consistencia:** Reutiliza la lógica de seguridad y datos ya implementada en la Épica de Instalaciones.
 
 ---
 
@@ -61,7 +61,7 @@ Implementar una vista visual de calendario que permita a los instaladores ver la
 
 **Tipos a usar:**
 
-- Tipo `Trabajo` filtrado para el rango visible.
+- Tipo `Instalación` filtrado para el rango visible.
 - Interfaces de la librería de calendario elegida.
 
 ---
@@ -69,7 +69,7 @@ Implementar una vista visual de calendario que permita a los instaladores ver la
 ## Content Writing
 
 - **Título:** "Calendario de Instalaciones"
-- **Empty Day:** "No tienes trabajos para este día."
+- **Empty Day:** "No tienes instalaciones para este día."
 
 ---
 
@@ -87,8 +87,8 @@ Implementar una vista visual de calendario que permita a los instaladores ver la
 
 ### **Step 3: Mapeo de Eventos y Colores**
 
-**Task:** Transformar el array de trabajos en "Eventos" de calendario y aplicar estilos por estado.
-**Testing:** Crear un trabajo de cada estado en DB y verificar que los colores en el calendario coincidan.
+**Task:** Transformar el array de instalaciones en "Eventos" de calendario y aplicar estilos por estado.
+**Testing:** Crear un instalación de cada estado en DB y verificar que los colores en el calendario coincidan.
 
 ### **Step 4: Interacción Detalle Rápido**
 
@@ -99,7 +99,7 @@ Implementar una vista visual de calendario que permita a los instaladores ver la
 
 ## Dependencies
 
-- [x] STORY-SOL-23 (Creación de trabajos para tener qué mostrar).
+- [x] STORY-SOL-23 (Creación de instalaciones para tener qué mostrar).
 - [x] EPIC-SOL-10 (Auth).
 
 ---

@@ -1,4 +1,4 @@
-# Como Javi, quiero poder generar una vista de factura para un trabajo "Completado" con un solo clic, que calcule automáticamente el total sumando la mano de obra y los materiales.
+# Como Javi, quiero poder generar una vista de factura para un instalación "Completado" con un solo clic, que calcule automáticamente el total sumando la mano de obra y los materiales.
 
 **Jira Key:** SOL-33
 **Epic:** SOL-32 (Facturación Simple)
@@ -12,7 +12,7 @@
 ## User Story
 
 **As a** Javi
-**I want to** poder generar una vista de factura para un trabajo "Completado" con un solo clic, que calcule automáticamente el total sumando la mano de obra y los materiales
+**I want to** poder generar una vista de factura para un instalación "Completado" con un solo clic, que calcule automáticamente el total sumando la mano de obra y los materiales
 **So that** saber qué está listo para facturar
 
 ---
@@ -23,11 +23,11 @@
 
 ### In Scope
 
-- Botón "Generar Factura" visible en la vista de detalle de un trabajo solo si el estado es "Completado".
+- Botón "Generar Factura" visible en la vista de detalle de un instalación solo si el estado es "Completado".
 - Al hacer clic, se carga una página/componente con la vista previa de la factura.
 - La vista previa debe mostrar:
-  - Detalle de los ítems asociados al trabajo (nombre, cantidad, precio/costo unitario, subtotal).
-  - Cálculo automático del total del trabajo (suma de todos los ítems).
+  - Detalle de los ítems asociados al instalación (nombre, cantidad, precio/costo unitario, subtotal).
+  - Cálculo automático del total del instalación (suma de todos los ítems).
 
 ### Out of Scope
 
@@ -41,28 +41,28 @@
 
 <!-- Jira Field: customfield_10201 (✅ Acceptance Criteria) -->
 
-### Scenario: Generar vista de factura para trabajo completado
+### Scenario: Generar vista de factura para instalación completado
 
-- **Given:** Javi tiene un trabajo "Instalación Panel Solar" con estado "Completado"
-- **And:** este trabajo tiene 5 "Paneles Solares" a 200€ cada uno y 1 "Instalación Básica" a 150€
-- **When:** Javi navega a los detalles del trabajo "Instalación Panel Solar"
+- **Given:** Javi tiene un instalación "Instalación Panel Solar" con estado "Completado"
+- **And:** este instalación tiene 5 "Paneles Solares" a 200€ cada uno y 1 "Instalación Básica" a 150€
+- **When:** Javi navega a los detalles del instalación "Instalación Panel Solar"
 - **And:** hace clic en el botón "Generar Factura"
 - **Then:** se muestra una vista previa de la factura
 - **And:** la vista previa muestra los 5 "Paneles Solares" y la "Instalación Básica"
 - **And:** el total calculado es de 1150€ (5\*200 + 150)
 
-### Scenario: No poder generar factura para trabajo no completado
+### Scenario: No poder generar factura para instalación no completado
 
-- **Given:** Javi tiene un trabajo "Mantenimiento Preventivo" con estado "Agendado"
-- **When:** Javi navega a los detalles del trabajo "Mantenimiento Preventivo"
+- **Given:** Javi tiene un instalación "Mantenimiento Preventivo" con estado "Agendado"
+- **When:** Javi navega a los detalles del instalación "Mantenimiento Preventivo"
 - **Then:** el botón "Generar Factura" no está visible o está deshabilitado
 - **And:** Javi no puede acceder a la vista previa de la factura
 
 ### Scenario: Recalcular total automáticamente al añadir/eliminar ítems (previo al completado)
 
 - **Given:** Javi está viendo la vista previa de una factura
-- **And:** el trabajo asociado tiene ítems con precios
-- **When:** el trabajo asociado se actualiza (ej. se añade un nuevo ítem o se elimina uno)
+- **And:** el instalación asociado tiene ítems con precios
+- **When:** el instalación asociado se actualiza (ej. se añade un nuevo ítem o se elimina uno)
 - **Then:** el total de la factura en la vista previa se recalcula automáticamente
 
 ---
@@ -74,8 +74,8 @@
 - **Precios:** Los montos ya incluyen IVA (Precio Final).
 - **Numeración:** Generación automática correlativa (INV-XXX).
 - **Persistencia:** Realizar snapshot de los datos del emisor (perfil) al generar el documento.
-- Solo se puede generar una vista previa de factura para trabajos con estado "Completado".
-- El cálculo del total debe ser la suma de (cantidad \* precio_unitario) para todos los ítems asociados al trabajo.
+- Solo se puede generar una vista previa de factura para instalaciones con estado "Completado".
+- El cálculo del total debe ser la suma de (cantidad \* precio_unitario) para todos los ítems asociados al instalación.
 
 ---
 
@@ -84,17 +84,17 @@
 ### Frontend
 
 - Componente `InvoicePreview` para mostrar la factura.
-- Lógica para activar/desactivar el botón "Generar Factura" según el estado del trabajo.
+- Lógica para activar/desactivar el botón "Generar Factura" según el estado del instalación.
 - Manejo de estados de carga y errores al obtener los datos de la factura.
 
 ### Backend
 
-- API Route `GET /api/facturas/[jobId]` que obtiene todos los detalles del trabajo, sus ítems asociados y calcula el total.
-- La ruta debe verificar la pertenencia del trabajo al usuario y su estado "Completado".
+- API Route `GET /api/facturas/[jobId]` que obtiene todos los detalles del instalación, sus ítems asociados y calcula el total.
+- La ruta debe verificar la pertenencia del instalación al usuario y su estado "Completado".
 
 ### Database
 
-- Consulta compleja que une `trabajos`, `trabajos_items` y `catalogo_items` para obtener todos los detalles de la factura.
+- Consulta compleja que une `instalaciones`, `trabajos_items` y `catalogo_items` para obtener todos los detalles de la factura.
 - RLS en todas las tablas involucradas.
 
 ---
@@ -103,8 +103,8 @@
 
 ### Blocked By
 
-- STORY-SOL-27 - Marcar trabajo como "Completado".
-- STORY-SOL-26 - Agregar materiales y mano de obra a un trabajo.
+- STORY-SOL-27 - Marcar instalación como "Completado".
+- STORY-SOL-26 - Agregar materiales y mano de obra a un instalación.
 
 ### Blocks
 

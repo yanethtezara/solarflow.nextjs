@@ -15,7 +15,7 @@ Implementar un mecanismo que permita al usuario cambiar fluidamente entre la vis
 
 ## Technical Approach
 
-**Chosen approach:** Implementar un hook custom `useViewPreference` que gestione el estado `'list' | 'calendar'`. El componente padre `/dashboard/trabajos` renderizará condicionalmente `JobListView` o `CalendarView`. La sincronización de filtros se asegurará mediante el uso de los mismos Query Params en la URL para ambas vistas.
+**Chosen approach:** Implementar un hook custom `useViewPreference` que gestione el estado `'list' | 'calendar'`. El componente padre `/dashboard/instalaciones` renderizará condicionalmente `JobListView` o `CalendarView`. La sincronización de filtros se asegurará mediante el uso de los mismos Query Params en la URL para ambas vistas.
 
 **Why this approach:**
 
@@ -35,7 +35,7 @@ Implementar un mecanismo que permita al usuario cambiar fluidamente entre la vis
 
 ```
 ┌──────────────────────────────────────┐
-│ [≡] Trabajos      [ Lista | Calendario ] │
+│ [≡] Instalaciones      [ Lista | Calendario ] │
 ├──────────────────────────────────────┤
 │ [ Filtros ]                          │
 ├──────────────────────────────────────┤

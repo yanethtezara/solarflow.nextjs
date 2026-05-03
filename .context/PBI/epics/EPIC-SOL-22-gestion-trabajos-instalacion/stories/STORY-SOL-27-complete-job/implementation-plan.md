@@ -1,16 +1,16 @@
-# Implementation Plan: STORY-SOL-27 - Completar y Gestionar Estados de Trabajo
+# Implementation Plan: STORY-SOL-27 - Completar y Gestionar Estados de Instalación
 
 ## Overview
 
-Implementar la lógica de transiciones de estado para los trabajos, permitiendo al instalador marcar el progreso desde que se agenda hasta que se completa para su cobro.
+Implementar la lógica de transiciones de estado para los instalaciones, permitiendo al instalador marcar el progreso desde que se agenda hasta que se completa para su cobro.
 
 **Acceptance Criteria a cumplir:**
 
-- Cambiar el estado de un trabajo entre: Agendado, En Progreso, Completado y Cancelado.
+- Cambiar el estado de un instalación entre: Agendado, En Progreso, Completado y Cancelado.
 - Mostrar visualmente el estado actual con colores distintivos.
-- Bloquear la edición de ítems si el trabajo está en estado "Completado" o "Cancelado" (Regla de integridad).
+- Bloquear la edición de ítems si el instalación está en estado "Completado" o "Cancelado" (Regla de integridad).
 - Actualizar el estado en tiempo real en la lista y detalle.
-- Seguridad RLS para evitar que terceros cambien el estado de un trabajo.
+- Seguridad RLS para evitar que terceros cambien el estado de un instalación.
 
 ---
 
@@ -20,8 +20,8 @@ Implementar la lógica de transiciones de estado para los trabajos, permitiendo 
 
 **Why this approach:**
 
-- ✅ **Flujo de Trabajo Claro:** El instalador tiene un control visual del ciclo de vida del proyecto.
-- ✅ **Consistencia de Datos:** Impedir ediciones en trabajos completados evita discrepancias tras la generación de facturas.
+- ✅ **Flujo de Instalación Claro:** El instalador tiene un control visual del ciclo de vida del proyecto.
+- ✅ **Consistencia de Datos:** Impedir ediciones en instalaciones completados evita discrepancias tras la generación de facturas.
 - ✅ **Eficiencia:** El uso de `PATCH` optimiza el tráfico de red al actualizar solo una columna.
 
 ---
@@ -37,7 +37,7 @@ Implementar la lógica de transiciones de estado para los trabajos, permitiendo 
 
 ```
 ┌──────────────────────────────────────┐
-│ [≡] Detalle Trabajo #45              │
+│ [≡] Detalle Instalación #45              │
 ├──────────────────────────────────────┤
 │ ESTADO: [ En Progreso ▼ ]            │
 │ (Cambiar a: Completado | Cancelado)  │
@@ -64,8 +64,8 @@ Implementar la lógica de transiciones de estado para los trabajos, permitiendo 
 
 ## Content Writing
 
-- **Confirmación:** "¿Deseas marcar este trabajo como Completado? No podrás editar los materiales después."
-- **Aviso:** "Trabajo completado. Listo para facturar."
+- **Confirmación:** "¿Deseas marcar este instalación como Completado? No podrás editar los materiales después."
+- **Aviso:** "Instalación completado. Listo para facturar."
 
 ---
 
@@ -83,7 +83,7 @@ Implementar la lógica de transiciones de estado para los trabajos, permitiendo 
 
 ### **Step 3: Lógica de Bloqueo de Edición**
 
-**Task:** En el detalle del trabajo, condicionar los botones de acción al estado.
+**Task:** En el detalle del instalación, condicionar los botones de acción al estado.
 **Details:**
 
 - `isEditable = estado !== 'Completado' && estado !== 'Cancelado'`.
@@ -92,13 +92,13 @@ Implementar la lógica de transiciones de estado para los trabajos, permitiendo 
 ### **Step 4: Middleware de Seguridad**
 
 **Task:** (Opcional) Validar en la API que no se permitan mutaciones si el estado es terminal.
-**Testing:** Intentar un `PUT` vía Postman a un trabajo completado y verificar el rechazo.
+**Testing:** Intentar un `PUT` vía Postman a un instalación completado y verificar el rechazo.
 
 ---
 
 ## Dependencies
 
-- [x] STORY-SOL-23 (Estructura de Trabajo).
+- [x] STORY-SOL-23 (Estructura de Instalación).
 - [x] STORY-SOL-26 (Items asignados).
 
 ---

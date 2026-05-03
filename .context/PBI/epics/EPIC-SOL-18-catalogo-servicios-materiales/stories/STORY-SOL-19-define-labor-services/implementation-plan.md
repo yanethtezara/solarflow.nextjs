@@ -2,13 +2,13 @@
 
 ## Overview
 
-Implementar la gestión de servicios de mano de obra (ej. Instalación, Mantenimiento) para que el instalador pueda estandarizar sus precios base antes de agendar trabajos.
+Implementar la gestión de servicios de mano de obra (ej. Instalación, Mantenimiento) para que el instalador pueda estandarizar sus precios base antes de agendar instalaciones.
 
 **Acceptance Criteria a cumplir:**
 
 - Crear servicio con nombre y precio (obligatorio, mayor a 0).
 - Listar solo servicios de tipo "Mano de Obra".
-- Bloquear eliminación de servicios ya utilizados en trabajos.
+- Bloquear eliminación de servicios ya utilizados en instalaciones.
 - Moneda única en USD.
 - Validación de que el nombre incluya la unidad si es necesario (regla de negocio sugerida).
 

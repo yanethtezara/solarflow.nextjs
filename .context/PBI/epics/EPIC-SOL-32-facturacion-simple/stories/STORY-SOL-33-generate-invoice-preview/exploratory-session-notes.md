@@ -17,7 +17,7 @@ The invoicing system is fully functional. It correctly generates a professional 
 
 ### 1. Happy Path: Invoice Preview - [PASSED]
 
-- **Steps:** Navigate to `/dashboard/trabajos/[id]/factura` for a completed job.
+- **Steps:** Navigate to `/dashboard/instalaciones/[id]/factura` for a completed job.
 - **Result:** Page renders with all details (Job ID, Client name, Company name).
 - **Evidence:** API test confirmed data integrity for Job `34a7e95d-5188-47bc-9451-c7a5538ed34c`.
 

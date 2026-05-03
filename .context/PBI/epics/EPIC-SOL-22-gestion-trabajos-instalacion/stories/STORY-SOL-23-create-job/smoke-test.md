@@ -1,6 +1,6 @@
-# Smoke Test: EPIC-SOL-22 - Gestión de Trabajos de Instalación
+# Smoke Test: EPIC-SOL-22 - Gestión de Instalaciones de Instalación
 
-**Staging URL:** https://solarflow-nextjs-staging.vercel.app/dashboard/trabajos
+**Staging URL:** https://solarflow-nextjs-staging.vercel.app/dashboard/instalaciones
 **Fecha:** 2026-04-14
 **QA:** AI-Assigned (Gemini CLI)
 
@@ -10,16 +10,16 @@
 
 ### 1. Acceso Básico
 
-- [ ] **Dashboard de Trabajos carga correctamente**
-  - Navegar a `/dashboard/trabajos`.
-  - Debe mostrar la lista de trabajos programados.
+- [ ] **Dashboard de Instalaciones carga correctamente**
+  - Navegar a `/dashboard/instalaciones`.
+  - Debe mostrar la lista de instalaciones programados.
 
 ### 2. Funcionalidad Core (Happy Path)
 
-- [ ] **Botón "Crear Trabajo" funcional**
-  - Abre el formulario de nuevo trabajo.
-- [ ] **Detalle de Trabajo**
-  - Hacer clic en un trabajo existente abre la vista de detalle `/dashboard/trabajos/[id]`.
+- [ ] **Botón "Crear Instalación" funcional**
+  - Abre el formulario de nuevo instalación.
+- [ ] **Detalle de Instalación**
+  - Hacer clic en un instalación existente abre la vista de detalle `/dashboard/instalaciones/[id]`.
 
 ### 3. Integración Backend
 

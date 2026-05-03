@@ -2,26 +2,26 @@
 
 ## Overview
 
-Implementar la capacidad de desglosar materiales y servicios consumidos en un trabajo específico, permitiendo calcular el costo total de la obra de forma precisa y persistente.
+Implementar la capacidad de desglosar materiales y servicios consumidos en un instalación específico, permitiendo calcular el costo total de la obra de forma precisa y persistente.
 
 **Acceptance Criteria a cumplir:**
 
-- Agregar ítems del catálogo (Materiales/Mano de Obra) a un trabajo.
+- Agregar ítems del catálogo (Materiales/Mano de Obra) a un instalación.
 - Definir cantidad para cada ítem agregado.
 - Snapshot de Precios: Guardar el precio/costo del momento de la asignación.
-- Recalcular el total del trabajo automáticamente al añadir o eliminar ítems.
-- Listar todos los ítems asociados en la vista de detalle del trabajo.
+- Recalcular el total del instalación automáticamente al añadir o eliminar ítems.
+- Listar todos los ítems asociados en la vista de detalle del instalación.
 - Eliminar ítems del desglose.
 
 ---
 
 ## Technical Approach
 
-**Chosen approach:** Utilizar la tabla asociativa `trabajos_items`. La lógica de inserción se realizará mediante una **Stored Procedure** en Supabase (o una transacción compleja en el cliente) que: 1. Obtenga el precio actual del catálogo, 2. Inserte en `trabajos_items` incluyendo ese precio como snapshot, 3. (Opcional) Actualice la columna `total_acumulado` en la tabla `trabajos`. Para la UI, utilizaremos un buscador de ítems con autocompletado.
+**Chosen approach:** Utilizar la tabla asociativa `trabajos_items`. La lógica de inserción se realizará mediante una **Stored Procedure** en Supabase (o una transacción compleja en el cliente) que: 1. Obtenga el precio actual del catálogo, 2. Inserte en `trabajos_items` incluyendo ese precio como snapshot, 3. (Opcional) Actualice la columna `total_acumulado` en la tabla `instalaciones`. Para la UI, utilizaremos un buscador de ítems con autocompletado.
 
 **Why this approach:**
 
-- ✅ **Consistencia Financiera:** El snapshot evita que una subida de precios en el catálogo altere facturas de trabajos pasados.
+- ✅ **Consistencia Financiera:** El snapshot evita que una subida de precios en el catálogo altere facturas de instalaciones pasados.
 - ✅ **Rendimiento:** Almacenar el snapshot evita joins complejos con el catálogo para calcular totales históricos.
 - ✅ **UX de Alta Calidad:** El buscador dinámico permite a David encontrar materiales rápidamente entre cientos de opciones.
 
@@ -33,13 +33,13 @@ Implementar la capacidad de desglosar materiales y servicios consumidos en un tr
 
 - **`ItemSelector`**: Buscador con filtros por tipo.
 - **`ItemsTable`**: Desglose con columnas: Ítem, Cantidad, Precio Unitario, Subtotal y Acción (Eliminar).
-- **`TotalFooter`**: Resumen visual del costo total del trabajo.
+- **`TotalFooter`**: Resumen visual del costo total del instalación.
 
 ### wireframes/Layout:
 
 ```
 ┌──────────────────────────────────────┐
-│ [≡] Detalle Trabajo #45              │
+│ [≡] Detalle Instalación #45              │
 ├──────────────────────────────────────┤
 │ CLIENTE: Juan Pérez                  │
 ├──────────────────────────────────────┤
@@ -66,7 +66,7 @@ Implementar la capacidad de desglosar materiales y servicios consumidos en un tr
 ## Content Writing
 
 - **Sección:** "Desglose de Costos"
-- **CTA:** "Añadir al Trabajo"
+- **CTA:** "Añadir al Instalación"
 - **Empty:** "No hay materiales asignados aún."
 
 ---
@@ -98,7 +98,7 @@ Implementar la capacidad de desglosar materiales y servicios consumidos en un tr
 ## Dependencies
 
 - [x] EPIC-SOL-18 (Catálogo de Ítems).
-- [x] STORY-SOL-23 (Estructura de Trabajo).
+- [x] STORY-SOL-23 (Estructura de Instalación).
 
 ---
 

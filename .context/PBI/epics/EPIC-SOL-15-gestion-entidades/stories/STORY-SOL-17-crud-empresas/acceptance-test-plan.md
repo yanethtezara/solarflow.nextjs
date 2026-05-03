@@ -16,7 +16,7 @@
 
 - **Primary:** David Rojas (Líder de Equipo) - Necesita gestionar los contratos con empresas de energía.
   **Business Value:**
-- **Value Proposition:** Agrupación de trabajos por entidad pagadora.
+- **Value Proposition:** Agrupación de instalaciones por entidad pagadora.
 - **Business Impact:** Facilita la conciliación de pagos y reportes.
 
 ### Technical Context of This Story

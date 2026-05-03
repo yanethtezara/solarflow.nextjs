@@ -9,7 +9,7 @@ Implementar la gestión completa de clientes (Crear, Leer, Editar, Eliminar) par
 - Crear cliente con nombre (obligatorio), dirección y teléfono (obligatorio).
 - Listar solo los clientes pertenecientes al usuario autenticado.
 - Editar información de clientes existentes.
-- Bloquear la eliminación de clientes que tengan trabajos asociados.
+- Bloquear la eliminación de clientes que tengan instalaciones asociados.
 - Impedir nombres de clientes duplicados para el mismo usuario.
 - Diálogo de confirmación antes de eliminar.
 
@@ -22,7 +22,7 @@ Implementar la gestión completa de clientes (Crear, Leer, Editar, Eliminar) par
 **Why this approach:**
 
 - ✅ **Seguridad por Diseño:** El RLS garantiza que un usuario nunca vea datos de otro, incluso si intenta manipular las peticiones de red.
-- ✅ **Integridad Referencial:** Postgres se encargará de bloquear el `DELETE` si existe una llave foránea activa en la tabla de trabajos.
+- ✅ **Integridad Referencial:** Postgres se encargará de bloquear el `DELETE` si existe una llave foránea activa en la tabla de instalaciones.
 - ✅ **UX Fluida:** El uso de caché permite transiciones instantáneas entre la lista y el detalle.
 
 ---
@@ -50,8 +50,8 @@ Implementar la gestión completa de clientes (Crear, Leer, Editar, Eliminar) par
 
 ### Estados de UI:
 
-- **Empty State:** "Aún no tienes clientes. Crea el primero para empezar a agendar trabajos."
-- **Error de Integridad:** "No se puede eliminar el cliente porque tiene trabajos asociados."
+- **Empty State:** "Aún no tienes clientes. Crea el primero para empezar a agendar instalaciones."
+- **Error de Integridad:** "No se puede eliminar el cliente porque tiene instalaciones asociados."
 
 ---
 
@@ -109,22 +109,22 @@ Implementar la gestión completa de clientes (Crear, Leer, Editar, Eliminar) par
 **Task:** Implementar el botón de borrado con confirmación.
 **Testing:**
 
-1. Eliminar un cliente sin trabajos (éxito).
-2. Intentar eliminar un cliente con un trabajo vinculado (error controlado).
+1. Eliminar un cliente sin instalaciones (éxito).
+2. Intentar eliminar un cliente con un instalación vinculado (error controlado).
 
 ---
 
 ## Dependencies
 
 - [x] EPIC-SOL-10 (Autenticación) completada.
-- [ ] Tabla `trabajos` creada (necesaria para probar la restricción de integridad).
+- [ ] Tabla `instalaciones` creada (necesaria para probar la restricción de integridad).
 
 ---
 
 ## Risks & Mitigations
 
 - **Riesgo:** Confusión del usuario si no sabe por qué no puede borrar un cliente.
-- **Mitigación:** Mostrar un mensaje claro indicando que el cliente tiene "Trabajos pendientes o históricos".
+- **Mitigación:** Mostrar un mensaje claro indicando que el cliente tiene "Instalaciones pendientes o históricos".
 
 ---
 

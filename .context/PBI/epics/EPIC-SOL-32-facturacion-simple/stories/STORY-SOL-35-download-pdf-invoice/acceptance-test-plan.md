@@ -74,7 +74,7 @@
 
 #### **Validar nombre de archivo dinámico**
 
-- **Steps:** Generar factura para Cliente "Test" y Trabajo "45".
+- **Steps:** Generar factura para Cliente "Test" y Instalación "45".
 - **Expected Result:** Nombre de archivo contiene "Test" y "45".
 
 #### **Validar que el PDF es de solo lectura**

@@ -70,7 +70,7 @@ Implementar la capacidad de exportar la vista previa de la factura a un archivo 
 
 ### **Step 3: Formateo de Nombre de Archivo**
 
-**Task:** Implementar lógica para limpiar el nombre del cliente y concatenar el ID del trabajo.
+**Task:** Implementar lógica para limpiar el nombre del cliente y concatenar el ID del instalación.
 **Testing:** Para el cliente "Peña & Hnos", el archivo debe llamarse `Factura_SOL-45_Pena-Hnos.pdf`.
 
 ### **Step 4: Soporte Mobile**

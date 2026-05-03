@@ -24,11 +24,11 @@
 **Frontend:**
 
 - Component: `InvoicePreview`.
-- Route: `/dashboard/trabajos/[id]/factura`.
+- Route: `/dashboard/instalaciones/[id]/factura`.
   **Backend:**
 - API: `/api/facturas/[id]`.
   **Security:**
-- RLS garantiza que solo se consulten ítems del trabajo propio.
+- RLS garantiza que solo se consulten ítems del instalación propio.
 
 ---
 
@@ -37,7 +37,7 @@
 ### Ambiguities Identified
 
 - **Ambiguity 1:** ¿Se deben agrupar materiales y mano de obra o mostrarse en una sola lista mezclada?
-  - **Suggested Clarification:** Mostrar una sola tabla cronológica según se agregaron al trabajo.
+  - **Suggested Clarification:** Mostrar una sola tabla cronológica según se agregaron al instalación.
 
 ### Missing Information / Gaps
 
@@ -49,16 +49,16 @@
 
 ### Scenario 1: Generación exitosa (Happy Path)
 
-- **Given:** Trabajo completado con 3 paneles ($600) y 1 instalación ($150).
+- **Given:** Instalación completado con 3 paneles ($600) y 1 instalación ($150).
 - **When:** Carga la vista previa.
 - **Then:**
   - Subtotales: $600 y $150.
   - Total: $750.00.
 
-### Scenario 2: Trabajo no completado
+### Scenario 2: Instalación no completado
 
-- **When:** Intenta entrar a la ruta de factura de un trabajo "Agendado".
-- **Then:** Redirige al detalle del trabajo con un aviso: "Solo se pueden facturar trabajos completados".
+- **When:** Intenta entrar a la ruta de factura de un instalación "Agendado".
+- **Then:** Redirige al detalle del instalación con un aviso: "Solo se pueden facturar instalaciones completados".
 
 ### Scenario 3: Cambio de datos en caliente
 
@@ -77,7 +77,7 @@
 #### **Validar bloqueo de botón "Factura"**
 
 - **Type:** Positive | **Level:** UI
-- **Steps:** Ver trabajo agendado -> Verificar ausencia de botón. Ver trabajo completado -> Verificar presencia de botón.
+- **Steps:** Ver instalación agendado -> Verificar ausencia de botón. Ver instalación completado -> Verificar presencia de botón.
 
 #### **Validar visualización de datos del cliente en factura**
 

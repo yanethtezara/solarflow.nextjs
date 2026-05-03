@@ -78,7 +78,7 @@
 
 <!-- Jira Field: customfield_10202 (🚩BUSINESS RULES SPEC) - Opcional -->
 
-- **Integridad:** BLOQUEAR eliminación si el cliente tiene trabajos asociados.
+- **Integridad:** BLOQUEAR eliminación si el cliente tiene instalaciones asociados.
 - **Unicidad:** Nombre de cliente debe ser único por usuario.
 - **Obligatorios:** Nombre y Teléfono son requeridos.
 - Cada cliente debe estar asociado a un `user_id`.
@@ -113,7 +113,7 @@
 
 ### Blocks
 
-- STORY-SOL-TBD - Crear un nuevo trabajo (un trabajo requiere un cliente).
+- STORY-SOL-TBD - Crear un nuevo instalación (un instalación requiere un cliente).
 
 ---
 

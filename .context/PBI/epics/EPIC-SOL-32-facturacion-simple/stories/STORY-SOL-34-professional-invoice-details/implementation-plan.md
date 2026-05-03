@@ -16,12 +16,12 @@ Asegurar que las facturas generadas proyecten una imagen profesional del instala
 
 ## Technical Approach
 
-**Chosen approach:** Implementar la tabla `user_profiles` para almacenar Nombre del Negocio, NIF, Dirección Fiscal y URL del Logo. Utilizaremos **Supabase Storage** para gestionar el archivo de imagen. Al generar la factura, los datos del perfil se copiarán a una tabla de `facturas_emitidas` (o se incluirán en el snapshot del trabajo) para asegurar que el documento no cambie si el usuario edita su perfil después.
+**Chosen approach:** Implementar la tabla `user_profiles` para almacenar Nombre del Negocio, NIF, Dirección Fiscal y URL del Logo. Utilizaremos **Supabase Storage** para gestionar el archivo de imagen. Al generar la factura, los datos del perfil se copiarán a una tabla de `facturas_emitidas` (o se incluirán en el snapshot del instalación) para asegurar que el documento no cambie si el usuario edita su perfil después.
 
 **Why this approach:**
 
 - ✅ **Legalidad:** Una factura emitida debe ser inalterable. El snapshot de perfil garantiza esto.
-- ✅ **Flexibilidad:** Permite al usuario cambiar su branding para futuros trabajos sin romper el histórico.
+- ✅ **Flexibilidad:** Permite al usuario cambiar su branding para futuros instalaciones sin romper el histórico.
 - ✅ **Escalabilidad:** El uso de Storage gestiona eficientemente los activos binarios (imágenes).
 
 ---
