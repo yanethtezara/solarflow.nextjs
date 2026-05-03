@@ -12,7 +12,11 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>;
-  signUp: (email: string, password: string) => Promise<{ error: AuthError | null }>;
+  signUp: (
+    email: string,
+    password: string,
+    metadata?: { nombre_completo?: string; telefono?: string }
+  ) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<{ error: AuthError | null }>;
   resetPassword: (email: string) => Promise<{ error: AuthError | null }>;
   updatePassword: (newPassword: string) => Promise<{ error: AuthError | null }>;
@@ -34,11 +38,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session) {
         setUser(session.user);
-        // Optionally, fetch profile data from your public.profiles table
-        // const { data: profile, error } = await supabase.from('profiles').select('*').eq('id', session.user.id).single();
-        // if (profile) {
-        //   setUser({ ...session.user, profile }); // Augment user object with profile data
-        // }
       } else {
         setUser(null);
       }
@@ -70,13 +69,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { error };
   };
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = async (
+    email: string,
+    password: string,
+    metadata?: { nombre_completo?: string; telefono?: string }
+  ) => {
     setLoading(true);
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: `${appUrl}/auth/callback`, // Important for email confirmation
+        data: metadata,
       },
     });
     setLoading(false);

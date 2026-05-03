@@ -39,6 +39,13 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
 
   if (error || !trabajo) notFound();
 
+  // Obtener datos del perfil del usuario (emisor)
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('nombre_completo, telefono')
+    .eq('id', user.id)
+    .single();
+
   const { data: itemsData } = await supabase
     .from('trabajos_items')
     .select(
@@ -153,15 +160,15 @@ export default async function FacturaPage({ params }: { params: Promise<{ id: st
                     De
                   </p>
                   <p className="text-lg font-bold text-slate-900">
-                    {empresa?.nombre ?? 'Mi Empresa'}
+                    {profile?.nombre_completo ?? empresa?.nombre ?? 'Mi Empresa'}
                   </p>
-                  {empresa?.contacto_responsable && (
-                    <p className="text-sm text-slate-600 mt-1">{empresa.contacto_responsable}</p>
+                  {empresa?.nombre && profile?.nombre_completo && (
+                    <p className="text-sm text-slate-600">{empresa.nombre}</p>
                   )}
-                  {empresa?.telefono_contacto && (
-                    <p className="text-sm text-slate-600">{empresa.telefono_contacto}</p>
-                  )}
-                  <p className="text-sm text-slate-600 mt-2">{user.email}</p>
+                  <p className="text-sm text-slate-600 mt-1">
+                    {profile?.telefono ?? empresa?.telefono_contacto}
+                  </p>
+                  <p className="text-sm text-slate-600">{user.email}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">

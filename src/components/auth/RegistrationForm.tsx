@@ -9,6 +9,14 @@ import { useRouter } from 'next/navigation';
 import Toast from '@/components/Toast';
 
 const signupSchema = z.object({
+  nombre_completo: z
+    .string()
+    .min(3, 'El nombre debe tener al menos 3 caracteres')
+    .max(100, 'El nombre es demasiado largo'),
+  telefono: z
+    .string()
+    .min(6, 'El teléfono debe tener al menos 6 caracteres')
+    .max(20, 'El teléfono es demasiado largo'),
   email: z
     .string()
     .email('Ingresa un correo electrónico válido')
@@ -35,7 +43,10 @@ export default function RegistrationForm() {
 
   const onSubmit = async (data: SignupValues) => {
     setError(null);
-    const { error: signUpError } = await signUp(data.email, data.password);
+    const { error: signUpError } = await signUp(data.email, data.password, {
+      nombre_completo: data.nombre_completo,
+      telefono: data.telefono,
+    });
 
     if (signUpError) {
       if (signUpError.message.includes('rate limit') || signUpError.status === 429) {
@@ -47,8 +58,6 @@ export default function RegistrationForm() {
       }
     } else {
       setShowToast(true);
-      // El autologin de Supabase redirigirá automáticamente vía AuthContext/Middleware
-      // pero forzamos la navegación al dashboard por seguridad de UX
       setTimeout(() => {
         router.push('/dashboard');
       }, 1500);
@@ -58,6 +67,51 @@ export default function RegistrationForm() {
   return (
     <div className="space-y-6" data-testid="registrationForm">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div>
+          <label
+            className="block text-sm font-medium text-slate-700 mb-1"
+            htmlFor="nombre_completo"
+          >
+            Nombre Completo
+          </label>
+          <input
+            {...register('nombre_completo')}
+            id="nombre_completo"
+            type="text"
+            placeholder="Juan Pérez"
+            data-testid="name_input"
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200 ${
+              errors.nombre_completo ? 'border-red-500' : 'border-gray-200'
+            }`}
+          />
+          {errors.nombre_completo && (
+            <p className="mt-1 text-xs text-red-600" data-testid="name_error">
+              {errors.nombre_completo.message}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1" htmlFor="telefono">
+            Teléfono de Contacto
+          </label>
+          <input
+            {...register('telefono')}
+            id="telefono"
+            type="tel"
+            placeholder="+1 234 567 890"
+            data-testid="phone_input"
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200 ${
+              errors.telefono ? 'border-red-500' : 'border-gray-200'
+            }`}
+          />
+          {errors.telefono && (
+            <p className="mt-1 text-xs text-red-600" data-testid="phone_error">
+              {errors.telefono.message}
+            </p>
+          )}
+        </div>
+
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1" htmlFor="email">
             Email
